@@ -1,0 +1,9 @@
+.register{
+  font-size: 12px;
+}
+
+.register a:hover{
+ color: #3c3ca4;
+  cursor: pointer;
+
+}
