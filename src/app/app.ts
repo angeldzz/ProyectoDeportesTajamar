@@ -1,7 +1,9 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './components/navbar.component/navbar.component';
-import { FooterComponent } from './components/footer.component/footer.component';
+import {LoginComponent} from './pages/auth/login.component/login.component';
+import {HttpClient} from '@angular/common/http';
+import {AuthService} from './core/services/auth-service/auth.service';
 
 @Component({
   selector: 'app-root',
