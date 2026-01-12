@@ -1,0 +1,33 @@
+.text-gradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.min-vh-100 {
+  min-height: 100vh;
+}
+
+.btn {
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+a:hover {
+  text-decoration: underline !important;
+}
+
+svg {
+  vertical-align: middle;
+}
+
+@media (max-width: 576px) {
+  .display-1 {
+    font-size: 5rem;
+  }
+}
