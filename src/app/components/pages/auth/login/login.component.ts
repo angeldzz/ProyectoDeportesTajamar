@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {AuthService} from '../../../core/services/auth-service/auth.service';
+import {AuthService} from '../../../../core/services/auth.service';
 import {FormsModule} from '@angular/forms';
 
 
