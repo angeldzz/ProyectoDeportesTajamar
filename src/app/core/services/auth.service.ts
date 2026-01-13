@@ -3,16 +3,26 @@ import { Router } from '@angular/router';
 import {BehaviorSubject, Observable, tap} from 'rxjs';
 import {environment} from '../../../environments/environment.development';
 import {HttpClient, HttpResponse} from '@angular/common/http';
+import {JwtHelperService} from "@auth0/angular-jwt";
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
   constructor(private _http: HttpClient) {}
 
-  loggedInUser: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private router = inject(Router);
+  private readonly ACCESS_TOKEN = 'accessToken';
+  private jwtHelper: JwtHelperService = new JwtHelperService();
+
+  //loggedInUser: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.hasToken());
+
+  // Este "Subject" guarda el estado de si está logueado o no
+  loggedIn = new BehaviorSubject<boolean>(this.hasToken());
+
+  // Observable para que otros componentes se suscriban si quieren
 
   get isLoggedInUser(): Observable<boolean> {
-    return this.loggedInUser.asObservable();
+    return this.loggedIn.asObservable();
   }
 
   login(userName:string, password:string):Observable<any> {
@@ -26,15 +36,23 @@ export class AuthService {
     return this._http.post(url, body)
   }
 
+  getUserRole(): any{
+    // const accessToken: string | null = this.getToken();
+    //
+    // if (!accessToken) {
+    //   return null;
+    // }
+    //
+    // const decodedToken = this.jwtHelper.decodeToken(accessToken);
+    //
+    // console.log("EL TOKEN DECODED " + decodedToken.role);
+    //
+    // return 1;
+    //
 
-  private router = inject(Router);
-  private readonly ACCESS_TOKEN = 'accessToken';
+    return localStorage.getItem('role');
+  }
 
-  // Este "Subject" guarda el estado de si está logueado o no
-  loggedIn = new BehaviorSubject<boolean>(this.hasToken());
-
-  // Observable para que otros componentes se suscriban si quieren
-  isLoggedIn$ = this.loggedIn.asObservable();
 
   private hasToken(): boolean {
     return !!localStorage.getItem(this.ACCESS_TOKEN);
@@ -43,14 +61,19 @@ export class AuthService {
   storeToken(token:string){
     localStorage.setItem(this.ACCESS_TOKEN, token)
   }
-
+  //** TEMPORAL ** //
+  storeRole(role:string){
+    localStorage.setItem("role", role)
+  }
+  //** ----- ** //
   logout() {
     localStorage.removeItem(this.ACCESS_TOKEN);
+    localStorage.removeItem("role");
     this.loggedIn.next(false); // Avisamos que ya no hay token
     this.router.navigate(['/login']); // Redirección automática
   }
 
-  getToken(): string | null {
+  getToken(): string | null{
     return localStorage.getItem(this.ACCESS_TOKEN);
   }
 

@@ -1,26 +1,24 @@
-// import { HttpInterceptorFn } from '@angular/common/http';
-// import { inject } from '@angular/core';
-// import { AuthService } from '../services/auth.service';
-// import { catchError, throwError } from 'rxjs';
-//
-// export const authInterceptor: HttpInterceptorFn = (req, next) => {
-//   const authService = inject(AuthService);
-//   const token = authService.getToken();
-//
-//   // Clonamos la petición para añadir el header Authorization
-//   let authReq = req;
-//   if (token) {
-//     authReq = req.clone({
-//       setHeaders: { Authorization: `Bearer ${token}` }
-//     });
-//   }
-//
-//   return next(authReq).pipe(
-//     catchError((error) => {
-//       if (error.status === 401) {
-//         authService.logout(); // Si el token vence, fuera.
-//       }
-//       return throwError(() => error);
-//     })
-//   );
-// };
+import { Injectable } from '@angular/core';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { AuthService } from "../services/auth.service";
+
+@Injectable()
+export class AuthInterceptor implements HttpInterceptor {
+
+  constructor(private authService: AuthService) {}
+
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    const authToken: string | null = this.authService.getToken();
+
+    if (authToken) {
+      const authReq: HttpRequest<any> = req.clone({
+        headers: req.headers.set('Authorization', `Bearer ${authToken}`)
+      });
+
+      return next.handle(authReq);
+    }
+
+    return next.handle(req);
+  }
+}
