@@ -1,6 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {AuthService} from '../../../../core/services/auth.service';
 import {FormsModule} from '@angular/forms';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -19,22 +20,37 @@ export class LoginComponent implements OnInit {
   @ViewChild('cajaUser') cajaUserName !: ElementRef;
   @ViewChild('cajaPass') cajaPassword !: ElementRef;
 
-  constructor(private _authService: AuthService) {
+  constructor(private _authService: AuthService,private _router: Router) {
 
   }
-   ngOnInit() {
-    console.log("Arrancando")
-   }
-  login(){
+  ngOnInit(): void {
 
-    this.userName=this.cajaUserName.nativeElement.value;
+    if (this._authService.isLoggedInUser) {
+      this._router.navigate(['']).then(r => {});
+    }
+
+  }
+
+  login() {
+
+
+    this.userName=this.cajaUserName.nativeElement.value+"@tajamar365.com";
     this.password=this.cajaPassword.nativeElement.value;
 
     console.log(this.userName);
     console.log(this.password);
 
-    this._authService.login(this.userName,this.password).subscribe(value => {
-      console.log(value);
-    })
+
+    this._authService.login(this.userName,this.password).subscribe({
+      next: (response): void => {
+
+        // this._authService.userRoleSubject.next(this.authService.getUserRole());
+        this._authService.storeToken(response.response);
+        this._router.navigate([''])
+          .then((r: boolean): void => {});
+      },
+      error: (err) => alert('Credenciales inválidas')
+    });
   }
 }
+
