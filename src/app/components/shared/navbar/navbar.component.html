@@ -1,25 +1,49 @@
-
 <nav *ngIf="_authService.loggedIn | async" class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" [routerLink]="['']">Tajamar Events</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Features</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Pricing</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-pills" (click)="logout()">Cerrar Sesion</a>
-        </li>
-      </ul>
+
+    <div class="collapse navbar-collapse w-100" id="navbarCollapse">
+      <div class="d-flex align-items-center w-100">
+        <a class="navbar-brand me-auto" [routerLink]="['']">Tajamar Events</a>
+
+        <ul class="navbar-nav mx-auto">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" [routerLink]="['']">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/otra']">Otra</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/pagos']">Pagos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/panel_administrador']">Panel Admin</a>
+          </li>
+        </ul>
+
+        <div class="dropdown text-end ms-auto">
+          <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
+             data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end text-small">
+            <li><a class="dropdown-item" [routerLink]="['/perfil']">Perfil</a></li>
+            <li>
+               <a class="dropdown-item" [routerLink]="['/panel_administrador']">
+                 Panel Admin
+               </a>
+            </li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" (click)="logout()" href="">Cerrar Sesión</a></li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </nav>
