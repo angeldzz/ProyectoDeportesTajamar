@@ -1,4 +1,3 @@
-<p>navbar.component works!
-
-    cambio adrian rama
-</p>
+<nav *ngIf="authService.loggedIn | async">
+  <p>NAVBAR</p>
+</nav>

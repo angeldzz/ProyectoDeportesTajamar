@@ -60,6 +60,7 @@ export class AuthService {
 
   storeToken(token:string){
     localStorage.setItem(this.ACCESS_TOKEN, token)
+    this.loggedIn.next(true); // ← AGREGAR ESTA LÍNEA
   }
   //** TEMPORAL ** //
   storeRole(role:string){
@@ -69,7 +70,7 @@ export class AuthService {
   logout() {
     localStorage.removeItem(this.ACCESS_TOKEN);
     localStorage.removeItem("role");
-    this.loggedIn.next(false); // Avisamos que ya no hay token
+    this.loggedIn.next(false); // Avisamos que ya no tiene token
     this.router.navigate(['/login']); // Redirección automática
   }
 
