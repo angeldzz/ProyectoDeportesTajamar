@@ -17,12 +17,15 @@ export const adminGuard = () => {
       console.log(authService.isLoggedInUser);
       if (isUserLoggedIn) {
         //TODO CAMBIAR LO HARDCODEADO
-        if (authService.getUserRole() === 'ADMINISTRADOR'){
+        if (authService.getUserRole() == 'ADMINISTRADOR'){
           comprobarAdmin = true;
         }else{
           alert("No eres administrador")
           router.navigate(['']).then(r => { });
         }
+      }else{
+        console.log(authService.isLoggedInUser);
+        router.navigate(['/login']).then(r => { });
       }
     }
   )
