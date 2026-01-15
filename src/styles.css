@@ -1,1 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+  --dark-bg: #0b1416;
+  --sidebar-bg: #0f1c1e;
+  --card-bg: #162629;
+  --cyan-accent: #00e5ff;
+}
+
+.bg-dark-main {
+  background-color: var(--dark-bg);
+  color: white;
+}
+
+.btn-cyan {
+  background-color: var(--cyan-accent);
+  color: black;
+}
