@@ -11,7 +11,7 @@ import {NotFoundComponent} from './components/pages/not-found/not-found.componen
 import {authGuard} from './core/guards/auth.guard';
 import {loginGuard} from './core/guards/login.guard';
 import {adminGuard} from './core/guards/admin.guard';
-import { CreacionEventosComponent } from './components/pages/creacion-eventos/creacion-eventos.component';
+import { CreacionEventosComponent } from './components/shared/creacion-eventos/creacion-eventos.component';
 
 export const routes: Routes = [
   {

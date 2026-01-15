@@ -1,0 +1,282 @@
+.creacion-eventos-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 15px 15px 10px 15px;
+    background-color: #f8f9fa;
+    height: calc(100vh - 56px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 3px;
+}
+
+.subtitle {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin: 0;
+}
+
+.content-wrapper {
+    background-color: white;
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+}
+
+/* Información de fecha seleccionada */
+.selected-date-info {
+    margin-bottom: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    flex-shrink: 0;
+}
+
+.date-selected {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.date-selected i {
+    font-size: 1.15rem;
+    color: #4285f4;
+}
+
+.date-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.label {
+    font-size: 0.7rem;
+    color: #6c757d;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.date-value {
+    font-size: 0.9rem;
+    color: #333;
+    font-weight: 700;
+    text-transform: capitalize;
+}
+
+.date-placeholder {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #6c757d;
+}
+
+.date-placeholder i {
+    font-size: 1.15rem;
+    opacity: 0.5;
+}
+
+.date-placeholder span {
+    font-size: 0.8rem;
+    font-style: italic;
+}
+
+/* Calendario */
+.calendar-wrapper {
+    background-color: white;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    flex: 1;
+    overflow: auto;
+    min-height: 0;
+}
+
+/* Botones de acción */
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.btn-crear-evento {
+    background: linear-gradient(135deg, #4285f4 0%, #5a9dff 100%);
+    color: white;
+    border: none;
+    padding: 8px 28px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(66, 133, 244, 0.3);
+}
+
+.btn-crear-evento:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(66, 133, 244, 0.4);
+    background: linear-gradient(135deg, #3367d6 0%, #4285f4 100%);
+}
+
+.btn-crear-evento:disabled {
+    background: #e9ecef;
+    color: #adb5bd;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.btn-crear-evento i {
+    font-size: 1.1rem;
+}
+
+/* Estilos personalizados para FullCalendar */
+::ng-deep .calendar-wrapper .fc {
+    font-family: inherit;
+}
+
+::ng-deep .calendar-wrapper .fc-toolbar {
+    margin-bottom: 10px;
+}
+
+::ng-deep .calendar-wrapper .fc-toolbar-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #333;
+}
+
+::ng-deep .calendar-wrapper .fc-button {
+    background: linear-gradient(135deg, #4285f4 0%, #5a9dff 100%);
+    border-color: #4285f4;
+    text-transform: capitalize;
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 6px;
+}
+
+::ng-deep .calendar-wrapper .fc-button:hover {
+    background: linear-gradient(135deg, #3367d6 0%, #4285f4 100%);
+    border-color: #3367d6;
+}
+
+::ng-deep .calendar-wrapper .fc-button:disabled {
+    opacity: 0.5;
+}
+
+::ng-deep .calendar-wrapper .fc-button-active {
+    background: linear-gradient(135deg, #3367d6 0%, #4285f4 100%) !important;
+    border-color: #3367d6 !important;
+}
+
+::ng-deep .calendar-wrapper .fc-col-header-cell {
+    background: linear-gradient(135deg, #4285f4 0%, #5a9dff 100%);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.68rem;
+    padding: 6px 4px;
+    color: white;
+    letter-spacing: 0.6px;
+    border: none;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+::ng-deep .calendar-wrapper .fc-col-header-cell:last-child {
+    border-right: none;
+}
+
+::ng-deep .calendar-wrapper .fc-col-header-cell-cushion {
+    color: white;
+    text-decoration: none;
+    padding: 2px;
+}
+
+::ng-deep .calendar-wrapper .fc-daygrid-day-number {
+    color: #333;
+    font-weight: 600;
+    padding: 5px;
+    font-size: 0.8rem;
+}
+
+::ng-deep .calendar-wrapper .fc-daygrid-day {
+    border-color: #e0e0e0;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+::ng-deep .calendar-wrapper .fc-daygrid-day:hover {
+    background-color: rgba(66, 133, 244, 0.05);
+}
+
+::ng-deep .calendar-wrapper .fc-day-today {
+    background-color: rgba(66, 133, 244, 0.1) !important;
+}
+
+::ng-deep .calendar-wrapper .fc-day-today .fc-daygrid-day-number {
+    color: #4285f4;
+    font-weight: 700;
+}
+
+::ng-deep .calendar-wrapper .fc-scrollgrid {
+    border-color: #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+::ng-deep .calendar-wrapper .fc-daygrid-day.fc-day-past {
+    background-color: #f8f9fa;
+    opacity: 0.6;
+}
+
+::ng-deep .calendar-wrapper .fc-daygrid-day.fc-day-past:hover {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+}
+
+/* Efecto de selección */
+::ng-deep .calendar-wrapper .fc-highlight {
+    background-color: rgba(66, 133, 244, 0.2) !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .creacion-eventos-container {
+        padding: 20px 10px;
+    }
+
+    .content-wrapper {
+        padding: 20px;
+    }
+
+    .title {
+        font-size: 1.8rem;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+    }
+
+    .btn-crear-evento {
+        width: 100%;
+        justify-content: center;
+    }
+}

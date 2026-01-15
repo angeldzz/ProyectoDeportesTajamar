@@ -1,0 +1,43 @@
+<div class="creacion-eventos-container">
+    <div class="header">
+        <h1 class="title">Crear Nuevo Evento</h1>
+        <p class="subtitle">Selecciona una fecha en el calendario para crear un evento</p>
+    </div>
+
+    <div class="content-wrapper">
+        <!-- Información de fecha seleccionada -->
+        <div class="selected-date-info">
+            @if (selectedDate) {
+                <div class="date-selected">
+                    <i class="bi bi-calendar-check"></i>
+                    <div class="date-details">
+                        <span class="label">Fecha seleccionada:</span>
+                        <span class="date-value">{{ selectedDateStr }}</span>
+                    </div>
+                </div>
+            } @else {
+                <div class="date-placeholder">
+                    <i class="bi bi-calendar-event"></i>
+                    <span>Haz clic en una fecha del calendario para seleccionarla</span>
+                </div>
+            }
+        </div>
+
+        <!-- Calendario -->
+        <div class="calendar-wrapper">
+            <full-calendar [options]="calendarOptions"></full-calendar>
+        </div>
+
+        <!-- Botón de acción -->
+        <div class="action-buttons">
+            <button 
+                type="button" 
+                class="btn btn-crear-evento" 
+                (click)="crearEvento()"
+                [disabled]="!selectedDate">
+                <i class="bi bi-plus-circle"></i>
+                Crear Evento
+            </button>
+        </div>
+    </div>
+</div>
