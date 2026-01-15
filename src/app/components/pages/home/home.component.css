@@ -367,12 +367,19 @@
 }
 
 ::ng-deep .calendario-content .fc-col-header-cell {
-    background-color: #f8f9fa;
-    font-weight: 600;
+    background-color: #ffffff;
+    border-bottom: 3px solid #4285f4;
+    font-weight: 700;
     text-transform: uppercase;
-    font-size: 0.75rem;
-    padding: 10px;
-    color: #6c757d;
+    font-size: 0.85rem;
+    padding: 15px 10px;
+    color: #4285f4;
+    letter-spacing: 1.2px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+::ng-deep .calendario-content .fc-col-header-cell a {
+    text-decoration: none;
 }
 
 ::ng-deep .calendario-content .fc-daygrid-day {
