@@ -24,6 +24,7 @@ export class LoginInterceptor implements HttpInterceptor {
               const accessToken = event.body?.response;
               if (accessToken) {
                 this.authService.storeToken(accessToken);
+                this.authService.storeRole(event.body?.role);
                 this.authService.loggedIn.next(true);
               }
             }
