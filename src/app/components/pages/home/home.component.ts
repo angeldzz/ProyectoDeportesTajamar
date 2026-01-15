@@ -4,13 +4,20 @@ import { EventosService } from '../../../core/services/eventos.service';
 import { Evento } from '../../../models/Evento';
 import { DatePipe, UpperCasePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { CalendarOptions } from '@fullcalendar/core';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import esLocale from '@fullcalendar/core/locales/es';
 
 @Component({
   selector: 'app-home',
   imports: [
     DatePipe,
     UpperCasePipe,
-    RouterLink
+    RouterLink,
+    FullCalendarModule
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
@@ -26,6 +33,22 @@ export class HomeComponent implements OnInit{
   // Paginación eventos anteriores
   public paginaAnteriores: number = 1;
 
+  // Configuración del calendario
+  calendarOptions: CalendarOptions = {
+    plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
+    initialView: 'dayGridMonth',
+    locale: esLocale,
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'dayGridMonth,timeGridWeek'
+    },
+    events: [],
+    eventClick: this.handleEventClick.bind(this),
+    height: 'auto',
+    aspectRatio: 1.5
+  };
+
   constructor(private _authService: AuthService, private _serviceEventos: EventosService) { }
 
   ngOnInit(): void {
@@ -38,10 +61,32 @@ export class HomeComponent implements OnInit{
         this.eventosdisponibles = data.filter((evento: Evento) => 
           new Date(evento.fechaEvento) >= fechaActual
         );
+        
+        // Convertir eventos para FullCalendar
+        this.calendarOptions.events = data.map((evento: Evento) => {
+          const esPasado = new Date(evento.fechaEvento) < fechaActual;
+          return {
+            id: evento.idEvento.toString(),
+            title: `#${evento.idEvento}`,
+            start: evento.fechaEvento,
+            allDay: true,
+            backgroundColor: esPasado ? '#6c757d' : '#4285f4',
+            borderColor: esPasado ? '#6c757d' : '#4285f4',
+            extendedProps: {
+              idProfesor: evento.idProfesor
+            }
+          };
+        });
+        
         console.log('Eventos anteriores:', this.eventosanteriores);
         console.log('Eventos disponibles:', this.eventosdisponibles);
       }
     });
+  }
+
+  handleEventClick(clickInfo: any) {
+    const eventoId = clickInfo.event.id;
+    window.location.href = `/seleccion_deportes/${eventoId}`;
   }
 
   logout() {

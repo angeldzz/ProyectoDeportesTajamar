@@ -1,29 +1,29 @@
 .main-content {
-        min-height: 100vh;
+        height: calc(100vh - 56px);
         background-color: #f8f9fa;
+        overflow: hidden;
     }
 
     .activities-section {
         padding: 0;
-        min-height: 100vh;
+        height: calc(100vh - 56px);
     }
 
     .events-column {
         background-color: #ffffff;
         padding: 40px 20px;
-        min-height: 100vh;
+        height: calc(100vh - 56px);
+        max-height: calc(100vh - 56px);
         overflow-y: auto;
     }
 
     .calendario-column {
         background-color: #f8f9fa;
         padding: 40px 20px;
-        min-height: 100vh;
-        border-left: 2px solid #e0e0e0;
+        height: calc(100vh - 56px);
+        max-height: calc(100vh - 56px);
         position: sticky;
         top: 0;
-        max-height: 100vh;
-        overflow-y: auto;
     }
 
     .events-container {
@@ -38,15 +38,9 @@
 
     .calendario-content {
         background-color: white;
-        padding: 40px;
+        padding: 20px;
         border-radius: 12px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        min-height: 400px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #333;
-        font-weight: 600;
     }
 
     .section-title {
@@ -328,3 +322,85 @@
         line-height: 1;
         margin-top: 4px;
     }
+
+/* Estilos personalizados para FullCalendar */
+::ng-deep .calendario-content .fc {
+    font-family: inherit;
+}
+
+::ng-deep .calendario-content .fc-toolbar {
+    margin-bottom: 20px;
+}
+
+::ng-deep .calendario-content .fc-toolbar-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #333;
+}
+
+::ng-deep .calendario-content .fc-button {
+    background-color: #4285f4;
+    border-color: #4285f4;
+    text-transform: capitalize;
+    padding: 6px 12px;
+    font-size: 0.875rem;
+}
+
+::ng-deep .calendario-content .fc-button:hover {
+    background-color: #3367d6;
+    border-color: #3367d6;
+}
+
+::ng-deep .calendario-content .fc-button:disabled {
+    opacity: 0.5;
+}
+
+::ng-deep .calendario-content .fc-button-active {
+    background-color: #3367d6 !important;
+    border-color: #3367d6 !important;
+}
+
+::ng-deep .calendario-content .fc-daygrid-day-number {
+    color: #333;
+    font-weight: 500;
+    padding: 8px;
+}
+
+::ng-deep .calendario-content .fc-col-header-cell {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    padding: 10px;
+    color: #6c757d;
+}
+
+::ng-deep .calendario-content .fc-daygrid-day {
+    border-color: #e0e0e0;
+}
+
+::ng-deep .calendario-content .fc-event {
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 2px 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: none;
+}
+
+::ng-deep .calendario-content .fc-event:hover {
+    opacity: 0.85;
+}
+
+::ng-deep .calendario-content .fc-daygrid-day-top {
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+::ng-deep .calendario-content .fc-day-today {
+    background-color: rgba(66, 133, 244, 0.1) !important;
+}
+
+::ng-deep .calendario-content .fc-scrollgrid {
+    border-color: #e0e0e0;
+}
