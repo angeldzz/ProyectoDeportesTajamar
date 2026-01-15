@@ -1,34 +1,22 @@
-import { inject } from "@angular/core"
-import { Subscription } from "rxjs";
-import { AuthService } from "../services/auth.service";
-import { Router } from "@angular/router";
+import {map, take} from 'rxjs';
+import {AuthService} from '../services/auth.service';
+import {inject} from '@angular/core';
+import {Router} from '@angular/router';
 
 export const adminGuard = () => {
-  const router: Router = inject(Router);
-  const authService: AuthService = inject(AuthService);
-  let loggedInSubscription: Subscription;
-  let isUserLoggedIn: boolean = false;
-  let comprobarAdmin: boolean = false;
+  const router = inject(Router);
+  const authService = inject(AuthService);
 
-  loggedInSubscription = authService.isLoggedInUser.subscribe(
-    (loggedIn: boolean): void => {
-      isUserLoggedIn = loggedIn;
+  const role = localStorage.getItem('role');
+  const token = localStorage.getItem('accessToken');
 
-      console.log(authService.isLoggedInUser);
-      if (isUserLoggedIn) {
-        //TODO CAMBIAR LO HARDCODEADO
-        if (authService.getUserRole() == 'ADMINISTRADOR'){
-          comprobarAdmin = true;
-        }else{
-          alert("No eres administrador")
-          router.navigate(['']).then(r => { });
-        }
-      }else{
-        console.log(authService.isLoggedInUser);
-        router.navigate(['/login']).then(r => { });
-      }
-    }
-  )
+  console.log("Guard revisando:", { role, hasToken: !!token });
 
-  return comprobarAdmin;
-}
+  if (token && role === 'ADMINISTRADOR') {
+    return true;
+  }
+
+  alert("No eres administrador");
+  router.navigate(['']);
+  return false;
+};

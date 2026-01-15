@@ -36,20 +36,7 @@ export class AuthService {
     return this._http.post(url, body)
   }
 
-  getUserRole(): any{
-    // const accessToken: string | null = this.getToken();
-    //
-    // if (!accessToken) {
-    //   return null;
-    // }
-    //
-    // const decodedToken = this.jwtHelper.decodeToken(accessToken);
-    //
-    // console.log("EL TOKEN DECODED " + decodedToken.role);
-    //
-    // return 1;
-    //
-
+  getUserRole(): string | null {
     return localStorage.getItem('role');
   }
 
@@ -62,10 +49,12 @@ export class AuthService {
     localStorage.setItem(this.ACCESS_TOKEN, token)
     this.loggedIn.next(true); // ← AGREGAR ESTA LÍNEA
   }
+
   //** TEMPORAL ** //
   storeRole(role:string){
     localStorage.setItem("role", role)
   }
+
   //** ----- ** //
   logout() {
     localStorage.removeItem(this.ACCESS_TOKEN);
