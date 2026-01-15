@@ -1,3 +1,18 @@
 export const environment = {
-    url:"https://apideportestajamar.azurewebsites.net/"
+    url:"https://apideportestajamar.azurewebsites.net/",
+    urlActividades:"https://apideportestajamar.azurewebsites.net/api/Actividades/",
+    urlActividadesEventos:"https://apideportestajamar.azurewebsites.net/api/ActividadesEventos/",
+    urlCapitanActividades:"https://apideportestajamar.azurewebsites.net/api/CapitanActividades/",
+    urlColores:"https://apideportestajamar.azurewebsites.net/api/Colores/",
+    urlEquipos:"https://apideportestajamar.azurewebsites.net/api/Equipos/",
+    urlEventos:"https://apideportestajamar.azurewebsites.net/api/Eventos/",
+    urlGestionEvento:"https://apideportestajamar.azurewebsites.net/api/GestionEvento/",
+    urlInscripciones:"https://apideportestajamar.azurewebsites.net/api/Inscripciones/",
+    urlMateriales:"https://apideportestajamar.azurewebsites.net/api/Materiales/",
+    urlMiembroEquipos:"https://apideportestajamar.azurewebsites.net/api/MiembroEquipos/",
+    urlOrganizadores:"https://apideportestajamar.azurewebsites.net/api/Organizadores/",
+    urlPagos:"https://apideportestajamar.azurewebsites.net/api/Pagos/",
+    urlPrecioActividad:"https://apideportestajamar.azurewebsites.net/api/PrecioActividad/",
+    urlProfesEventos:"https://apideportestajamar.azurewebsites.net/api/ProfesEventos/",
+    urlUsuariosDeportes:"https://apideportestajamar.azurewebsites.net/api/UsuariosDeportes/",
 };
