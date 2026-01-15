@@ -2,16 +2,9 @@
 :root {
   --dark-bg: #0b1416;
   --sidebar-bg: #0f1c1e;
-  --card-bg: #162629;
+  --card-bg: #195a67;
   --cyan-accent: #00e5ff;
+  --text-gray: #a0a0a0;
 }
 
-.bg-dark-main {
-  background-color: var(--dark-bg);
-  color: white;
-}
 
-.btn-cyan {
-  background-color: var(--cyan-accent);
-  color: black;
-}

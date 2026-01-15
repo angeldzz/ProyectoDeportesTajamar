@@ -1,0 +1,85 @@
+.bg-dark-main {
+  background-color: var(--dark-bg);
+  color: white;
+}
+
+.btn-cyan {
+  background-color: var(--cyan-accent);
+  color: black;
+}
+/* La pastilla cian */
+.title-indicator {
+  width: 6px;
+  height: 32px;
+  background-color: var(--cyan-accent);
+  border-radius: 50px;
+  display: inline-block;
+}
+
+/* Estilo para el contenedor del título */
+.section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Estilo para tus nuevas tarjetas oscuras */
+.bg-dark-card {
+  background-color: var(--card-bg) !important;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.text-cyan {
+  color: var(--cyan-accent);
+}
+
+.btn-cyan {
+  background-color: var(--cyan-accent);
+  color: #0b1416;
+  border: none;
+  font-weight: bold;
+}
+
+.badge-deporte {
+  position: absolute;
+  bottom: 15px; /* Distancia desde abajo de la imagen */
+  left: 15px;   /* Distancia desde la izquierda */
+  background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro semitransparente */
+  color: #00e5ff; /* Texto cian */
+  border: 1px solid #00e5ff; /* Borde cian fino */
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+/* Texto extra pequeño para etiquetas */
+
+
+/* Contenedor sutil para los datos de jugadores */
+.info-cupo {
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Iconos de color cian suave */
+.bi {
+  font-size: 0.9rem;
+}
+
+/* Efecto Hover en la tarjeta */
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  background-color: #1c2e31 !important; /* Un poco más claro al pasar el ratón */
+}
+
+/* Asegúrate de tener el color gris definido */
+.text-gray {
+  color: #a0a0a0;
+}

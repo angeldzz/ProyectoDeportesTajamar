@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { CarouselModule } from 'primeng/carousel';
 import {DeportesService} from '../../../core/services/deportes.service';
-import {Deporte} from '../../../models/Deportes';
+import {ActividadDeportes} from '../../../models/ActividadDeportes';
 @Component({
   selector: 'app-seleccion-deportes',
   imports: [],
@@ -11,7 +11,7 @@ import {Deporte} from '../../../models/Deportes';
 })
 export class SeleccionDeportesComponent implements OnInit {
   public idEvento!: number;
-  public deportes!: Array<Deporte>;
+  public deportes!: Array<ActividadDeportes>;
   constructor(private _activeRoute: ActivatedRoute,private _deportesService: DeportesService) {}
 
   ngOnInit(): void {
@@ -24,6 +24,8 @@ export class SeleccionDeportesComponent implements OnInit {
         this._deportesService.getDeportesEvento(this.idEvento).subscribe(value => {
 
           this.deportes= value;
+
+          console.log(this.deportes);
         });
       }
     });

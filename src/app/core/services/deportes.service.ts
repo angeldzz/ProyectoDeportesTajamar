@@ -3,6 +3,7 @@ import {Deporte} from '../../models/Deportes';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment.development';
 import {Observable} from 'rxjs';
+import {ActividadDeportes} from '../../models/ActividadDeportes';
 
 @Injectable({ providedIn: 'root' })
 export class DeportesService {
@@ -14,16 +15,12 @@ export class DeportesService {
     return this._http.get<Array<Deporte>>(url);
 
     }
-    getDeportesEvento(idEvento:number):Observable<Array<Deporte>> {
+    getDeportesEvento(idEvento:number):Observable<Array<ActividadDeportes>> {
 
     let url=environment.urlActividades+"ActividadesEvento/"+idEvento;
-    return this._http.get<Array<Deporte>>(url);
+    return this._http.get<Array<ActividadDeportes>>(url);
 
     }
-
-
-
-
 
   //
   // getProductsMini() {
