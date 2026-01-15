@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-
-const API_BASE = 'https://apideportestajamar.azurewebsites.net/api/GestionEvento/Roles';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
+import { environment } from '../../../../environments/environment.development';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-rol',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './rol.html',
   styleUrls: ['./rol.css']
 })
@@ -18,7 +22,7 @@ export class RolComponent implements OnInit {
   loading = false;
   error: string | null = null;
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
     this.loadRoles();
@@ -33,9 +37,7 @@ export class RolComponent implements OnInit {
     this.loading = true;
     this.error = null;
     try {
-      const res = await fetch(API_BASE);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
+      const data: any[] = await firstValueFrom(this.http.get<any[]>(`${environment.url}api/GestionEvento/Roles`));
       this.roles = (data || []).map((it: any) => ({ id: it.idRole ?? it.id ?? 0, nombre: it.role ?? it.nombre ?? String(it), descripcion: it.descripcion ?? '' }));
     } catch (err: any) {
       this.error = err?.message || String(err);

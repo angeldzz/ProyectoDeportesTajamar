@@ -7,7 +7,7 @@
         type="button"
         (click)="seleccionarRol(r.id)"
         [class.selected]="r.id === seleccionado"
-        aria-pressed="{{ r.id === seleccionado }}"
+        [attr.aria-pressed]="r.id === seleccionado"
       >
         <strong>{{ r.nombre }}</strong>
       </button>

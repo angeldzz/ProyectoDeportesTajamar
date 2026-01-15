@@ -1,9 +1,13 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-
-const API_BASE = 'https://apideportestajamar.azurewebsites.net/api/Deportes';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
+import { environment } from '../../../../environments/environment.development';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-seleccionar-deporte',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './seleccionar-deporte.html',
   styleUrls: ['./seleccionar-deporte.css']
 })
@@ -21,7 +25,7 @@ export class SeleccionarDeporteComponent implements OnInit {
   loading = false;
   error: string | null = null;
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
   async ngOnInit(): Promise<void> {
     await this.loadDeportes();
@@ -35,14 +39,10 @@ export class SeleccionarDeporteComponent implements OnInit {
     this.loading = true;
     this.error = null;
     try {
-      const res = await fetch(API_BASE);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      // if API returns array of objects with id and nombre or similar fields
+      const data: any[] = await firstValueFrom(this.http.get<any[]>(`${environment.url}api/Deportes`));
       if (Array.isArray(data) && data.length) {
         this.deportes = data.map((d: any, i: number) => ({ id: d.id || d.idDeporte || i + 1, nombre: d.nombre || d.nombreDeporte || String(d) }));
       } else {
-        // fallback to default list
         this.deportes = [
           { id: 1, nombre: 'Fútbol' },
           { id: 2, nombre: 'Baloncesto' },
@@ -53,7 +53,6 @@ export class SeleccionarDeporteComponent implements OnInit {
       }
     } catch (err: any) {
       this.error = err?.message || String(err);
-      // fallback list
       this.deportes = [
         { id: 1, nombre: 'Fútbol' },
         { id: 2, nombre: 'Baloncesto' },

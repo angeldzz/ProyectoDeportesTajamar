@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-
-const API_BASE = 'https://apideportestajamar.azurewebsites.net/api/Equipos';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
+import { environment } from '../../../../environments/environment.development';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-equipos',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './equipos.html',
   styleUrls: ['./equipos.css']
 })
@@ -29,7 +33,7 @@ export class EquiposComponent implements OnInit {
     idEventoActividad?: number | null;
   } = {};
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
     this.loadEquipos();
@@ -43,9 +47,8 @@ export class EquiposComponent implements OnInit {
     this.loading = true;
     this.error = null;
     try {
-      const res = await fetch(API_BASE);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      this.equipos = await res.json();
+      const res = await firstValueFrom(this.http.get<any[]>(environment.urlEquipos));
+      this.equipos = res || [];
     } catch (err: any) {
       this.error = err?.message || String(err);
       this.equipos = [];
@@ -85,19 +88,14 @@ export class EquiposComponent implements OnInit {
   async crearEquipo() {
     this.error = null;
     try {
-      const body = JSON.stringify({
+      const body = {
         nombreEquipo: this.form.nombreEquipo || '',
         minimoJugadores: this.form.minimoJugadores || 0,
         idColor: this.form.idColor || 0,
         idCurso: this.form.idCurso || 0,
         idEventoActividad: this.form.idEventoActividad || 0
-      });
-      const res = await fetch(`${API_BASE}/create`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      };
+      await firstValueFrom(this.http.post(`${environment.urlEquipos}create`, body));
       await this.loadEquipos();
       this.clearSelection();
     } catch (err: any) {
@@ -112,20 +110,15 @@ export class EquiposComponent implements OnInit {
   async actualizarEquipo() {
     this.error = null;
     try {
-      const body = JSON.stringify({
+      const body = {
         idEquipo: this.form.idEquipo,
         nombreEquipo: this.form.nombreEquipo || '',
         minimoJugadores: this.form.minimoJugadores || 0,
         idColor: this.form.idColor || 0,
         idCurso: this.form.idCurso || 0,
         idEventoActividad: this.form.idEventoActividad || 0
-      });
-      const res = await fetch(`${API_BASE}/update`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      };
+      await firstValueFrom(this.http.put(`${environment.urlEquipos}update`, body));
       await this.loadEquipos();
       this.clearSelection();
     } catch (err: any) {
@@ -141,8 +134,7 @@ export class EquiposComponent implements OnInit {
     this.error = null;
     if (!confirm('¿Eliminar equipo?')) return;
     try {
-      const res = await fetch(`${API_BASE}/${id}`, { method: 'DELETE' });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      await firstValueFrom(this.http.delete(`${environment.urlEquipos}${id}`));
       await this.loadEquipos();
       this.clearSelection();
     } catch (err: any) {
