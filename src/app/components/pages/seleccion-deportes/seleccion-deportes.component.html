@@ -1,61 +1,56 @@
+<div class="container-fluid bg-light-custom p-5">
 
-<div class="container-fluid bg-dark-main p-4 min-vh-100">
-
-  <div class="d-flex align-items-center mb-4">
-    <div class="title-indicator me-3"></div>
-    <h2 class="text-white fw-bold m-0">Eventos Disponibles</h2>
+  <div class="d-flex align-items-center mb-5">
+    <div class="title-bar"></div>
+    <h2 class="fw-bold m-0 ms-3" style="color: var(--text-main);">Eventos Disponibles</h2>
   </div>
 
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-5">
     @for(deporte of deportes; track deporte.idActividad) {
+      <div class="col">
+        <div class="card border-0 shadow-sm h-100 bg-white overflow-hidden card-hover-simple">
 
-      <div class="card bg-dark-card border-0 h-100 shadow-sm card-hover">
-        <div class="position-relative">
-          <img src="https://img.asmedia.epimg.net/resizer/v2/Q4FRBZWWLJKJVLNER6KGG5X6WE.jpg?auth=9ac7b5ed6b83692a50a0974caa6192d003659fdc51a4f5881f7c61abdd6ee4d1&width=1472&height=828&smart=true" class="card-img-top p-2 rounded-4" alt="...">
-          <span class="badge-deporte">{{deporte.nombreActividad}}</span>
+          <div class="position-relative p-2">
+            <img src="https://img.asmedia.epimg.net/resizer/v2/Q4FRBZWWLJKJVLNER6KGG5X6WE.jpg?auth=9ac7b5ed6b83692a50a0974caa6192d003659fdc51a4f5881f7c61abdd6ee4d1&width=1472&height=828&smart=true"
+                 class="card-img-top rounded-4 shadow-sm" alt="...">
 
-          <span class="badge position-absolute top-0 start-0 m-3 badge rounded-pill text-bg-success">
-            REGISTRO ABIERTO
-          </span>
+            <span class="badge position-absolute top-0 start-0 m-3 border-0 py-2 px-3  shadow-sm badge-status">
+              REGISTRO ABIERTO
+            </span>
 
-        </div>
 
-        <div class="card-body d-flex flex-column pt-2">
-          <h5 class="card-title text-white fw-bold mb-3">{{deporte.nombreActividad}}</h5>
-
-          <div class="row g-2 mb-3">
-            <div class="col-6">
-              <div class="d-flex align-items-center text-gray small">
-                <i class="bi bi-clock me-2 text-cyan"></i>
-                <span>21:00 CEST</span>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="d-flex align-items-center text-gray small">
-                <i class="bi bi-geo-alt me-2 text-cyan"></i>
-                <span>Pista 3</span>
-              </div>
-            </div>
+            <span class="badge position-absolute bottom-0 start-0 m-3 py-1 px-3 fw-bold badge-sport-type">
+              67€
+            </span>
           </div>
 
-          <div class="d-flex justify-content-between align-items-center mt-auto pt-2">
-            <div class="d-flex align-items-center">
-              <div class="jugadores-icon-stack me-2">
-                <i class="bi bi-people-fill text-cyan"></i>
-              </div>
-              <div class="d-flex flex-column">
-                <span class="text-white fw-bold lh-1 small">12/{{deporte.minimoJugadores}}</span>
-                <span class="text-gray extra-small">Inscritos</span>
-              </div>
+          <div class="card-body d-flex flex-column p-4">
+            <h5 class="fw-bold mb-3" style="color: var(--text-main); font-size: 1.2rem;">{{deporte.nombreActividad}}</h5>
+
+            <div class="d-flex justify-content-between mb-4">
+              <span class="small text-muted"><i class="bi bi-clock-fill me-1" style="color: var(--sport-orange);"></i>
+              Precio 67€
+              </span>
             </div>
 
-            <button class="btn btn-cyan btn-sm px-4 py-2 shadow-sm rounded-3 fw-bold">
-              Inscribirse
-            </button>
+            <hr class="text-secondary opacity-25 mb-4">
+
+            <div class="d-flex justify-content-between align-items-center mt-auto">
+              <div class="d-flex align-items-center">
+
+                <div>
+                  <span class="d-block fw-bold lh-1" style="color: var(--text-main);">12/{{deporte.minimoJugadores}}</span>
+                  <span class="text-muted fw-bold" style="font-size: 0.65rem; text-transform: uppercase;">Inscritos</span>
+                </div>
+              </div>
+
+              <button class="btn btn-enroll px-4 py-2 fw-bold shadow-sm">
+                Inscribirse
+              </button>
+            </div>
           </div>
         </div>
       </div>
     }
   </div>
 </div>
-

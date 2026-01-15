@@ -1,10 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
 :root {
-  --dark-bg: #0b1416;
-  --sidebar-bg: #0f1c1e;
-  --card-bg: #195a67;
-  --cyan-accent: #00e5ff;
-  --text-gray: #a0a0a0;
+  --bg-custom: #f9f7f2;        /* Fondo suave cálido */
+  --card-white: #ffffff;
+
+  /* Colores principales */
+  --sport-orange: #ff7e5f;     /* Naranja vibrante (Energía) */
+  --sport-yellow: #feb47b;     /* Amarillo anaranjado (Detalles) */
+  --sport-yellow-light: #fff4e6; /* Fondo suave para iconos */
+  /* Estados y Texto */
+  --success-soft: #e7f7ed;
+  --success-text: #1b4d3e;
+  --text-main: #3d3d3d;        /* Gris muy oscuro cálido */
+  --text-muted: #7a7a7a;
+
 }
-
-

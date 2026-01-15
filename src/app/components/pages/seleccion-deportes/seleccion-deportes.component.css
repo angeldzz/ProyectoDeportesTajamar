@@ -1,85 +1,69 @@
-.bg-dark-main {
-  background-color: var(--dark-bg);
-  color: white;
+
+/* Contenedor Principal */
+.bg-light-custom {
+  background-color: var(--bg-custom);
+  min-height: 100vh;
 }
 
-.btn-cyan {
-  background-color: var(--cyan-accent);
-  color: black;
-}
-/* La pastilla cian */
-.title-indicator {
+/* Indicador de Título */
+.title-bar {
   width: 6px;
   height: 32px;
-  background-color: var(--cyan-accent);
+  background-color: var(--sport-orange);
   border-radius: 50px;
-  display: inline-block;
 }
 
-/* Estilo para el contenedor del título */
-.section-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1.5rem;
+/* Tarjeta Deportiva */
+.card-hover-simple {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 1.25rem !important; /* rounded-4 */
 }
 
-/* Estilo para tus nuevas tarjetas oscuras */
-.bg-dark-card {
-  background-color: var(--card-bg) !important;
-  border-radius: 12px;
-  overflow: hidden;
+.card-hover-simple:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(255, 126, 95, 0.15) !important;
 }
 
-.text-cyan {
-  color: var(--cyan-accent);
+/* Badges sobre imagen */
+.badge-status {
+  background-color: var(--success-soft);
+  color: var(--success-text);
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 800;
 }
 
-.btn-cyan {
-  background-color: var(--cyan-accent);
-  color: #0b1416;
-  border: none;
-  font-weight: bold;
-}
-
-.badge-deporte {
-  position: absolute;
-  bottom: 15px; /* Distancia desde abajo de la imagen */
-  left: 15px;   /* Distancia desde la izquierda */
-  background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro semitransparente */
-  color: #00e5ff; /* Texto cian */
-  border: 1px solid #00e5ff; /* Borde cian fino */
-  padding: 4px 12px;
+.badge-sport-type {
+  font-family: 'Outfit', sans-serif; /* Aplicamos la nueva fuente */
+  background-color: #e5f5eb;
+  color: var(--text-main);
   border-radius: 8px;
   font-size: 0.7rem;
-  font-weight: bold;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-/* Texto extra pequeño para etiquetas */
-
-
-/* Contenedor sutil para los datos de jugadores */
-.info-cupo {
-  background-color: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  font-weight: 700;
+  backdrop-filter: blur(4px);
 }
 
-/* Iconos de color cian suave */
-.bi {
-  font-size: 0.9rem;
+/* Iconos de información */
+.icon-container {
+  background-color: var(--sport-yellow-light);
+  border-radius: 10px;
 }
 
-/* Efecto Hover en la tarjeta */
-.card-hover {
-  transition: all 0.3s ease;
+.icon-people {
+  color: var(--sport-orange);
 }
 
-.card-hover:hover {
-  transform: translateY(-5px);
-  background-color: #1c2e31 !important; /* Un poco más claro al pasar el ratón */
+/* Botón de Inscripción */
+.btn-enroll {
+  background: linear-gradient(135deg, var(--sport-orange), var(--sport-yellow));
+  color: white !important;
+  border-radius: 12px;
+  border: none;
+  font-size: 0.85rem;
+  transition: opacity 0.2s;
 }
 
-/* Asegúrate de tener el color gris definido */
-.text-gray {
-  color: #a0a0a0;
+.btn-enroll:hover {
+  opacity: 0.9;
+  box-shadow: 0 4px 12px rgba(255, 126, 95, 0.3);
 }
