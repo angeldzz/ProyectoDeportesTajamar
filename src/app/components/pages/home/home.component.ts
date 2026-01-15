@@ -2,13 +2,14 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../../core/services/auth.service';
 import { EventosService } from '../../../core/services/eventos.service';
 import { Evento } from '../../../models/Evento';
-import { DatePipe } from '@angular/common';
+import { DatePipe, UpperCasePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   imports: [
     DatePipe,
+    UpperCasePipe,
     RouterLink
   ],
   templateUrl: './home.component.html',
