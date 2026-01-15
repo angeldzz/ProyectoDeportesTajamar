@@ -1,40 +1,119 @@
 <main class="main-content">
-    <section class="hero-section">
-        <div class="container">
-            <h1 class="hero-title">Bienvenido a Deportes Tajamar</h1>
-            <p class="hero-subtitle">Encuentra y únete a actividades deportivas</p>
-        </div>
-    </section>
-
     <section class="activities-section">
         <div class="container">
-            <h2 class="section-title">Actividades Disponibles</h2>
+            <h2 class="section-title">Eventos Disponibles</h2>
             <div class="row">
-                @for (evento of eventos; track evento ) {
+                @for (evento of eventosDisponiblesPaginados; track evento.idEvento ) {
                     <div class="col-md-4 mb-4">
                         <div class="card activity-card">
-                            <div class="card-header bg-primary text-white">
-                                <h3 class="card-title mb-0">Evento #{{ evento.idEvento }}</h3>
+                            <div class="card-header bg-gradient-primary text-white">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="calendar-badge">
+                                        <span class="calendar-month">{{ evento.fechaEvento | date:'MMM' }}</span>
+                                        <span class="calendar-day">{{ evento.fechaEvento | date:'dd' }}</span>
+                                    </div>
+                                    <span class="badge bg-light text-primary">#{{ evento.idEvento }}</span>
+                                </div>
                             </div>
                             <div class="card-body">
-                                <div class="d-flex justify-content-between mb-3">
-                                    <span class="fw-bold text-muted">ID Evento:</span>
-                                    <span class="text-primary">{{ evento.idEvento }}</span>
+                                <div class="event-info mb-3">
+                                    <div class="info-item">
+                                        <i class="bi bi-clock text-primary"></i>
+                                        <span class="info-label">Hora:</span>
+                                        <span class="info-value">{{ evento.fechaEvento | date:'HH:mm' }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <i class="bi bi-person-badge text-primary"></i>
+                                        <span class="info-label">Profesor:</span>
+                                        <span class="info-value">ID {{ evento.idProfesor }}</span>
+                                    </div>
                                 </div>
-                                <div class="d-flex justify-content-between mb-3">
-                                    <span class="fw-bold text-muted">Fecha Evento:</span>
-                                    <span class="text-primary">{{ evento.fechaEvento | date }}</span>
-                                </div>
-                                <div class="d-flex justify-content-between mb-3">
-                                    <span class="fw-bold text-muted">ID Profesor:</span>
-                                    <span class="text-primary">{{ evento.idProfesor }}</span>
-                                </div>
-                                <button class="btn btn-primary w-100">Unirse</button>
+                                <button class="btn btn-primary w-100 btn-join" [routerLink]="'/seleccion_deportes/' + evento.idEvento">
+                                    <i class="bi bi-plus-circle me-2"></i>Unirse al Evento
+                                </button>
                             </div>
                         </div>
                     </div>
                 }
             </div>
+            @if (totalPaginasDisponibles > 1) {
+                <div class="pagination-controls">
+                    <button 
+                        class="btn btn-outline-primary pagination-btn" 
+                        (click)="anteriorPaginaDisponibles()" 
+                        [disabled]="paginaDisponibles === 1">
+                        <i class="bi bi-chevron-left"></i> Anterior
+                    </button>
+                    <span class="pagination-info">
+                        Página {{ paginaDisponibles }} de {{ totalPaginasDisponibles }}
+                    </span>
+                    <button 
+                        class="btn btn-outline-primary pagination-btn" 
+                        (click)="siguientePaginaDisponibles()" 
+                        [disabled]="paginaDisponibles === totalPaginasDisponibles">
+                        Siguiente <i class="bi bi-chevron-right"></i>
+                    </button>
+                </div>
+            }
+        </div>
+    </section>
+
+    <section class="activities-section past-events">
+        <div class="container">
+            <h2 class="section-title">Eventos Pasados</h2>
+            <div class="row">
+                @for (evento of eventosAnterioresPaginados; track evento.idEvento ) {
+                    <div class="col-md-4 mb-4">
+                        <div class="card activity-card past-card">
+                            <div class="card-header bg-gradient-secondary text-white">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="calendar-badge">
+                                        <span class="calendar-month">{{ evento.fechaEvento | date:'MMM' }}</span>
+                                        <span class="calendar-day">{{ evento.fechaEvento | date:'dd' }}</span>
+                                    </div>
+                                    <span class="badge bg-light text-secondary">#{{ evento.idEvento }}</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="event-info mb-3">
+                                    <div class="info-item">
+                                        <i class="bi bi-clock text-secondary"></i>
+                                        <span class="info-label">Hora:</span>
+                                        <span class="info-value">{{ evento.fechaEvento | date:'HH:mm' }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <i class="bi bi-person-badge text-secondary"></i>
+                                        <span class="info-label">Profesor:</span>
+                                        <span class="info-value">ID {{ evento.idProfesor }}</span>
+                                    </div>
+                                </div>
+                                <button class="btn btn-secondary w-100" disabled>
+                                    <i class="bi bi-check-circle me-2"></i>Finalizado
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            @if (totalPaginasAnteriores > 1) {
+                <div class="pagination-controls">
+                    <button 
+                        class="btn btn-outline-secondary pagination-btn" 
+                        (click)="anteriorPaginaAnteriores()" 
+                        [disabled]="paginaAnteriores === 1">
+                        <i class="bi bi-chevron-left"></i> Anterior
+                    </button>
+                    <span class="pagination-info">
+                        Página {{ paginaAnteriores }} de {{ totalPaginasAnteriores }}
+                    </span>
+                    <button 
+                        class="btn btn-outline-secondary pagination-btn" 
+                        (click)="siguientePaginaAnteriores()" 
+                        [disabled]="paginaAnteriores === totalPaginasAnteriores">
+                        Siguiente <i class="bi bi-chevron-right"></i>
+                    </button>
+                </div>
+            }
         </div>
     </section>
 </main>

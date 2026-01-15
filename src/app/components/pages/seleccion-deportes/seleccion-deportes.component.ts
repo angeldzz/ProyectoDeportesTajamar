@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
 
 @Component({
   selector: 'app-seleccion-deportes',
@@ -6,6 +7,17 @@ import { Component } from '@angular/core';
   templateUrl: './seleccion-deportes.component.html',
   styleUrl: './seleccion-deportes.component.css',
 })
-export class SeleccionDeportesComponent {
+export class SeleccionDeportesComponent implements OnInit {
+  public idEvento!: number;
 
+  constructor(private _activeRoute: ActivatedRoute) {}
+
+  ngOnInit(): void {
+    this._activeRoute.params.subscribe((parametros: Params) => {
+      if (parametros['idEvento'] != null) {
+        this.idEvento = Number(parametros['idEvento']);
+        console.log('ID del evento:', this.idEvento);
+      }
+    });
+  }
 }
