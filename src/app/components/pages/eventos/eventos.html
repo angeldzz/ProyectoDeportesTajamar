@@ -1,0 +1,35 @@
+<div class="eventos-page">
+  <h2>Eventos</h2>
+
+  <div class="buscar">
+    <input
+      name="buscar"
+      [value]="filtro"
+      (input)="filtro = $any($event.target).value"
+      placeholder="Buscar por título, lugar o descripción"
+      aria-label="Buscar eventos"
+    />
+  </div>
+
+  <ul class="eventos-list" *ngIf="eventos && eventos.length; else noEventos">
+    <li *ngFor="let ev of eventosFiltrados()" class="evento-item">
+      <h4>{{ ev.titulo }}</h4>
+      <p class="meta">
+        <span>{{ ev.fecha }}</span>
+        <span *ngIf="ev.lugar"> · {{ ev.lugar }}</span>
+      </p>
+      <p *ngIf="ev.equipoLocal || ev.equipoVisitante">
+        <small>
+          {{ ev.equipoLocal || '' }}
+          <span *ngIf="ev.equipoLocal && ev.equipoVisitante"> vs </span>
+          {{ ev.equipoVisitante || '' }}
+        </small>
+      </p>
+      <p *ngIf="ev.descripcion">{{ ev.descripcion }}</p>
+    </li>
+  </ul>
+
+  <ng-template #noEventos>
+    <p>No hay eventos disponibles.</p>
+  </ng-template>
+</div>

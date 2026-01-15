@@ -1,0 +1,31 @@
+<div class="rol-page">
+  <h2>Roles</h2>
+
+  <ul class="roles-list" *ngIf="roles && roles.length; else noRoles">
+    <li *ngFor="let r of roles" class="rol-item">
+      <button
+        type="button"
+        (click)="seleccionarRol(r.id)"
+        [class.selected]="r.id === seleccionado"
+        aria-pressed="{{ r.id === seleccionado }}"
+      >
+        <strong>{{ r.nombre }}</strong>
+      </button>
+      <p *ngIf="r.descripcion" class="descripcion">{{ r.descripcion }}</p>
+    </li>
+  </ul>
+
+  <ng-template #noRoles>
+    <p>No hay roles definidos.</p>
+  </ng-template>
+
+  <div *ngIf="seleccionado !== null" class="detalle-rol">
+    <h3>Rol seleccionado</h3>
+    <div *ngFor="let r of roles">
+      <div *ngIf="r.id === seleccionado">
+        <p><strong>Nombre:</strong> {{ r.nombre }}</p>
+        <p *ngIf="r.descripcion"><strong>Descripción:</strong> {{ r.descripcion }}</p>
+      </div>
+    </div>
+  </div>
+</div>
