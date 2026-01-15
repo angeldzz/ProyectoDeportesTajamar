@@ -11,6 +11,7 @@ import {NotFoundComponent} from './components/pages/not-found/not-found.componen
 import {authGuard} from './core/guards/auth.guard';
 import {loginGuard} from './core/guards/login.guard';
 import {adminGuard} from './core/guards/admin.guard';
+import { CreacionEventosComponent } from './components/pages/creacion-eventos/creacion-eventos.component';
 
 export const routes: Routes = [
   {
@@ -51,6 +52,11 @@ export const routes: Routes = [
     component: PanelAdministradorComponent,
     canActivate: [adminGuard]
     //TODO METER EL GUARD
+  },
+  {
+    path: "creacion_eventos",
+    component: CreacionEventosComponent,
+    canActivate: [adminGuard]
   },
   {
     path: "register",

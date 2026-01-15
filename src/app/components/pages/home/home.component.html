@@ -5,7 +5,10 @@
                 <!-- Columna izquierda - Eventos -->
                 <div class="col-lg-6 events-column">
                     <div class="events-container">
-                        <h2 class="section-title">Eventos Disponibles</h2>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h2 class="section-title mb-0">Eventos Disponibles</h2>
+                            <button type="button" class="btn btn-primary" [routerLink]="'/creacion_eventos'">Crear Evento</button>
+                        </div>
                         <div class="row px-3">
                             @for (evento of eventosDisponiblesPaginados; track evento.idEvento ) {
                                 <div class="col-12 mb-2">

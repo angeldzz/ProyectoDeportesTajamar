@@ -1,1 +1,74 @@
-<p>perfil.component works!</p>
+<div class="perfil-container" *ngIf="perfil">
+
+  <div class="perfil-content">
+    <div class="perfil-main-info">
+      <div class="perfil-avatar-section">
+        <img src="https://cdn.pixabay.com/photo/2017/11/10/05/48/user-2935527_640.png" alt="Foto de perfil" class="perfil-avatar">
+        <div class="perfil-status" [class.active]="perfil.estadoUsuario">
+          {{ perfil.estadoUsuario ? 'Activo' : 'Inactivo' }}
+        </div>
+      </div>
+      <div class="perfil-text-info">
+        <h1 class="perfil-nombre">{{ perfil.nombre }} {{ perfil.apellidos }}</h1>
+        <p class="perfil-role">{{ perfil.role }}</p>
+      </div>
+    </div>
+
+    <div class="perfil-details">
+      <div class="detail-card">
+        <div class="detail-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z" />
+            <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
+          </svg>
+        </div>
+        <div class="detail-content">
+          <span class="detail-label">Email</span>
+          <span class="detail-value">{{ perfil.email }}</span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M11.7 2.805a.75.75 0 01.6 0A60.65 60.65 0 0122.83 8.72a.75.75 0 01-.231 1.337 49.949 49.949 0 00-9.902 3.912l-.003.002-.34.18a.75.75 0 01-.707 0A50.009 50.009 0 007.5 12.174v-.224c0-.131.067-.248.172-.311a54.614 54.614 0 014.653-2.52.75.75 0 00-.65-1.352 56.129 56.129 0 00-4.78 2.589 1.858 1.858 0 00-.859 1.228 49.803 49.803 0 00-4.634-1.527.75.75 0 01-.231-1.337A60.653 60.653 0 0111.7 2.805z" />
+            <path d="M13.06 15.473a48.45 48.45 0 017.666-3.282c.134 1.414.22 2.843.255 4.285a.75.75 0 01-.46.71 47.878 47.878 0 00-8.105 4.342.75.75 0 01-.832 0 47.877 47.877 0 00-8.104-4.342.75.75 0 01-.461-.71c.035-1.442.121-2.87.255-4.286A48.4 48.4 0 016 15.473v.322c0 .409.145.809.401 1.11l.05.052a23.319 23.319 0 008.653 5.815.75.75 0 00.597-.001 23.319 23.319 0 008.653-5.815l.05-.052c.256-.301.401-.701.401-1.11v-.322z" />
+          </svg>
+        </div>
+        <div class="detail-content">
+          <span class="detail-label">Curso</span>
+          <span class="detail-value">{{ perfil.curso }}</span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <div class="detail-content">
+          <span class="detail-label">ID de Usuario</span>
+          <span class="detail-value">#{{ perfil.idUsuario }}</span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <div class="detail-content">
+          <span class="detail-label">Rol</span>
+          <span class="detail-value">{{ perfil.role }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="loading-container" *ngIf="!perfil">
+  <div class="spinner"></div>
+  <p>Cargando perfil...</p>
+</div>
