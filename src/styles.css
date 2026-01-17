@@ -13,4 +13,28 @@
   --text-main: #3d3d3d;        /* Gris muy oscuro cálido */
   --text-muted: #7a7a7a;
 
+
+  /*COLORES PARA PREVISUALIZAR EN TABLA COLORES*/
+  --color-rojo: #ff4d4d;
+  --color-azul: #3498db;
+  --color-verde: #2ecc71;
+  --color-amarillo: #f1c40f;
+  --color-naranja: #e67e22;
+  --color-morado: #9b59b6;
+  --color-rosa: #e84393;
+  --color-marron: #8d6e63;
+  --color-gris: #95a5a6;
+  --color-negro: #2d3436;
+  --color-blanco: #ffffff;
+  --color-cian: #00d2d3;
+  --color-default: #ced4da;
+  --color-lima: #badc58;
+  --color-turquesa: #81ecec;
+  --color-fucsia: #ff00ff;
+  --color-dorado: #ffbc00;
+  --color-plata: #bdc3c7;
+  --color-beige: #f5f5dc;
+  --color-lila: #dcdde1;
+  --color-oliva: #808000;
+  --color-marino: #191970;
 }

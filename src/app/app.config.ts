@@ -5,7 +5,6 @@ import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@ang
 import {LoginInterceptor} from './core/interceptors/login.interceptor';
 import {AuthInterceptor} from './core/interceptors/auth.interceptor';
 import {httpInterceptorProviders} from './core/interceptors';
-
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),

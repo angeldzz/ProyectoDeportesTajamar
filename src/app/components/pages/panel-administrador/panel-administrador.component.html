@@ -1,1 +1,40 @@
-<p>panel-administrador.component works!</p>
+<div class="admin-container">
+
+  <app-sidebar></app-sidebar>
+
+  <main class="admin-main-content">
+
+    <div class="p-4">
+      <div class="row g-4 mb-5 justify-content-center">
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm p-3 rounded-4 h-100">
+            <span class="text-muted small fw-bold">Colores</span>
+            <h2 class="fw-800 text-primary mb-0">{{numColores}}</h2>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm p-3 rounded-4 h-100">
+            <span class="text-muted small fw-bold">Eventos Activos</span>
+            <h2 class="fw-800 text-primary mb-0">24</h2>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm p-3 rounded-4 h-100">
+            <span class="text-muted small fw-bold">Actividades</span>
+            <h2 class="fw-800 text-primary mb-0">24</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="d-flex align-items-center mb-4">
+        <div class="title-bar-premium"></div>
+        <h3 class="fw-bold m-0 ms-3">Eventos</h3>
+      </div>
+    </div>
+
+    <router-outlet></router-outlet>
+  </main>
+</div>

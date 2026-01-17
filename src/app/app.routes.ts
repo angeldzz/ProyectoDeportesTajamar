@@ -11,8 +11,9 @@ import {NotFoundComponent} from './components/pages/not-found/not-found.componen
 import {authGuard} from './core/guards/auth.guard';
 import {loginGuard} from './core/guards/login.guard';
 import {adminGuard} from './core/guards/admin.guard';
-import { CreacionEventosComponent } from './components/shared/creacion-eventos/creacion-eventos.component';
+import {CreacionEventosComponent} from './components/shared/creacion-eventos/creacion-eventos.component';
 import {DeporteEventoComponent} from './components/pages/deporte-evento/deporte-evento.component';
+import {ColoresComponent} from './components/pages/forms/colores-form/colores.component';
 
 export const routes: Routes = [
   {
@@ -55,12 +56,6 @@ export const routes: Routes = [
     //TODO METER EL GUARD
   },
   {
-    path: "panel_administrador",
-    component: PanelAdministradorComponent,
-    canActivate: [adminGuard]
-    //TODO METER EL GUARD
-  },
-  {
     path: "creacion_eventos",
     component: CreacionEventosComponent,
     canActivate: [adminGuard]
@@ -69,6 +64,15 @@ export const routes: Routes = [
     path: "register",
     component: RegisterComponent
   },
-  //Debemos dejar siempre el NotFound404 ultimo
+  {
+    path: "panel_administrador",
+    component: PanelAdministradorComponent,
+    canActivate: [adminGuard],
+    children:
+      [
+        {path: 'colores-form', component: ColoresComponent},
+      ]
+
+  },
   {path: '**', component: NotFoundComponent}
 ];

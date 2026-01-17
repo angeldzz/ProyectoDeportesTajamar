@@ -1,0 +1,48 @@
+/* El contenedor ocupa el 100% del alto del viewport */
+.sidebar-wrapper {
+  width: 280px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  background-color: #ffffff;
+  border-right: 1px solid rgba(0,0,0,0.05);
+  font-family: 'Outfit', sans-serif;
+}
+
+.brand-text {
+  color: #2d3436;
+  letter-spacing: -0.5px;
+}
+
+.logo-icon {
+  background: linear-gradient(135deg, #6c5ce7, #00d2d3);
+  color: white;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-size: 1.2rem;
+}
+
+/* Estilo de los links */
+.nav-link {
+  color: #636e72;
+  font-weight: 500;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  padding: 12px 15px;
+}
+
+.nav-link:hover {
+  background-color: #f1f0ff;
+  color: #6c5ce7;
+}
+
+/* Estilo cuando el link está activo (Angular Router) */
+.nav-link.active {
+  background-color: #6c5ce7 !important;
+  color: white !important;
+  box-shadow: 0 4px 15px rgba(108, 92, 231, 0.2);
+}

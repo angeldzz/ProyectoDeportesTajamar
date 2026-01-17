@@ -1,0 +1,20 @@
+/* Contenedor principal del Panel Admin */
+.admin-container {
+  display: flex;
+  width: 100%;
+  height: 100vh; /* Ocupa toda la ventana */
+  overflow: hidden; /* Evita que la página entera tenga scroll */
+}
+
+/* El contenido que va a la derecha del sidebar */
+.admin-main-content {
+  flex-grow: 1; /* Ocupa todo el espacio restante */
+  height: 100vh;
+  overflow-y: auto; /* Solo esta parte tiene scroll si el contenido es largo */
+  background-color: #fdfdff; /* Fondo suave de tu paleta Electric Pulse */
+}
+
+/* Forzar que el componente sidebar ocupe el alto */
+app-sidebar {
+  height: 100%;
+}
