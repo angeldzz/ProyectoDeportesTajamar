@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PerfilUsuario } from '../../../models/PerfilUsuario';
+import { Usuario } from '../../../models/Usuario';
 import { PerfilService } from '../../../core/services/perfil.service';
 import { CommonModule } from '@angular/common';
 
@@ -10,12 +10,12 @@ import { CommonModule } from '@angular/common';
   styleUrl: './perfil.component.css',
 })
 export class PerfilComponent implements OnInit{
-  public perfil: PerfilUsuario | undefined;
-  
+  public perfil: Usuario | undefined;
+
   constructor(
     private _perfilService: PerfilService
   ){}
-  
+
   ngOnInit(): void {
     this._perfilService.GetEventos().subscribe(perfil => {
       this.perfil = perfil;

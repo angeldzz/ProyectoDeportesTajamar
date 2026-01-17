@@ -14,12 +14,7 @@ export class AuthService {
   private readonly ACCESS_TOKEN = 'accessToken';
   private jwtHelper: JwtHelperService = new JwtHelperService();
 
-  //loggedInUser: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.hasToken());
-
-  // Este "Subject" guarda el estado de si está logueado o no
   loggedIn = new BehaviorSubject<boolean>(this.hasToken());
-
-  // Observable para que otros componentes se suscriban si quieren
 
   get isLoggedInUser(): Observable<boolean> {
     return this.loggedIn.asObservable();
@@ -54,8 +49,9 @@ export class AuthService {
   storeRole(role:string){
     localStorage.setItem("role", role)
   }
-
   //** ----- ** //
+
+
   logout() {
     localStorage.removeItem(this.ACCESS_TOKEN);
     localStorage.removeItem("role");
@@ -66,16 +62,5 @@ export class AuthService {
   getToken(): string | null{
     return localStorage.getItem(this.ACCESS_TOKEN);
   }
-
-  // isLoggedIn(): boolean {
-  //   const refreshToken: string = this.getRefreshToken();
-  //
-  //   if (!refreshToken || this.jwtHelper.isTokenExpired(refreshToken)) {
-  //     this.removeTokens();
-  //     this.loggedInUser.next(false);
-  //   }
-  //
-  //   return !this.jwtHelper.isTokenExpired(refreshToken);
-  // }
 
 }
