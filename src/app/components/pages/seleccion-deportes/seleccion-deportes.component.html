@@ -44,7 +44,12 @@
                 </div>
               </div>
 
-              <button class="btn btn-enroll px-4 py-2 fw-bold shadow-sm">
+              <button class="btn btn-enroll px-4 py-2 fw-bold shadow-sm" [routerLink]="['/deporte_eventos',idEvento,deporte.idActividad]">
+                Detalles
+              </button>
+
+              <button class="btn btn-enroll px-4 py-2 fw-bold shadow-sm"
+              (click)="inscribirseActividadEvento(this.idEvento,deporte.idActividad,deporte.idEventoActividad)">
                 Inscribirse
               </button>
             </div>

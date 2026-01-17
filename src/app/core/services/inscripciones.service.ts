@@ -28,4 +28,11 @@ export class InscripcionesService {
 
     return this._http.post<Inscripciones>(url, body);
   }
+
+
+  getNumeroInscipcionesEventoActividad(idEvento:number, idactividad:number):Observable<any>{
+    let url = environment.urlInscripciones+"InscripcionesUsuariosEventoActividad/"+idEvento+"?idactividad="+idactividad;
+
+    return this._http.get(url);
+  }
 }

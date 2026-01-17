@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../../../models/Usuario';
-import { PerfilService } from '../../../core/services/perfil.service';
+import { UsuarioService } from '../../../core/services/usuario.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -13,11 +13,11 @@ export class PerfilComponent implements OnInit{
   public perfil: Usuario | undefined;
 
   constructor(
-    private _perfilService: PerfilService
+    private _usuarioService: UsuarioService
   ){}
 
   ngOnInit(): void {
-    this._perfilService.GetEventos().subscribe(perfil => {
+    this._usuarioService.getDatosUsuario().subscribe(perfil => {
       this.perfil = perfil;
       console.log(perfil);
     });

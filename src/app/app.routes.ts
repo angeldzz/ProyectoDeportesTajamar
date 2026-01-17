@@ -12,6 +12,7 @@ import {authGuard} from './core/guards/auth.guard';
 import {loginGuard} from './core/guards/login.guard';
 import {adminGuard} from './core/guards/admin.guard';
 import { CreacionEventosComponent } from './components/shared/creacion-eventos/creacion-eventos.component';
+import {DeporteEventoComponent} from './components/pages/deporte-evento/deporte-evento.component';
 
 export const routes: Routes = [
   {
@@ -44,6 +45,12 @@ export const routes: Routes = [
   {
     path: "pagos",
     component: PagosComponent,
+    canActivate: [loginGuard],
+    //TODO METER EL GUARD
+  },
+  {
+    path: "deporte_eventos/:idEvento/:idDeporte",
+    component: DeporteEventoComponent,
     canActivate: [loginGuard],
     //TODO METER EL GUARD
   },
