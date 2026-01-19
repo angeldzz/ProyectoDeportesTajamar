@@ -31,9 +31,9 @@ export class AuthService {
     return this._http.post(url, body)
   }
 
-  getUserRole(): string | null {
-    return localStorage.getItem('role');
-  }
+  // getUserRole(): string | null {
+  //   return localStorage.getItem('role');
+  // }
 
 
   private hasToken(): boolean {
@@ -45,14 +45,40 @@ export class AuthService {
     this.loggedIn.next(true); // ← AGREGAR ESTA LÍNEA
   }
 
+
+
+
   //** TEMPORAL ** //
   storeRole(role:string){
     localStorage.setItem("role", role)
   }
   //** ----- ** //
 
+  getUserRole(): number | null {
+    const accessToken: string |null = this.getToken();
 
-  logout() {
+    if (!accessToken) {
+      return null;
+    }
+    const userRoleId:string |null  = localStorage.getItem("role");
+
+    switch (userRoleId) {
+      case "1":
+        return 1;
+      case "2":
+        return 2;
+      case "3":
+        return 3;
+      case "4":
+        return 4;
+      case "5":
+        return 5;
+      default:
+        return null;
+    }
+  }
+
+    logout() {
     localStorage.removeItem(this.ACCESS_TOKEN);
     localStorage.removeItem("role");
     this.loggedIn.next(false); // Avisamos que ya no tiene token

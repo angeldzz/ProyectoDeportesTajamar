@@ -46,7 +46,8 @@ export class LoginComponent implements OnInit {
         //TODO CUANDO SE ACTIVE LA SEGURIDAD CORRECTAMENTE DEJAR DE GUARDAR EN LOCALSTORAGE EL ROL
 
         this._authService.storeToken(response.response);
-        this._authService.storeRole(response.role);
+        this._authService.storeRole(response.idrole);
+       console.log(response);
         this._router.navigate(['']);
       },
       error: (err) => alert('Credenciales inválidas')
