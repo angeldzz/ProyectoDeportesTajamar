@@ -32,8 +32,6 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-
-
     this.userName=this.cajaUserName.nativeElement.value+"@tajamar365.com";
     this.password=this.cajaPassword.nativeElement.value;
 
