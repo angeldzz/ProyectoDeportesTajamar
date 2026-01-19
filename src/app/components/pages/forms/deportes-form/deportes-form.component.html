@@ -1,0 +1,57 @@
+<p>deportes-form.component works!</p>
+<div class="admin-actividades-wrapper mx-auto" style="width: 80%;">
+
+  <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+    <h5 class="fw-bold mb-3 text-primary">Nueva Actividad</h5>
+    <form ngForm="ngForm" class="row g-3">
+      <div class="col-md-7">
+        <label class="form-label small fw-bold text-muted">NOMBRE DE LA ACTIVIDAD</label>
+        <input type="text" #cajaNombreAct
+               class="form-control border-0 bg-light rounded-3 p-2"
+               placeholder="Ej: Torneo de Pádel Nocturno">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label small fw-bold text-muted">MÍN. JUGADORES</label>
+        <input type="number" #cajaMinimo
+               class="form-control border-0 bg-light rounded-3 p-2"
+               placeholder="0">
+      </div>
+      <div class="col-md-2 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100 rounded-3 py-2">
+          <i class="bi bi-plus-lg"></i> Crear
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="tabla-scroll-container shadow-sm bg-white rounded-4 overflow-hidden">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="sticky-top bg-light">
+      <tr>
+        <th class="text-center" style="width: 15%;">ID</th>
+        <th style="width: 50%;">ACTIVIDAD</th>
+        <th class="text-center" style="width: 20%;">MÍN. JUGADORES</th>
+        <th class="text-center" style="width: 15%;">ACCIONES</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (act of actividades; track act.idActividad) {
+          <tr>
+            <td class="text-center text-muted fw-bold">#{{act.idActividad}}</td>
+            <td><span class="fw-semibold text-dark">{{act.nombre}}</span></td>
+            <td class="text-center">
+              <span class="badge bg-info-subtle text-info px-3 py-2 rounded-pill">
+                {{act.minimoJugadores}} pers.
+              </span>
+            </td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-outline-primary border-0">
+                <i class="bi bi-pencil-square"></i>
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

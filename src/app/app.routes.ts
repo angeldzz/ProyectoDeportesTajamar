@@ -14,6 +14,7 @@ import {adminGuard} from './core/guards/admin.guard';
 import {CreacionEventosComponent} from './components/shared/creacion-eventos/creacion-eventos.component';
 import {DeporteEventoComponent} from './components/pages/deporte-evento/deporte-evento.component';
 import {ColoresComponent} from './components/pages/forms/colores-form/colores.component';
+import {DeportesFormComponent} from './components/pages/forms/deportes-form/deportes-form.component';
 
 export const routes: Routes = [
   {
@@ -71,6 +72,7 @@ export const routes: Routes = [
     children:
       [
         {path: 'colores-form', component: ColoresComponent},
+        {path: 'actividades-form', component: DeportesFormComponent},
       ]
 
   },

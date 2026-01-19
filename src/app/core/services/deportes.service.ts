@@ -22,16 +22,20 @@ export class DeportesService {
 
     }
 
-  //
-  // getProductsMini() {
-  //   return Promise.resolve(this.getDeportes().slice(0, 5));
-  // }
-  //
-  // getProductsSmall() {
-  //   return Promise.resolve(this.getDeportes().slice(0, 10));
-  // }
-  //
-  // getProducts() {
-  //   return Promise.resolve(this.getDeportes());
-  // }
+    getActividades():Observable<Array<Deporte>>{
+    let url=environment.urlActividades;
+    return this._http.get<Array<Deporte>>(url);
+    }
+
+    crearActividad(nombre:String,minJugadores:Number):Observable<any> {
+      let url=environment.urlActividades+"create";
+
+      const body={
+        "idActividad": 0,
+        "nombre":nombre,
+        "minimoJugadores": minJugadores
+      }
+      return this._http.post(url, body);
+    }
+
 };

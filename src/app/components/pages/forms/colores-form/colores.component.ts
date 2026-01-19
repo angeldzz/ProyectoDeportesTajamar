@@ -3,16 +3,21 @@ import {HttpClient} from '@angular/common/http';
 import {ColoresService} from '../../../../core/services/colores.service';
 import {Colores} from '../../../../models/Colores';
 import Swal from 'sweetalert2';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-colores-form',
   templateUrl: './colores.component.html',
   styleUrl: './colores.component.css',
+  imports: [
+    FormsModule
+  ]
 })
 export class ColoresComponent implements OnInit {
 
   public colores: Array<Colores> = [];
-  public idEditando: number = 0;
+  public idEditando!: number;
+  nombreColor!:String;
   @ViewChild('cajaNombre') cajaNombre!: ElementRef;
 
   @ViewChild('cajaId') cajaId!: ElementRef;
@@ -58,19 +63,36 @@ export class ColoresComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this._coloresService.deleteColor(idColor).subscribe(value => {
+          console.log(value);
           Swal.fire({
             title: "Deleted!",
             text: "Your file has been deleted.",
             icon: "success"
           });
-
         });
       }
     });
   }
 
   crearColor(){
-    this.cajaId.nativeElement.value;
 
+
+   this.nombreColor= this.cajaNombre.nativeElement.value;
+
+   this._coloresService.createColor(this.nombreColor).subscribe(value => {
+     console.log(value);
+     window.location.reload();
+   })
+  }
+
+  updateColor(){
+    this.nombreColor=this.cajaNombreModal.nativeElement.value;
+    this.idEditando=this.cajaId.nativeElement.value;
+
+
+    this._coloresService.updateColor(this.idEditando,this.nombreColor).subscribe(value => {
+      console.log(this.idEditando,this.nombreColor);
+      window.location.reload();
+    })
   }
 }

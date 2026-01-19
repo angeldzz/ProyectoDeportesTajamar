@@ -17,15 +17,17 @@ export class ColoresService {
     return this._http.get<Array<Colores>>(url);
   }
 
-  getVariableColor(nombre: string): string {
-    if (!nombre) return 'var(--color-default)';
-
-    // Pasamos a minúsculas y quitamos espacios para evitar errores
-    const clave = nombre.toLowerCase().trim();
-
-    // Retornamos la variable CSS correspondiente
-    // Esto asume que si el back devuelve "Rojo", tú tienes "--color-rojo"
-    return `var(--color-${clave}, var(--color-default))`;
+  updateColor(idColor: Number,nombreColor:String):Observable<any> {
+    let url= environment.urlColores+"update";
+    const body={
+      "idColor": idColor,
+      "nombreColor": nombreColor
+    }
+    return this._http.put(url,body)
+  }
+  createColor(nombreColor:String):Observable<any> {
+    let url= environment.urlColores+"create/"+nombreColor;
+    return this._http.post(url,nombreColor)
   }
 
   deleteColor(idColor:Number):Observable<any> {

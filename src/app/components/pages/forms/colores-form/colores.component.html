@@ -9,13 +9,13 @@
       <form ngForm="ngForm" class="d-flex align-items-center gap-3">
         <div class="flex-grow-1">
           <input type="text"
-                 #cajaNuevoColor
+                 #cajaNombre
                  class="form-control border-0 bg-light rounded-3"
                  name="cajaColor"
                  required
                  placeholder="Nombre del nuevo color (ej: Cian)...">
         </div>
-        <button type="submit" class="btn btn-primary px-4 rounded-3 d-flex align-items-center">
+        <button type="submit" (click)="crearColor()" class="btn btn-primary px-4 rounded-3 d-flex align-items-center">
           <i class="bi bi-plus-lg me-2"></i> Añadir Color
         </button>
       </form>
@@ -43,7 +43,9 @@
               </td>
               <td class="text-center">
                 <div class="d-flex justify-content-center gap-2">
-                  <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalEditar" (click)="cargarDatosEnModal(color)">
+                  <button class="btn btn-sm btn-outline-primary"
+                          data-bs-toggle="modal"
+                          data-bs-target="#modalEditar" (click)="cargarDatosEnModal(color)">
                     Editar
                   </button>
 
@@ -72,18 +74,20 @@
       <div class="modal-body p-4">
         <form>
           <input type="hidden" #cajaId>
-
           <div class="mb-3">
             <label class="form-label fw-bold small text-muted text-uppercase">Nombre del Color</label>
-            <input type="text" #cajaNombreModal class="form-control form-control-lg bg-light border-0 rounded-3"
+            <input type="text"
+                   #cajaNombreModal
+                   class="form-control form-control-lg bg-light border-0 rounded-3"
                    placeholder="Ej: Azul Eléctrico">
           </div>
         </form>
       </div>
       <div class="modal-footer border-0 p-3">
         <button type="button" class="btn btn-light rounded-3 px-4" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary rounded-3 px-4 shadow-sm">Guardar Cambios</button>
+        <button type="button"  (click)="updateColor()" class="btn btn-primary rounded-3 px-4 shadow-sm">Guardar Cambios</button>
       </div>
     </div>
   </div>
+</div>
 </div>
