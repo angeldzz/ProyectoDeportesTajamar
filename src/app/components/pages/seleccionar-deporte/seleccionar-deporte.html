@@ -1,0 +1,19 @@
+<div class="seleccionar-deporte">
+  <h3>Selecciona un deporte</h3>
+
+  <div class="deportes-grid" *ngIf="deportes && deportes.length; else noDeportes">
+    <button
+      *ngFor="let d of deportes"
+      type="button"
+      (click)="seleccionar(d.id)"
+      [class.active]="d.id === seleccionadoId"
+      [attr.aria-pressed]="d.id === seleccionadoId"
+    >
+      {{ d.nombre }}
+    </button>
+  </div>
+
+  <ng-template #noDeportes>
+    <p>No hay deportes para seleccionar.</p>
+  </ng-template>
+</div>

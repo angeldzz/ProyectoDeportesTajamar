@@ -1,5 +1,20 @@
+  // {
+  //   "extends": "./tsconfig.json",
+  //   "compilerOptions": {
+  //     "outDir": "./out-tsc/app",
+  //     "types": []
+  //   },
+  //   "include": [
+  //     "src/**/*.ts"
+  //   ],
+  //   "exclude": [
+  //     "src/**/*.spec.ts"
+  //   ]
+  // }
+//al hacer el commit para trer a mi rama los cambios de esta mañna 
+//me daba error en este archivo, por lo que lo copie de nuevo
 {
-  "extends": "./tsconfig.json",
+  "extends": "./tsconfig.json", 
   "compilerOptions": {
     "outDir": "./out-tsc/app",
     "types": []

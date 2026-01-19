@@ -1,0 +1,68 @@
+<div class="equipos-page">
+  <h2>Equipos</h2>
+
+  <div *ngIf="loading">Cargando equipos...</div>
+  <div *ngIf="error" class="error">Error: {{ error }}</div>
+
+  <ul class="equipos-list" *ngIf="!loading && equipos && equipos.length; else noEquipos">
+    <li *ngFor="let e of equipos" class="equipos-item">
+      <div class="item-row">
+        <button type="button" (click)="selectEquipo(e)">
+          {{ e.nombreEquipo }}
+        </button>
+        <div class="actions">
+          <button type="button" (click)="selectEquipo(e)">Ver</button>
+          <button type="button" (click)="eliminarEquipo(e.idEquipo)">Eliminar</button>
+        </div>
+      </div>
+    </li>
+  </ul>
+
+  <ng-template #noEquipos>
+    <p>No hay equipos disponibles.</p>
+  </ng-template>
+
+  <section class="form-section">
+    <h3 *ngIf="!selected">Crear equipo</h3>
+    <h3 *ngIf="selected">Editar equipo</h3>
+
+    <div class="form-row">
+      <label>Nombre</label>
+      <input [value]="form.nombreEquipo || ''" (input)="form.nombreEquipo = $any($event.target).value" />
+    </div>
+
+    <div class="form-row">
+      <label>Mínimo jugadores</label>
+      <input type="number" [value]="form.minimoJugadores ?? ''" (input)="form.minimoJugadores = ($any($event.target).value === '' ? null : +$any($event.target).value)" />
+    </div>
+
+    <div class="form-row">
+      <label>Id color</label>
+      <input type="number" [value]="form.idColor ?? ''" (input)="form.idColor = ($any($event.target).value === '' ? null : +$any($event.target).value)" />
+    </div>
+
+    <div class="form-row">
+      <label>Id curso</label>
+      <input type="number" [value]="form.idCurso ?? ''" (input)="form.idCurso = ($any($event.target).value === '' ? null : +$any($event.target).value)" />
+    </div>
+
+    <div class="form-row">
+      <label>Id eventoActividad</label>
+      <input type="number" [value]="form.idEventoActividad ?? ''" (input)="form.idEventoActividad = ($any($event.target).value === '' ? null : +$any($event.target).value)" />
+    </div>
+
+    <div class="form-actions">
+      <button type="button" (click)="crearEquipo()" *ngIf="!selected">Crear</button>
+      <button type="button" (click)="actualizarEquipo()" *ngIf="selected">Guardar</button>
+      <button type="button" (click)="clearSelection()">Cancelar</button>
+    </div>
+  </section>
+
+  <section *ngIf="selected" class="detalle">
+    <h3>Detalle</h3>
+    <p><strong>Nombre:</strong> {{ selected.nombreEquipo }}</p>
+    <p><strong>Mínimo jugadores:</strong> {{ selected.minimoJugadores }}</p>
+    <p *ngIf="selected.idColor"><strong>Id color:</strong> {{ selected.idColor }}</p>
+    <p *ngIf="selected.idCurso"><strong>Id curso:</strong> {{ selected.idCurso }}</p>
+  </section>
+</div>
