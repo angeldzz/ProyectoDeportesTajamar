@@ -15,6 +15,7 @@ import {CreacionEventosComponent} from './components/shared/creacion-eventos/cre
 import {DeporteEventoComponent} from './components/pages/deporte-evento/deporte-evento.component';
 import {ColoresComponent} from './components/pages/forms/colores-form/colores.component';
 import {DeportesFormComponent} from './components/pages/forms/deportes-form/deportes-form.component';
+import {ResultadosComponent} from './components/pages/resultados/resultados.component';
 
 export const routes: Routes = [
   {
@@ -41,6 +42,12 @@ export const routes: Routes = [
   {
     path: "seleccion_equipo",
     component: SeleccionEquipoComponent,
+    canActivate: [loginGuard],
+    //TODO METER EL GUARD
+  },
+  {
+    path: "resultados",
+    component: ResultadosComponent,
     canActivate: [loginGuard],
     //TODO METER EL GUARD
   },
