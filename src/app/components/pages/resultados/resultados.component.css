@@ -1,0 +1,46 @@
+/* Colores Naranja */
+.bg-orange-light {
+  background-color: #fff5f0 !important;
+  color: #ff793f;
+}
+
+.border-bottom-orange {
+  border-bottom: 3px solid #ff793f !important;
+}
+
+.btn-orange {
+  background-color: #ff793f;
+  color: white;
+  transition: all 0.2s;
+}
+
+.btn-orange:hover {
+  background-color: #e66733;
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Personalización del Select */
+.form-select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ff793f' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+}
+
+/* Ajustes de la tabla que ya teníamos */
+.marcador-pill {
+  background-color: #f8f9fa;
+  color: #636e72;
+  font-weight: 800;
+  padding: 6px 14px;
+  border-radius: 10px;
+  border: 1px solid #eee;
+}
+
+.marcador-pill.winner {
+  background-color: #ff793f;
+  color: white;
+  border-color: #ff793f;
+}
