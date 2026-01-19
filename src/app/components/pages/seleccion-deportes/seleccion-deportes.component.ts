@@ -18,7 +18,7 @@ import {catchError} from 'rxjs';
 })
 export class SeleccionDeportesComponent implements OnInit {
 
-  public idEvento!: number;
+  public idEvento!: String;
   public deportes!: Array<ActividadDeportes>;
   private usario!: Usuario;
 
@@ -34,7 +34,7 @@ export class SeleccionDeportesComponent implements OnInit {
     this._activeRoute.params.subscribe((parametros: Params) => {
       if (parametros['idEvento'] != null) {
 
-        this.idEvento = Number(parametros['idEvento']);
+        this.idEvento = parametros['idEvento'];
         console.log('ID del evento:', this.idEvento);
 
         this._deportesService.getDeportesEvento(this.idEvento).subscribe(value => {
@@ -50,7 +50,7 @@ export class SeleccionDeportesComponent implements OnInit {
     });
   }
 
-  inscribirseActividadEvento(idEvento: number, idActividad: number, idActividadEvento: number) {
+  inscribirseActividadEvento(idEvento: String, idActividad: number, idActividadEvento: number) {
     this._inscripcionesService.inscribirseActividadEvento(
       this.usario.idUsuario,
       idActividadEvento,

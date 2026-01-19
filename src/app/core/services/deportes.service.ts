@@ -15,7 +15,7 @@ export class DeportesService {
     return this._http.get<Array<Deporte>>(url);
 
     }
-    getDeportesEvento(idEvento:number):Observable<Array<ActividadDeportes>> {
+    getDeportesEvento(idEvento:String):Observable<Array<ActividadDeportes>> {
 
     let url=environment.urlActividades+"ActividadesEvento/"+idEvento;
     return this._http.get<Array<ActividadDeportes>>(url);

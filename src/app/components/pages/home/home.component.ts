@@ -25,11 +25,11 @@ import esLocale from '@fullcalendar/core/locales/es';
 export class HomeComponent implements OnInit{
   public eventosanteriores!: Array<Evento>
   public eventosdisponibles!: Array<Evento>
-  
+
   // Paginación eventos disponibles
   public paginaDisponibles: number = 1;
   public eventosPorPagina: number = 3;
-  
+
   // Paginación eventos anteriores
   public paginaAnteriores: number = 1;
 
@@ -55,13 +55,13 @@ export class HomeComponent implements OnInit{
     this._serviceEventos.GetEventos().subscribe({
       next: (data) => {
         const fechaActual = new Date();
-        this.eventosanteriores = data.filter((evento: Evento) => 
+        this.eventosanteriores = data.filter((evento: Evento) =>
           new Date(evento.fechaEvento) < fechaActual
         );
-        this.eventosdisponibles = data.filter((evento: Evento) => 
+        this.eventosdisponibles = data.filter((evento: Evento) =>
           new Date(evento.fechaEvento) >= fechaActual
         );
-        
+
         // Convertir eventos para FullCalendar
         this.calendarOptions.events = data.map((evento: Evento) => {
           const esPasado = new Date(evento.fechaEvento) < fechaActual;
@@ -77,7 +77,7 @@ export class HomeComponent implements OnInit{
             }
           };
         });
-        
+
         console.log('Eventos anteriores:', this.eventosanteriores);
         console.log('Eventos disponibles:', this.eventosdisponibles);
       }
@@ -87,10 +87,6 @@ export class HomeComponent implements OnInit{
   handleEventClick(clickInfo: any) {
     const eventoId = clickInfo.event.id;
     window.location.href = `/seleccion_deportes/${eventoId}`;
-  }
-
-  logout() {
-    this._authService.logout();
   }
 
   // Métodos de paginación para eventos disponibles

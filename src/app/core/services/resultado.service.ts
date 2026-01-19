@@ -8,13 +8,22 @@ import {environment} from '../../../environments/environment.development';
 export class ResultadoService {
 
 
-  constructor(private _http: HttpClient) {}
+  constructor(private _http: HttpClient) {
+  }
 
 
-  getResultados():Observable<Array<PartidoResultado>>{
+  getResultados(): Observable<Array<PartidoResultado>> {
 
-    let url= environment.urlResultados;
+    let url = environment.urlResultados;
 
     return this._http.get<Array<PartidoResultado>>(url);
   }
+
+
+  getResultadosByActividadEvento(idEventoActividad:String): Observable<Array<PartidoResultado>> {
+
+    let url = environment.urlResultados+"PartidosResultadosActividad/"+idEventoActividad;
+    return this._http.get<Array<PartidoResultado>>(url);
+  }
+
 }
