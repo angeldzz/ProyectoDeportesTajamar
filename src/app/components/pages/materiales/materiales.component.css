@@ -1,0 +1,5 @@
+.material-form{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center}
+.material-form label{display:block;font-weight:600}
+.material-form .actions{grid-column:1/-1;margin-top:8px}
+.materiales-page table{width:100%;border-collapse:collapse;margin-top:12px}
+.materiales-page th,.materiales-page td{border:1px solid #ddd;padding:8px;text-align:left}

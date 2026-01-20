@@ -1,0 +1,45 @@
+<div class="clases-alumnos">
+  <div class="formulario">
+    <h3>Buscar alumnos por Id de Clase</h3>
+    <form (ngSubmit)="buscarPorId()" class="d-flex gap-2 align-items-end">
+      <div>
+        <label>Id clase</label>
+        <input type="number" [(ngModel)]="idCursoInput" name="idCursoInput" class="form-control" />
+      </div>
+      <div>
+        <button class="btn btn-primary" type="submit">Buscar</button>
+      </div>
+    </form>
+    <small class="text-muted">También puedes ver en la lista de cursos activos abajo para referencias.</small>
+  </div>
+
+  <div class="alumnos mt-3">
+    <h3 *ngIf="idCursoInput">Alumnos en la clase: {{ idCursoInput }}</h3>
+    <div *ngIf="loadingAlumnos">Cargando alumnos...</div>
+    <table *ngIf="!loadingAlumnos && alumnos.length">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Nombre completo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let a of alumnos">
+          <td>{{ a.idUsuario ?? a.id ?? a.idCursoUsuario }}</td>
+          <td>{{ displayNombre(a) }}{{ displayApellidos(a) ? (' ' + displayApellidos(a)) : '' }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="!loadingAlumnos && alumnos.length === 0 && idCursoInput">No hay alumnos en este curso.</div>
+  </div>
+
+  <hr />
+
+  <div class="cursos mt-3">
+    <h4>Cursos activos (referencia)</h4>
+    <div *ngIf="loadingCursos">Cargando cursos...</div>
+    <ul *ngIf="!loadingCursos">
+      <li *ngFor="let c of cursos">{{ c.idCurso ?? c.id }} — {{ c.nombreCurso || c.curso || c.descripcion }}</li>
+    </ul>
+  </div>
+</div>

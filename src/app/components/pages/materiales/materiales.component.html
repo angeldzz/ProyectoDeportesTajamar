@@ -1,0 +1,50 @@
+<div class="materiales-page">
+  <h3>Materiales</h3>
+
+  <form (ngSubmit)="submit()" class="material-form">
+    <div>
+      <label>Id Evento/Actividad</label>
+      <input type="number" [(ngModel)]="model.idEventoActividad" name="idEventoActividad" />
+    </div>
+    <div>
+      <label>Id Usuario</label>
+      <input type="number" [(ngModel)]="model.idUsuario" name="idUsuario" />
+    </div>
+    <div>
+      <label>Nombre material</label>
+      <input type="text" [(ngModel)]="model.nombreMaterial" name="nombreMaterial" />
+    </div>
+    <div>
+      <label>Pendiente</label>
+      <input type="checkbox" [(ngModel)]="model.pendiente" name="pendiente" />
+    </div>
+    <div>
+      <label>Fecha solicitud</label>
+      <input type="date" [(ngModel)]="model.fechaSolicitud" name="fechaSolicitud" />
+    </div>
+    <div class="actions">
+      <button type="submit" [disabled]="loading">{{ editingId ? 'Actualizar' : 'Crear' }}</button>
+      <button type="button" (click)="resetForm()" [disabled]="loading">Limpiar</button>
+      <span *ngIf="loading" style="margin-left:8px;color:#666">Procesando...</span>
+    </div>
+  </form>
+
+  <hr />
+
+  <div *ngIf="loading">Cargando materiales...</div>
+  <table *ngIf="!loading && lista.length">
+    <thead>
+      <tr><th>Id</th><th>Nombre</th><th>Usuario</th><th>Pendiente</th><th>Fecha</th></tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let m of lista">
+        <td>{{ m.idMaterial }}</td>
+        <td>{{ m.nombreMaterial }}</td>
+        <td>{{ m.idUsuario }}</td>
+        <td>{{ m.pendiente }}</td>
+        <td>{{ m.fechaSolicitud | date }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div *ngIf="!loading && lista.length === 0">No hay materiales.</div>
+</div>

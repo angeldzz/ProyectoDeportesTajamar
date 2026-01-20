@@ -1,12 +1,13 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 const API_EQUIPOS = 'https://apideportestajamar.azurewebsites.net/api/Equipos';
 
 @Component({
   selector: 'app-seleccion-equipo',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './seleccion-equipo.component.html',
-  styleUrl: './seleccion-equipo.component.css',
+  styleUrls: ['./seleccion-equipo.component.css'],
 })
 export class SeleccionEquipoComponent implements OnInit {
   /**
