@@ -3,6 +3,7 @@ import {SidebarComponent} from '../../shared/sidebar/sidebar.component';
 import {RouterOutlet} from '@angular/router';
 import {ColoresService} from '../../../core/services/colores.service';
 import {Colores} from '../../../models/Colores';
+import {SideItem} from '../../../models/SideItem';
 
 @Component({
   selector: 'app-panel-administrador',
@@ -18,6 +19,10 @@ import {Colores} from '../../../models/Colores';
 export class PanelAdministradorComponent implements OnInit {
   numColores!:Number;
 
+  //PRUEBA
+  adminMenu:SideItem[]=[
+    {label:"Colores",route:'/panel_administrador/colores-form'},
+  ]
 
   constructor(private _coloresService: ColoresService) {
   }

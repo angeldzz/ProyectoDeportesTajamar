@@ -16,6 +16,10 @@ export class AuthService {
 
   loggedIn = new BehaviorSubject<boolean>(this.hasToken());
 
+  nombreSubject = new BehaviorSubject<string | null>(localStorage.getItem('usuario'));
+
+  public nombreUsuario$: Observable<string | null> = this.nombreSubject.asObservable();
+
   get isLoggedInUser(): Observable<boolean> {
     return this.loggedIn.asObservable();
   }
@@ -31,22 +35,18 @@ export class AuthService {
     return this._http.post(url, body)
   }
 
-  // getUserRole(): string | null {
-  //   return localStorage.getItem('role');
-  // }
-
-
   private hasToken(): boolean {
     return !!localStorage.getItem(this.ACCESS_TOKEN);
+  }
+  storeNombre(nombre:string):void {
+    localStorage.setItem("usuario",nombre);
+    this.nombreSubject.next(nombre);
   }
 
   storeToken(token:string){
     localStorage.setItem(this.ACCESS_TOKEN, token)
     this.loggedIn.next(true); // ← AGREGAR ESTA LÍNEA
   }
-
-
-
 
   //** TEMPORAL ** //
   storeRole(role:string){
@@ -77,10 +77,12 @@ export class AuthService {
         return null;
     }
   }
-
     logout() {
     localStorage.removeItem(this.ACCESS_TOKEN);
     localStorage.removeItem("role");
+    localStorage.removeItem("usuario");
+
+    this.nombreSubject.next(null);
     this.loggedIn.next(false); // Avisamos que ya no tiene token
     this.router.navigate(['/login']); // Redirección automática
   }

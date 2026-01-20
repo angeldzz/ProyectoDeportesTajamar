@@ -10,6 +10,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
+import {UsuarioService} from '../../../core/services/usuario.service';
 
 @Component({
   selector: 'app-home',
@@ -49,7 +50,8 @@ export class HomeComponent implements OnInit{
     aspectRatio: 1.5
   };
 
-  constructor(private _authService: AuthService, private _serviceEventos: EventosService) { }
+  constructor(private _authService: AuthService,
+              private _serviceEventos: EventosService) { }
 
   ngOnInit(): void {
     this._serviceEventos.GetEventos().subscribe({
