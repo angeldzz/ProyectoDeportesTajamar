@@ -1,46 +1,123 @@
-/* Colores Naranja */
-.bg-orange-light {
-  background-color: #fff5f0 !important;
-  color: #ff793f;
+.resultados-page {
+  background-color: #0f1012;
+  min-height: 100vh;
+  color: #fff;
 }
 
-.border-bottom-orange {
-  border-bottom: 3px solid #ff793f !important;
+/* Layout del Grid */
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
 }
 
-.btn-orange {
-  background-color: #ff793f;
-  color: white;
-  transition: all 0.2s;
+/* Estilo de la Tarjeta (Imagen 3) */
+.match-card {
+  background-color: #1a1c1e;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.3s ease;
 }
 
-.btn-orange:hover {
-  background-color: #e66733;
-  color: white;
-  transform: translateY(-2px);
+.match-card.live {
+  border-color: #ff5722; /* Borde naranja de la imagen central */
 }
 
-/* Personalización del Select */
-.form-select {
-  cursor: pointer;
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ff793f' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 0.75rem center;
-  background-size: 16px 12px;
+.match-card:hover {
+  background-color: #232529;
 }
 
-/* Ajustes de la tabla que ya teníamos */
-.marcador-pill {
-  background-color: #f8f9fa;
-  color: #636e72;
+/* Headers internos */
+.card-header-match {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.status-pill {
+  font-size: 10px;
   font-weight: 800;
-  padding: 6px 14px;
-  border-radius: 10px;
-  border: 1px solid #eee;
+  letter-spacing: 1px;
+  color: #6a6d71;
+  background: #25282c;
+  padding: 4px 10px;
+  border-radius: 6px;
 }
 
-.marcador-pill.winner {
-  background-color: #ff793f;
+.matchday {
+  color: #6a6d71;
+  font-size: 11px;
+}
+
+/* Marcadores (Cuerpo) */
+.team-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.team-name {
+  font-weight: 700;
+  font-size: 14px;
+  color: #d1d2d4;
+}
+
+.team-mini-logo {
+  width: 32px;
+  height: 32px;
+  background-color: #2d3136;
+  border-radius: 4px;
+}
+
+.score-value {
+  font-size: 26px;
+  font-weight: 800;
+  color: #3e4247; /* Color apagado */
+}
+
+.score-value.highlight {
+  color: #ff5722; /* Naranja resaltado */
+}
+
+/* Footer (Imagen 3) */
+.card-footer-match {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #25282c;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stadium {
+  font-size: 11px;
+  color: #6a6d71;
+}
+
+.action-link {
+  color: #00d2d3;
+  font-size: 11px;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Badge Live (Círculo rojo) */
+.live-dot {
+  background: #ff5722;
   color: white;
-  border-color: #ff793f;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+.view-standings {
+  color: #ff5722;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
 }
