@@ -3,6 +3,8 @@ import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
 import {environment} from "../../../environments/environment.development";
 import {Usuario} from "../../models/Usuario";
+import { ActividadDeportesInscrito } from "../../models/ActividadDeporteInscrito";
+import { ActividadDeportes } from "../../models/ActividadDeportes";
 
 @Injectable({
   providedIn: 'root'
@@ -14,5 +16,8 @@ export class UsuarioService {
 
   getDatosUsuario(): Observable<Usuario> {
     return this._http.get<Usuario>(environment.urlUsuariosDeportes + "Perfil");
+  }
+  getActividadesUser():Observable<Array<ActividadDeportesInscrito>>{
+    return this._http.get<Array<ActividadDeportesInscrito>>(environment.urlUsuariosDeportes + "ActividadesUser");
   }
 }

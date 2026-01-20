@@ -41,3 +41,79 @@
         </div>
     </div>
 </div>
+
+<!-- Modal de selección de hora estilo iPhone -->
+@if (showTimeModal) {
+    <div class="time-modal-overlay" (click)="closeTimeModal()">
+        <div class="time-modal-content" (click)="$event.stopPropagation()">
+            <div class="time-modal-header">
+                <h3>Seleccionar Hora</h3>
+                <button class="close-btn" (click)="closeTimeModal()">
+                    <i class="bi bi-x"></i>
+                </button>
+            </div>
+
+            <div class="time-modal-body">
+                <div class="date-display">
+                    <i class="bi bi-calendar3"></i>
+                    <span>{{ selectedDateStr }}</span>
+                </div>
+
+                <div class="time-picker-container">
+                    <div class="time-picker-overlay-top"></div>
+                    <div class="time-picker-selection-indicator"></div>
+                    <div class="time-picker-overlay-bottom"></div>
+
+                    <div class="time-picker-column">
+                        <div class="time-picker-scroll" 
+                             (scroll)="onHourScroll($event)"
+                             (mousedown)="onHourMouseDown($event)"
+                             (mousemove)="onHourMouseMove($event)"
+                             (mouseup)="onHourMouseUp()"
+                             (mouseleave)="onHourMouseUp()">
+                            <div class="time-picker-spacer"></div>
+                            @for (hour of hours; track hour) {
+                                <div class="time-picker-item" 
+                                     [class.selected]="hour === selectedHour">
+                                    {{ hour.toString().padStart(2, '0') }}
+                                </div>
+                            }
+                            <div class="time-picker-spacer"></div>
+                        </div>
+                        <div class="time-picker-label">horas</div>
+                    </div>
+
+                    <div class="time-picker-separator">:</div>
+
+                    <div class="time-picker-column">
+                        <div class="time-picker-scroll" 
+                             (scroll)="onMinuteScroll($event)"
+                             (mousedown)="onMinuteMouseDown($event)"
+                             (mousemove)="onMinuteMouseMove($event)"
+                             (mouseup)="onMinuteMouseUp()"
+                             (mouseleave)="onMinuteMouseUp()">
+                            <div class="time-picker-spacer"></div>
+                            @for (minute of minutes; track minute) {
+                                <div class="time-picker-item" 
+                                     [class.selected]="minute === selectedMinute">
+                                    {{ minute.toString().padStart(2, '0') }}
+                                </div>
+                            }
+                            <div class="time-picker-spacer"></div>
+                        </div>
+                        <div class="time-picker-label">minutos</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="time-modal-footer">
+                <button class="btn-cancel" (click)="closeTimeModal()">
+                    Cancelar
+                </button>
+                <button class="btn-confirm" (click)="confirmTime()">
+                    Confirmar
+                </button>
+            </div>
+        </div>
+    </div>
+}
