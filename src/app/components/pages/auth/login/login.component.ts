@@ -2,6 +2,8 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {AuthService} from '../../../../core/services/auth.service';
 import {FormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
+import {UsuarioService} from '../../../../core/services/usuario.service';
+import {switchMap} from 'rxjs';
 
 
 @Component({
@@ -20,7 +22,9 @@ export class LoginComponent implements OnInit {
   @ViewChild('cajaUser') cajaUserName !: ElementRef;
   @ViewChild('cajaPass') cajaPassword !: ElementRef;
 
-  constructor(private _authService: AuthService,private _router: Router) {
+  constructor(private _authService: AuthService,
+              private _router: Router,
+              private _usuarioService: UsuarioService,) {
 
   }
   ngOnInit(): void {
@@ -38,19 +42,25 @@ export class LoginComponent implements OnInit {
     console.log(this.userName);
     console.log(this.password);
 
+    this._authService.login(this.userName, this.password).pipe(
 
-    this._authService.login(this.userName,this.password).subscribe({
-      next: (response): void => {
-
-         //this._authService.userRoleSubject.next(this.authService.getUserRole());
-        //TODO CUANDO SE ACTIVE LA SEGURIDAD CORRECTAMENTE DEJAR DE GUARDAR EN LOCALSTORAGE EL ROL
-
+      switchMap((response) => {
         this._authService.storeToken(response.response);
         this._authService.storeRole(response.idrole);
-       console.log(response);
+
+        return this._usuarioService.getDatosUsuario();
+      })
+    ).subscribe({
+      next: (userData) => {
+        console.log('Datos de usuario cargados:', userData);
+        this._authService.storeNombre(userData.nombre);
+
         this._router.navigate(['']);
       },
-      error: (err) => alert('Credenciales inválidas')
+      error: (err) => {
+        console.error(err);
+        alert('Error en el login o al recuperar datos del usuario');
+      }
     });
   }
 }
