@@ -9,6 +9,7 @@ import localeEs from '@angular/common/locales/es';
 import { PickListModule } from 'primeng/picklist';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import Swal from 'sweetalert2';
 
 registerLocaleData(localeEs);
 
@@ -50,7 +51,12 @@ export class AsignacionActividadEventoComponent implements OnInit{
     const idevento = this.evento.idEvento;
     
     if (deportesSelecionadosActuales.length === 0) {
-      console.warn('No hay deportes seleccionados');
+      Swal.fire({
+          title: 'Actividades Asignadas',
+          text: `No hay deportes seleccionados`,
+          icon: 'warning',
+          confirmButtonText: 'Aceptar'
+        });
       return;
     }
 
@@ -68,7 +74,12 @@ export class AsignacionActividadEventoComponent implements OnInit{
         const exitosos = responses.filter(r => !r.error);
         const fallidos = responses.filter(r => r.error);
         
-        console.log(`${exitosos.length} actividades asignadas correctamente`);
+        Swal.fire({
+          title: 'Actividades Asignadas',
+          text: `${exitosos.length} actividades asignadas correctamente`,
+          icon: 'success',
+          confirmButtonText: 'Aceptar'
+        });
         if (fallidos.length > 0) {
           console.warn(`${fallidos.length} actividades no pudieron ser asignadas:`, fallidos);
         }
