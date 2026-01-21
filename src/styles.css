@@ -1,4 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* PrimeNG Icons */
+@import "primeicons/primeicons.css";
+
 :root {
   --bg-custom: #f9f7f2;        /* Fondo suave cálido */
   --card-white: #ffffff;

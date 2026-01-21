@@ -5,5 +5,14 @@
 .register a:hover{
  color: #3c3ca4;
   cursor: pointer;
+}
 
+.input-group button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.input-group button i {
+  font-size: 1.1rem;
 }

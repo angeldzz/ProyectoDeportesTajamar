@@ -16,6 +16,7 @@ import {DeporteEventoComponent} from './components/pages/deporte-evento/deporte-
 import {ColoresComponent} from './components/pages/forms/colores-form/colores.component';
 import {DeportesFormComponent} from './components/pages/forms/deportes-form/deportes-form.component';
 import {ResultadosComponent} from './components/pages/resultados/resultados.component';
+import { AsignacionActividadEventoComponent } from './components/shared/asignacion-actividad-evento.component/asignacion-actividad-evento.component';
 
 export const routes: Routes = [
   {
@@ -66,6 +67,11 @@ export const routes: Routes = [
   {
     path: "creacion_eventos",
     component: CreacionEventosComponent,
+    canActivate: [adminGuard]
+  },
+  {
+    path: "asignacion-actividad-evento/:idEvento",
+    component: AsignacionActividadEventoComponent,
     canActivate: [adminGuard]
   },
   {

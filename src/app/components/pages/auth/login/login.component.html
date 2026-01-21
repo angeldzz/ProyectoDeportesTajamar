@@ -20,13 +20,23 @@
 
         <div class="mb-3 w-75 mx-auto">
           <label for="password" class="form-label">Contraseña</label>
-          <input
-            type="password"
-            class="form-control"
-            name="cajaPass"
-            #cajaPass
-            required
-          />
+          <div class="input-group">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              class="form-control"
+              name="cajaPass"
+              #cajaPass
+              required
+            />
+            <button
+              class="btn btn-outline-secondary"
+              type="button"
+              (click)="togglePasswordVisibility()"
+              aria-label="Toggle password visibility"
+            >
+              <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+            </button>
+          </div>
         </div>
 
         <div class="d-grid w-50 mx-auto mb-1">

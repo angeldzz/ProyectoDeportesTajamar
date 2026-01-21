@@ -14,6 +14,9 @@ export class EventosService {
   GetEventos(): Observable<Array<Evento>> {
     return this._http.get<Array<Evento>>(environment.urlEventos);
   }
+  GetEventoIndividual(id: number): Observable<Evento>{
+    return this._http.get<Evento>(environment.urlEventos + "/" + id);
+  }
   createEvento(fecha: Date): Observable<Evento> {
       console.log(fecha);
     const fechaFormateada = encodeURIComponent(fecha.toISOString());
@@ -23,5 +26,12 @@ export class EventosService {
     let url=environment.urlEventos+"FindIdEventoActividad/"+idEvento+"/"+idActividad;
 
     return this._http.get(url);
+  }
+  AsignarActividad_Evento(idEvento: number, idActividad: number): Observable<any> {
+    return this._http.post<any>(
+      `${environment.urlActividadesEventos}create/`, 
+      null,
+      { params: { idevento: idEvento.toString(), idactividad: idActividad.toString() } }
+    );
   }
 }

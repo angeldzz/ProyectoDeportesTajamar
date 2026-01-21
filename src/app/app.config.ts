@@ -5,6 +5,9 @@ import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@ang
 import {LoginInterceptor} from './core/interceptors/login.interceptor';
 import {AuthInterceptor} from './core/interceptors/auth.interceptor';
 import {httpInterceptorProviders} from './core/interceptors';
+import { providePrimeNG } from 'primeng/config';
+import Lara from '@primeng/themes/lara';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
@@ -13,6 +16,11 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptorsFromDi()
     ),
-    httpInterceptorProviders
+    httpInterceptorProviders,
+    providePrimeNG({
+      theme: {
+        preset: Lara
+      }
+    })
   ]
 };

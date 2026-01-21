@@ -7,6 +7,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
 import { CommonModule } from '@angular/common';
 import { EventosService } from '../../../core/services/eventos.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-creacion-eventos',
@@ -15,7 +16,7 @@ import { EventosService } from '../../../core/services/eventos.service';
   styleUrl: './creacion-eventos.component.css',
 })
 export class CreacionEventosComponent implements OnInit {
-  constructor(private _eventosService: EventosService){}
+  constructor(private _eventosService: EventosService, private router: Router){}
   selectedDate: Date | null = null;
   selectedDateStr: string = '';
   showTimeModal: boolean = false;
@@ -160,7 +161,7 @@ export class CreacionEventosComponent implements OnInit {
     if (this.selectedDate) {
       this._eventosService.createEvento(this.selectedDate).subscribe({
         next: (eventoCreado: any) => {
-          console.log('Evento creado con éxito:', eventoCreado);
+          this.router.navigate(['/asignacion-actividad-evento', eventoCreado.idEvento]);
         },
         error: (error: any) => {
           console.error('Error al crear el evento:', error);
