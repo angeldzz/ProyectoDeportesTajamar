@@ -71,7 +71,7 @@ export class ResultadosComponent implements OnInit {
         lastValueFrom(this._deportesService.getDeportesEvento(idEvento)),
         lastValueFrom(this._resultadoService.getResultadosWithEquipos(idEvento))
       ]);
-
+      // TODO MIRAR SI CON VARIABLE SE MEJORA
       partidosEnriquecidos.forEach(partido => {
         (partido as any).colorLocalCss =
           this.getVariableColor(partido.infoLocal?.infoColor);
