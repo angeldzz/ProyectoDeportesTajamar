@@ -5,10 +5,10 @@
   </div>
   <div class="container mb-5" style="max-width: 600px;">
     <div class="card bg-dark border-secondary p-3 shadow-sm">
-      <label class="text-muted small text-uppercase fw-bold mb-2">Seleccionar Evento Pasado</label>
+      <label class=" small text-uppercase fw-bold mb-2 text-white">Seleccionar Evento Pasado</label>
       <select class="form-select bg-dark text-white border-secondary" #fEvento (change)="onEventoChange(fEvento.value)">
         <option value="" disabled selected>Elija un evento...</option>
-        @for(evento of eventosanteriores; track evento.idEvento) {
+        @for (evento of eventosanteriores; track evento.idEvento) {
           <option [value]="evento.idEvento">
             Evento del {{ evento.fechaEvento | date:'dd/MM/yyyy' }}
           </option>
@@ -27,10 +27,8 @@
             </div>
             <div>
               <h4 class="text-white fw-bold m-0">{{ grupo.deporte }}</h4>
-              <span class="text-muted small text-uppercase fw-bold ls-1">ESPAÑA</span>
             </div>
           </div>
-          <a class="view-standings">View Standings</a>
         </div>
 
         <div class="results-grid">
@@ -42,30 +40,60 @@
                       [class.text-live]="res.puntosLocal === res.puntosVisitante">
                   {{ res.puntosLocal === res.puntosVisitante ? 'In Progress' : 'Finished' }}
                 </span>
-                <span class="matchday">Matchday {{res.idPartidoResultado}}</span>
-                @if(res.puntosLocal === res.puntosVisitante) {
-                  <span class="live-dot"><i class="bi bi-dot"></i> LIVE 74'</span>
+
+                @if (res.puntosLocal === res.puntosVisitante) {
+                  <span class="live-dot"><i class="bi bi-dot"></i> EMPATE</span>
                 }
               </div>
 
               <div class="teams-score-area">
                 <div class="team-row">
                   <div class="d-flex align-items-center">
-                    <div class="team-mini-logo me-3"></div>
-                    <span class="team-name">EQUIPO {{res.idEquipoLocal}}</span>
+
+                    <div class="team-mini-logo me-3"
+                         [style.background-color]="res.colorLocalCss"
+                         style="width: 22px; height: 22px; border-radius: 6px; border: 2px solid white; outline: 1px solid #dee2e6;">
+                    </div>
+                    @if(res.infoLocal){
+                      <span class="team-name text-uppercase" >
+                      {{ res.infoLocal.nombreEquipo }}
+                    </span>
+                    }
+
+                    <button class="btn-icon-action"
+                            (click)="verPlantilla(res.idEquipoLocal)"
+                            data-bs-toggle="modal"
+                            data-bs-target="#playersModal">
+                     ver
+                    </button>
                   </div>
                   <span class="score-value" [class.highlight]="res.puntosLocal >= res.puntosVisitante">
-                    {{res.puntosLocal}}
+                    {{ res.puntosLocal }}
                   </span>
                 </div>
 
                 <div class="team-row">
                   <div class="d-flex align-items-center">
-                    <div class="team-mini-logo me-3"></div>
-                    <span class="team-name">EQUIPO {{res.idEquipoVisitante}}</span>
+                    <div class="team-mini-logo me-3"
+                         [style.background-color]="res.colorVisitanteCss"
+                         style="width: 22px; height: 22px; border-radius: 6px; border: 2px solid white; outline: 1px solid #dee2e6;">
+                    </div>
+
+                    @if(res.infoVisitante){
+                      <span class="team-name text-uppercase" >
+                      {{ res.infoVisitante.nombreEquipo }}
+                    </span>
+                    }
+                    <button class="btn-icon-action"
+                            (click)="verPlantilla(res.idEquipoLocal)"
+                            data-bs-toggle="modal"
+                            data-bs-target="#playersModal">
+                      ver
+                    </button>
+
                   </div>
                   <span class="score-value" [class.highlight]="res.puntosVisitante >= res.puntosLocal">
-                    {{res.puntosVisitante}}
+                    {{ res.puntosVisitante }}
                   </span>
                 </div>
               </div>
@@ -82,6 +110,75 @@
           }
         </div>
       </div>
+    } @empty {
+      <div class="empty-state-box text-center">
+        <div class="empty-icon-wrapper mb-3">
+          <i class="bi bi-clipboard-x"></i>
+        </div>
+        <h3 class="text-white fw-bold">Sin Resultados Disponibles</h3>
+        <p class="">
+          No se han encontrado partidos registrados para el evento seleccionado.<br>
+          Prueba a seleccionar otra fecha en el historial.
+        </p>
+      </div>
     }
+  </div>
+</div>
+
+
+<div class="modal fade"
+     id="playersModal"
+     tabindex="-1"
+     aria-labelledby="playersModalLabel"
+     aria-hidden="true">
+
+  <div class="modal-dialog modal-dialog-centered">
+
+    <div class="modal-content bg-dark-panel text-white border-secondary">
+
+      <div class="modal-header border-bottom-gray">
+        <div class="d-flex align-items-center">
+          <div class="me-3 fs-4 text-warning">
+            <i class="bi bi-people-fill"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bold" id="playersModalLabel">
+               'Cargando...'
+            </h5>
+            <span class="badge bg-secondary text-uppercase x-small">Plantilla Oficial</span>
+          </div>
+        </div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+
+        @if(loadingPlayers) {
+          <div class="d-flex justify-content-center py-4">
+            <div class="spinner-border text-warning" role="status">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
+          </div>
+        }
+
+        @if(!loadingPlayers && jugadoresEquipo) {
+          <div class="players-list">
+
+            @for(jugador of jugadoresEquipo; track jugador.idUsuario || $index) {
+              <div class="player-card mb-2">
+                <div class="player-avatar">
+                  <i class="bi bi-person-fill"></i>
+                </div>
+                <div class="player-info">
+                  <h6 class="m-0 fw-bold">{{ jugador.nombre }} {{ jugador.apellidos }}</h6>
+                </div>
+              </div>
+            }
+
+          </div>
+        }
+      </div>
+
+    </div>
   </div>
 </div>

@@ -1,128 +1,146 @@
-import {Component, OnInit} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {ResultadoService} from '../../../core/services/resultado.service';
-import {PartidoResultado} from '../../../models/PartidoResultado';
-import {EventosService} from '../../../core/services/eventos.service';
-import {DeportesService} from '../../../core/services/deportes.service';
-import {Deporte} from '../../../models/Deportes';
-import {ActividadDeportes} from '../../../models/ActividadDeportes';
-import {Evento} from '../../../models/Evento';
-import {DatePipe} from '@angular/common';
-import {CalendarioComponent} from '../../shared/calendario/calendario.component';
-import {ResultadoDeporteEvento} from '../../../models/ResultadoDeporteEvento';
+import { Component, OnInit } from '@angular/core';
+import { DatePipe, NgIf, UpperCasePipe } from '@angular/common';
+import { lastValueFrom } from 'rxjs';
+
+import { ResultadoService } from '../../../core/services/resultado.service';
+import { EventosService } from '../../../core/services/eventos.service';
+import { DeportesService } from '../../../core/services/deportes.service';
+
+import { PartidoResultado } from '../../../models/PartidoResultado';
+import { Evento } from '../../../models/Evento';
+import { ResultadoDeporteEvento } from '../../../models/ResultadoDeporteEvento';
+import { CalendarioComponent } from '../../shared/calendario/calendario.component';
+import {Colores} from '../../../models/Colores';
+import {Equipov2} from '../../../models/EquipoV2';
+import {Equipov2Service} from '../../../core/services/equipov2.service';
+import {Usuario} from '../../../models/Usuario';
 
 @Component({
   selector: 'app-resultados',
+  standalone: true,
   imports: [
     CalendarioComponent,
-    DatePipe
+    DatePipe,
+    NgIf
   ],
   templateUrl: './resultados.component.html',
   styleUrl: './resultados.component.css',
 })
-
-
 export class ResultadosComponent implements OnInit {
-  public results = [];
 
-
-
-  constructor(private _resultadoService: ResultadoService,
-              private _eventosService: EventosService,
-              private _deportesService: DeportesService) {
-  }
-
-  resultados: Array<PartidoResultado> = [];
-  actividades: Array<ActividadDeportes> = [];
   resultadosAgrupados: ResultadoDeporteEvento[] = [];
   eventosanteriores: Evento[] = [];
-  idEventoSeleccionado: string = "2"; // Por defecto o vacío
+  idEventoSeleccionado: string = "2";
+  loadingPlayers: boolean = false;
+  jugadoresEquipo!:Array<Usuario>;
 
-  ngOnInit() {
+  usariosEquipo!:Array<Equipov2>;
+  constructor(
+    private _resultadoService: ResultadoService,
+    private _eventosService: EventosService,
+    private _deportesService: DeportesService,
+    private _equiposService: Equipov2Service
+  ) {}
 
-    this.getEventos();
-    this.cargarDatosEvento(this.idEventoSeleccionado);
+  async ngOnInit() {
+    await this.getEventos();
+
+    if (this.idEventoSeleccionado) {
+      await this.cargarDatosEvento(this.idEventoSeleccionado);
+    }
   }
 
+  async getEventos() {
+    try {
+      const data = await lastValueFrom(this._eventosService.GetEventos());
+      const fechaActual = new Date();
+      this.eventosanteriores = data.filter((evento: Evento) =>
+        new Date(evento.fechaEvento) < fechaActual
+      );
+    } catch (error) {
+      console.error('Error cargando eventos:', error);
+    }
+  }
 
-  cargarDatosEvento(idEvento: string) {
+  async cargarDatosEvento(idEvento: string) {
     if (!idEvento) return;
 
-    this._deportesService.getDeportesEvento(idEvento).subscribe({
-      next: (actividades) => {
-        const diccionario = new Map<number, string>();
-        actividades.forEach(a => diccionario.set(a.idEventoActividad, a.nombreActividad));
+    try {
 
-        this._resultadoService.getResultados().subscribe(partidos => {
-          this.agruparPartidos(partidos, diccionario);
-        });
-      }
-    });
-  }
-  cargarTodoElEvento(idEvento: string) {
-    // 1. Primero traemos las actividades del evento seleccionado
-    this._deportesService.getDeportesEvento(idEvento).subscribe({
-      next: (actividadesEvento) => {
-        this.actividades = actividadesEvento; // Para tus otros selects
-        console.log(actividadesEvento)
-        const diccionarioActividades = new Map<number, string>();
-        actividadesEvento.forEach(act => {
-          diccionarioActividades.set(act.idActividad, act.nombreActividad);
-        });
+      const [actividades, partidosEnriquecidos] = await Promise.all([
+        lastValueFrom(this._deportesService.getDeportesEvento(idEvento)),
+        lastValueFrom(this._resultadoService.getResultadosWithEquipos(idEvento))
+      ]);
 
-        this._resultadoService.getResultadosByActividadEvento(idEvento).subscribe({
-          next: (todosLosPartidos) => {
-            const grupos: { [key: string]: PartidoResultado[] } = {};
+      partidosEnriquecidos.forEach(partido => {
+        (partido as any).colorLocalCss =
+          this.getVariableColor(partido.infoLocal?.infoColor);
 
-            todosLosPartidos.forEach(partido => {
-              const nombreDeporte = diccionarioActividades.get(partido.idEventoActividad);
+        (partido as any).colorVisitanteCss =
+          this.getVariableColor(partido.infoVisitante?.infoColor);
+      });
 
-              if (nombreDeporte) {
-                if (!grupos[nombreDeporte]) {
-                  grupos[nombreDeporte] = [];
-                }
-                grupos[nombreDeporte].push(partido);
-              }
-            });
-            this.resultadosAgrupados = Object.keys(grupos).map(nombre =>
-              new ResultadoDeporteEvento(nombre, grupos[nombre])
-            );
+      const mapaDeportes = new Map<number, string>();
+      actividades.forEach(act => mapaDeportes.set(act.idEventoActividad, act.nombreActividad));
+
+      const grupos: { [key: string]: PartidoResultado[] } = {};
+
+      partidosEnriquecidos.forEach(partido => {
+
+        const nombreDeporte = mapaDeportes.get(partido.idEventoActividad);
+
+        if (nombreDeporte) {
+          if (!grupos[nombreDeporte]) {
+            grupos[nombreDeporte] = [];
           }
-        });
-      }
-    });
-  }
-  private agruparPartidos(partidos: PartidoResultado[], diccionario: Map<number, string>) {
-    const grupos: { [key: string]: PartidoResultado[] } = {};
+          grupos[nombreDeporte].push(partido);
+        }
+      });
 
-    partidos.forEach(partido => {
-      const nombreDeporte = diccionario.get(partido.idEventoActividad);
+      this.resultadosAgrupados = Object.keys(grupos).map(nombre =>
+        new ResultadoDeporteEvento(nombre, grupos[nombre])
+      );
 
-      // Solo agrupamos si el partido pertenece a una actividad del evento actual
-      if (nombreDeporte) {
-        if (!grupos[nombreDeporte]) grupos[nombreDeporte] = [];
-        grupos[nombreDeporte].push(partido);
-      }
-    });
-    this.resultadosAgrupados = Object.keys(grupos).map(nombre =>
-      new ResultadoDeporteEvento(nombre, grupos[nombre])
-    );
+      console.log("Resultados Listos:", this.resultadosAgrupados);
+
+    } catch (error) {
+      console.error('Error cargando datos:', error);
+      this.resultadosAgrupados = [];
+    }
   }
 
-  getEventos(): void {
-    this._eventosService.GetEventos().subscribe({
+  getVariableColor(color: Colores | undefined | null): string {
+    if (!color?.nombreColor) return 'var(--color-default)';
+
+    const clave = color?.nombreColor.toLowerCase().trim();
+
+    return `var(--color-${clave}, var(--color-default))`;
+  }
+
+  verPlantilla(idEquipo:number) {
+    if (!idEquipo) return;
+
+
+    this.loadingPlayers = true;
+
+    // Llamada al servicio
+    this._equiposService.getMiembrosEquipoById(idEquipo).subscribe({
       next: (data) => {
-        const fechaActual = new Date();
-        this.eventosanteriores = data.filter((evento: Evento) =>
-          new Date(evento.fechaEvento) < fechaActual
-        );
+        this.jugadoresEquipo = data;
+        this.loadingPlayers = false;
+        console.log("Jugadores cargados:", data);
+      },
+      error: (e) => {
+        console.error(e);
+        this.loadingPlayers = false;
       }
     });
   }
 
-  onEventoChange(idEvento: string): void {
+  async onEventoChange(idEvento: string) {
     if (!idEvento) return;
-    this.resultadosAgrupados = []; // Limpieza visual
-    this.cargarTodoElEvento(idEvento);
+    this.idEventoSeleccionado = idEvento;
+    this.resultadosAgrupados = [];
+    await this.cargarDatosEvento(idEvento);
   }
 }
