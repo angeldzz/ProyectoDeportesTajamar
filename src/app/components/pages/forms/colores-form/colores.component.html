@@ -1,29 +1,28 @@
 
-<div class="admin-colores-wrapper mx-auto" style="width: 75%;">
+<div class="admin-colores-wrapper mx-auto px-2 px-md-0" style="max-width: 900px; margin-top: 2rem;">
 
-
-
-  <div class="admin-colores-wrapper mx-auto" style="width: 75%;">
-
-    <div class="card border-0 shadow-sm rounded-4 p-3 mb-4 bg-white">
-      <form ngForm="ngForm" class="d-flex align-items-center gap-3">
-        <div class="flex-grow-1">
-          <input type="text"
-                 #cajaNombre
-                 class="form-control border-0 bg-light rounded-3"
-                 name="cajaColor"
-                 required
-                 placeholder="Nombre del nuevo color (ej: Cian)...">
-        </div>
-        <button type="submit" (click)="crearColor()" class="btn btn-primary px-4 rounded-3 d-flex align-items-center">
+  <div class="card border-0 shadow-sm rounded-4 p-3 mb-4 bg-white">
+    <form (submit)="$event.preventDefault()" class="row g-2 align-items-center">
+      <div class="col-12 col-md">
+        <input type="text"
+               #cajaNombre
+               class="form-control border-0 bg-light rounded-3"
+               name="cajaColor"
+               required
+               placeholder="Nombre del nuevo color (ej: Cian)...">
+      </div>
+      <div class="col-12 col-md-auto">
+        <button type="submit" (click)="crearColor()" class="btn btn-primary w-100 px-4 rounded-3 d-flex align-items-center justify-content-center">
           <i class="bi bi-plus-lg me-2"></i> Añadir Color
         </button>
-      </form>
-    </div>
+      </div>
+    </form>
+  </div>
 
-    <div class="tabla-scroll-container shadow-sm bg-white rounded-4">
+  <div class="tabla-scroll-container shadow-sm bg-white rounded-4 overflow-auto" style="max-height: 450px;">
+    <div class="table-responsive">
       <table class="table table-hover align-middle mb-0">
-        <thead class="sticky-top bg-light">
+        <thead class="sticky-top bg-light shadow-sm" style="z-index: 1;">
         <tr>
           <th class="text-center">ID</th>
           <th>Color</th>
@@ -38,7 +37,9 @@
               <td><span class="fw-semibold text-dark">{{color.nombreColor}}</span></td>
               <td class="text-center">
                 <div class="d-flex justify-content-center">
-                  <div class="tipo-color shadow-sm" [style.background-color]="getVariableColor(color.nombreColor)"></div>
+                  <div class="tipo-color shadow-sm" [style.background-color]="getVariableColor(color.nombreColor)"
+                       style="width: 22px; height: 22px; border-radius: 6px; border: 2px solid white; outline: 1px solid #dee2e6;">
+                  </div>
                 </div>
               </td>
               <td class="text-center">
@@ -46,11 +47,10 @@
                   <button class="btn btn-sm btn-outline-primary"
                           data-bs-toggle="modal"
                           data-bs-target="#modalEditar" (click)="cargarDatosEnModal(color)">
-                    Editar
+                    <i class="bi bi-pencil"></i> <span class="d-none d-sm-inline">Editar</span>
                   </button>
-
                   <button class="btn btn-sm btn-outline-danger" (click)="deleteColor(color.idColor)">
-                    Borrar
+                    <i class="bi bi-trash"></i> <span class="d-none d-sm-inline">Borrar</span>
                   </button>
                 </div>
               </td>
@@ -61,33 +61,32 @@
     </div>
   </div>
 
-<!--MODAL CON EL FORMULARIO DEL COLOR-->
-<div class="modal fade" id="modalEditar" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0 shadow-lg rounded-4">
-      <div class="modal-header bg-light border-0 py-3">
-        <h5 class="modal-title fw-bold" id="modalEditarLabel">
-          <i class="bi bi-pencil-fill me-2 text-primary"></i>Editar Color
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body p-4">
-        <form>
-          <input type="hidden" #cajaId>
-          <div class="mb-3">
-            <label class="form-label fw-bold small text-muted text-uppercase">Nombre del Color</label>
-            <input type="text"
-                   #cajaNombreModal
-                   class="form-control form-control-lg bg-light border-0 rounded-3"
-                   placeholder="Ej: Azul Eléctrico">
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer border-0 p-3">
-        <button type="button" class="btn btn-light rounded-3 px-4" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button"  (click)="updateColor()" class="btn btn-primary rounded-3 px-4 shadow-sm">Guardar Cambios</button>
+  <div class="modal fade" id="modalEditar" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg rounded-4">
+        <div class="modal-header bg-light border-0 py-3">
+          <h5 class="modal-title fw-bold" id="modalEditarLabel">
+            <i class="bi bi-pencil-fill me-2 text-primary"></i>Editar Color
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <form>
+            <input type="hidden" #cajaId>
+            <div class="mb-3">
+              <label class="form-label fw-bold small text-muted text-uppercase">Nombre del Color</label>
+              <input type="text"
+                     #cajaNombreModal
+                     class="form-control form-control-lg bg-light border-0 rounded-3"
+                     placeholder="Ej: Azul Eléctrico">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer border-0 p-3">
+          <button type="button" class="btn btn-light rounded-3 px-4" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" (click)="updateColor()" class="btn btn-primary rounded-3 px-4 shadow-sm">Guardar Cambios</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </div>
