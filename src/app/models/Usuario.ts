@@ -10,4 +10,5 @@ export interface Usuario {
   idCurso: number;
   curso: string;
   idCursoUsuario: number;
+  usuario?:string;
 }

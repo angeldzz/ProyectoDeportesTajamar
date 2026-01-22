@@ -13,6 +13,27 @@
   --text-main: #3d3d3d;        /* Gris muy oscuro cálido */
   --text-muted: #7a7a7a;
 
+  --bg-soft: #eef2f7;           /* bloques secundarios */
+
+  --blue-primary: #1f3a5f;      /* azul títulos */
+  --blue-secondary: #3a5f8a;    /* azul textos */
+  --blue-muted: #8fa3bf;        /* azul grisáceo */
+
+  --orange-soft: #ffe2cc;       /* naranja suave */
+
+  --border-light: #d8e0ea;
+
+  --bg-main: #0a111a;         /* Azul noche profundo para el fondo */
+  --bg-card: #ffffff;          /* Cartas blancas para dar claridad */
+  --bg-card-hover: #f8fafd;    /* Gris azulado muy claro para hover */
+  --navy-primary: #1f3a5f;     /* Azul marino para textos y headers */
+  --navy-secondary: #3e5b84;   /* Azul medio para detalles */
+  --orange-accent: #ff793f;    /* Naranja vibrante para acciones */
+  --border-color: #dbe4f0;     /* Bordes suaves azulados */
+
+
+
+
 
   /*COLORES PARA PREVISUALIZAR EN TABLA COLORES*/
   --color-rojo: #ff4d4d;

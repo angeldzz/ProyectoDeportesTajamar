@@ -1,127 +1,134 @@
-<div class="resultados-page py-4">
+<div class="app-content">
+  <div class="resultados-page py-4">
 
-  <div class="d-flex justify-content-center mb-5">
-    <app-calendario></app-calendario>
-  </div>
-  <div class="container mb-5" style="max-width: 600px;">
-    <div class="card bg-dark border-secondary p-3 shadow-sm">
-      <label class=" small text-uppercase fw-bold mb-2 text-white">Seleccionar Evento Pasado</label>
-      <select class="form-select bg-dark text-white border-secondary" #fEvento (change)="onEventoChange(fEvento.value)">
-        <option value="" disabled selected>Elija un evento...</option>
-        @for (evento of eventosanteriores; track evento.idEvento) {
-          <option [value]="evento.idEvento">
-            Evento del {{ evento.fechaEvento | date:'dd/MM/yyyy' }}
-          </option>
-        }
-      </select>
+
+    <div class="container mb-5" style="max-width: 600px;">
+      <div class="card bg-dark border-secondary p-3 shadow-sm">
+        <label class=" small text-uppercase fw-bold mb-2 text-white">Seleccionar Evento Pasado</label>
+        <select class="form-select bg-dark text-white border-secondary" #fEvento
+                (change)="onEventoChange(fEvento.value)">
+          <option value="" disabled selected>Elija un evento...</option>
+          @for (evento of eventosanteriores; track evento.idEvento) {
+            <option [value]="evento.idEvento">
+              Evento del {{ evento.fechaEvento | date:'dd/MM/yyyy' }}
+            </option>
+          }
+        </select>
+      </div>
     </div>
-  </div>
-  <div class="container-fluid px-lg-5">
-    @for (grupo of resultadosAgrupados; track grupo.deporte) {
-      <div class="league-section mb-5">
-
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <div class="d-flex align-items-center">
-            <div class="league-logo-container me-3">
-              <i class="bi bi-trophy-fill text-white"></i>
-            </div>
-            <div>
-              <h4 class="text-white fw-bold m-0">{{ grupo.deporte }}</h4>
-            </div>
+    <div class="container-fluid px-lg-5">
+      @if (isInitialLoad) {
+        <div class="text-center py-5">
+          <div class="spinner-border text-orange" role="status"
+               style="color: var(--orange-accent); width: 3rem; height: 3rem;">
+            <span class="visually-hidden">Cargando resultados...</span>
           </div>
+          <p class="text-muted mt-3 fw-bold text-uppercase tracking-widest">Actualizando Marcadores...</p>
         </div>
+      } @else {
+        @for (grupo of resultadosAgrupados; track grupo.deporte) {
+          <div class="league-section mb-5">
 
-        <div class="results-grid">
-          @for (res of grupo.resultados; track res.idPartidoResultado) {
-            <div class="match-card" [class.live]="res.puntosLocal === res.puntosVisitante && res.puntosLocal > 0">
-
-              <div class="card-header-match">
-                <span class="status-pill text-uppercase"
-                      [class.text-live]="res.puntosLocal === res.puntosVisitante">
-                  {{ res.puntosLocal === res.puntosVisitante ? 'In Progress' : 'Finished' }}
-                </span>
-
-                @if (res.puntosLocal === res.puntosVisitante) {
-                  <span class="live-dot"><i class="bi bi-dot"></i> EMPATE</span>
-                }
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <div class="d-flex align-items-center">
+                <div class="league-logo-container me-3">
+                  <i class="bi bi-trophy-fill text-white"></i>
+                </div>
+                <div>
+                  <h4 class="text-white fw-bold m-0">{{ grupo.deporte }}</h4>
+                </div>
               </div>
+            </div>
 
-              <div class="teams-score-area">
-                <div class="team-row">
-                  <div class="d-flex align-items-center">
+            <div class="results-grid">
+              @for (res of grupo.resultados; track res.idPartidoResultado) {
+                <div class="match-card" [class.live]="res.puntosLocal === res.puntosVisitante && res.puntosLocal > 0">
 
-                    <div class="team-mini-logo me-3"
-                         [style.background-color]="res.colorLocalCss"
-                         style="width: 22px; height: 22px; border-radius: 6px; border: 2px solid white; outline: 1px solid #dee2e6;">
-                    </div>
-                    @if(res.infoLocal){
-                      <span class="team-name text-uppercase" >
+                  <div class="card-header-match">
+<!--                <span class="status-pill text-uppercase"-->
+<!--                      [class.text-live]="res.puntosLocal === res.puntosVisitante">-->
+<!--&lt;!&ndash;                  {{ res.puntosLocal === res.puntosVisitante ? 'In Progress' : 'Finished' }}&ndash;&gt;-->
+<!--                </span>-->
+
+                    @if (res.puntosLocal === res.puntosVisitante) {
+                      <span class="live-dot"><i class="bi bi-dot"></i> EMPATE</span>
+                    }
+                  </div>
+
+                  <div class="teams-score-area">
+                    <div class="team-row">
+                      <div class="d-flex align-items-center">
+
+                        <div class="team-mini-logo me-3"
+                             [style.background-color]="res.colorLocalCss"
+                             style="width: 22px; height: 22px; border-radius: 6px; border: 2px solid white; outline: 1px solid #dee2e6;">
+                        </div>
+                        @if (res.infoLocal) {
+                          <span class="team-name text-uppercase">
                       {{ res.infoLocal.nombreEquipo }}
                     </span>
-                    }
-
-                    <button class="btn-icon-action"
-                            (click)="verPlantilla(res.idEquipoLocal)"
-                            data-bs-toggle="modal"
-                            data-bs-target="#playersModal">
-                     ver
-                    </button>
-                  </div>
-                  <span class="score-value" [class.highlight]="res.puntosLocal >= res.puntosVisitante">
+                        }
+                      </div>
+                      <span class="score-value" [class.highlight]="res.puntosLocal >= res.puntosVisitante">
                     {{ res.puntosLocal }}
                   </span>
-                </div>
-
-                <div class="team-row">
-                  <div class="d-flex align-items-center">
-                    <div class="team-mini-logo me-3"
-                         [style.background-color]="res.colorVisitanteCss"
-                         style="width: 22px; height: 22px; border-radius: 6px; border: 2px solid white; outline: 1px solid #dee2e6;">
                     </div>
 
-                    @if(res.infoVisitante){
-                      <span class="team-name text-uppercase" >
+                    <div class="team-row">
+                      <div class="d-flex align-items-center">
+                        <div class="team-mini-logo me-3"
+                             [style.background-color]="res.colorVisitanteCss"
+                             style="width: 22px; height: 22px; border-radius: 6px; border: 2px solid white; outline: 1px solid #dee2e6;">
+                        </div>
+
+                        @if (res.infoVisitante) {
+                          <span class="team-name text-uppercase">
                       {{ res.infoVisitante.nombreEquipo }}
                     </span>
-                    }
-                    <button class="btn-icon-action"
-                            (click)="verPlantilla(res.idEquipoLocal)"
-                            data-bs-toggle="modal"
-                            data-bs-target="#playersModal">
-                      ver
-                    </button>
+                        }
 
-                  </div>
-                  <span class="score-value" [class.highlight]="res.puntosVisitante >= res.puntosLocal">
+                      </div>
+                      <span class="score-value" [class.highlight]="res.puntosVisitante >= res.puntosLocal">
                     {{ res.puntosVisitante }}
                   </span>
-                </div>
-              </div>
+                    </div>
+                  </div>
 
-              <div class="card-footer-match">
-                <span class="stadium">Tajamar Stadium</span>
-                <a class="action-link">
-                  {{ res.puntosLocal === res.puntosVisitante ? 'MATCH CENTER' : 'DETAILS' }}
-                  <i class="bi bi-graph-up-arrow ms-1" *ngIf="res.puntosLocal === res.puntosVisitante"></i>
-                  <i class="bi bi-info-circle ms-1" *ngIf="res.puntosLocal !== res.puntosVisitante"></i>
-                </a>
-              </div>
+                  <div class="card-footer-match">
+                    <span class="stadium"></span>
+                    <a class="action-link">
+
+                      @if (res.infoLocal && res.infoVisitante) {
+                        <button class="btn-icon-action"
+                                (click)="verPlantilla(res.idEquipoLocal,res.idEquipoVisitante,
+                                                 [res.infoLocal.nombreEquipo,res.infoVisitante.nombreEquipo])"
+                                data-bs-toggle="modal"
+                                data-bs-target="#playersModal">
+                          Ver Jugadores
+                        </button>
+                      }
+                      <i class="bi bi-graph-up-arrow ms-1" *ngIf="res.puntosLocal === res.puntosVisitante"></i>
+                      <i class="bi bi-info-circle ms-1" *ngIf="res.puntosLocal !== res.puntosVisitante"></i>
+                    </a>
+                  </div>
+                </div>
+              }
             </div>
-          }
-        </div>
-      </div>
-    } @empty {
-      <div class="empty-state-box text-center">
-        <div class="empty-icon-wrapper mb-3">
-          <i class="bi bi-clipboard-x"></i>
-        </div>
-        <h3 class="text-white fw-bold">Sin Resultados Disponibles</h3>
-        <p class="">
-          No se han encontrado partidos registrados para el evento seleccionado.<br>
-          Prueba a seleccionar otra fecha en el historial.
-        </p>
-      </div>
-    }
+          </div>
+        }@empty {
+          <div class="empty-state-box text-center">
+            <div class="empty-icon-wrapper mb-3">
+              <i class="bi bi-clipboard-x"></i>
+            </div>
+            <h3 class="text-white fw-bold">Sin Resultados Disponibles</h3>
+            <p>
+              No se han encontrado partidos registrados para el evento seleccionado.<br>
+              Prueba a seleccionar otra fecha en el historial.
+            </p>
+          </div>
+        }
+      }
+    </div>
   </div>
 </div>
 
@@ -132,53 +139,117 @@
      aria-labelledby="playersModalLabel"
      aria-hidden="true">
 
-  <div class="modal-dialog modal-dialog-centered">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content bg-dark-panel text-white border-secondary" style="background-color: #1a1a1a;">
 
-    <div class="modal-content bg-dark-panel text-white border-secondary">
-
-      <div class="modal-header border-bottom-gray">
+      <div class="modal-header border-bottom-gray border-secondary">
         <div class="d-flex align-items-center">
           <div class="me-3 fs-4 text-warning">
-            <i class="bi bi-people-fill"></i>
+            <i class="bi bi-shield-shaded"></i>
           </div>
           <div>
             <h5 class="modal-title fw-bold" id="playersModalLabel">
-               'Cargando...'
+              Jugadores
             </h5>
-            <span class="badge bg-secondary text-uppercase x-small">Plantilla Oficial</span>
           </div>
         </div>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
-      <div class="modal-body">
+      <div class="modal-body p-4">
 
-        @if(loadingPlayers) {
-          <div class="d-flex justify-content-center py-4">
+        @if (loadingPlayers) {
+          <div class="d-flex justify-content-center py-5">
             <div class="spinner-border text-warning" role="status">
               <span class="visually-hidden">Cargando...</span>
             </div>
           </div>
         }
 
-        @if(!loadingPlayers && jugadoresEquipo) {
-          <div class="players-list">
+        @if (!loadingPlayers && jugadoresEquipoLocal && jugadoresEquipoVisitante) {
+          <div class="row d-flex justify-content-between px-4">
 
-            @for(jugador of jugadoresEquipo; track jugador.idUsuario || $index) {
-              <div class="player-card mb-2">
-                <div class="player-avatar">
-                  <i class="bi bi-person-fill"></i>
-                </div>
-                <div class="player-info">
-                  <h6 class="m-0 fw-bold">{{ jugador.nombre }} {{ jugador.apellidos }}</h6>
-                </div>
+            <!-- LOCAL -->
+            <div class="col-12 col-md-5">
+              <div class="d-flex align-items-center mb-3">
+                <div class="orange-indicator me-2"></div>
+                <h6 class="text-uppercase fw-bold m-0 text-warning">
+                  {{ arrNombreEquipo[0] }}
+                </h6>
               </div>
-            }
+
+              <div class="players-list">
+                @for (jugador of jugadoresEquipoLocal; track jugador.idUsuario) {
+                  <div
+                    class="player-card d-flex align-items-center px-3 py-2 mb-2 rounded bg-dark border border-secondary border-opacity-10">
+                    <div class="player-avatar">
+                      <p-avatar
+                        [image]="jugador.imagen"
+                        size="normal"
+                        shape="circle"
+                        class="">
+                      </p-avatar>
+                    </div>
+                    <div class="player-info">
+                      <div class="fw-semibold" style="font-size: 0.85rem;">
+                        {{ jugador.usuario }}
+                      </div>
+                      <div class="text-muted" style="font-size: 0.75rem;">
+                        {{ jugador.apellidos }}
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+            <div
+              class="position-absolute top-0 start-50 translate-middle-x h-100 border-start border-secondary opacity-25"></div>
+
+            <!-- VISITANTE -->
+            <div class="col-12 col-md-5">
+              <div class="d-flex align-items-center justify-content-md-end mb-3">
+                <div class="orange-indicator me-2"></div>
+                <h6 class="text-uppercase fw-bold m-0 text-warning">
+                  {{ arrNombreEquipo[1] }}
+                </h6>
+              </div>
+
+              <div class="players-list">
+                @for (jugador of jugadoresEquipoVisitante; track jugador.idUsuario) {
+                  <div
+                    class="player-card d-flex align-items-center justify-content-end px-3 py-2 mb-2 rounded bg-dark border border-secondary border-opacity-10">
+
+                    <div class="player-info text-end me-2">
+                      <div class="fw-semibold player-username" style="font-size: 0.85rem;">
+                        {{ jugador.usuario }}
+                      </div>
+                      <div class="text-muted" style="font-size: 0.75rem;">
+                        {{ jugador.apellidos }}
+                      </div>
+                    </div>
+
+                    <div class="player-avatar">
+                      <p-avatar
+                        [image]="jugador.imagen"
+                        size="normal"
+                        shape="circle">
+                      </p-avatar>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
 
           </div>
+
         }
+      </div>
+
+      <div class="modal-footer border-top border-secondary">
+        <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
       </div>
 
     </div>
   </div>
 </div>
+

@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { DatePipe, NgIf, UpperCasePipe } from '@angular/common';
-import { lastValueFrom } from 'rxjs';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import { DatePipe, NgIf } from '@angular/common';
+import {forkJoin, lastValueFrom, pipe, Subject, takeUntil} from 'rxjs';
 
 import { ResultadoService } from '../../../core/services/resultado.service';
 import { EventosService } from '../../../core/services/eventos.service';
@@ -14,27 +14,33 @@ import {Colores} from '../../../models/Colores';
 import {Equipov2} from '../../../models/EquipoV2';
 import {Equipov2Service} from '../../../core/services/equipov2.service';
 import {Usuario} from '../../../models/Usuario';
+import {Avatar} from 'primeng/avatar';
 
 @Component({
   selector: 'app-resultados',
   standalone: true,
   imports: [
-    CalendarioComponent,
     DatePipe,
-    NgIf
+    NgIf,
+    Avatar
   ],
   templateUrl: './resultados.component.html',
   styleUrl: './resultados.component.css',
 })
-export class ResultadosComponent implements OnInit {
+export class ResultadosComponent implements OnInit ,OnDestroy {
 
   resultadosAgrupados: ResultadoDeporteEvento[] = [];
   eventosanteriores: Evento[] = [];
   idEventoSeleccionado: string = "2";
   loadingPlayers: boolean = false;
-  jugadoresEquipo!:Array<Usuario>;
+  isInitialLoad: boolean = true;
+  jugadoresEquipoLocal!:Array<Usuario>;
+  jugadoresEquipoVisitante!:Array<Usuario>;
+  arrNombreEquipo:[string, string]=["",""];
 
-  usariosEquipo!:Array<Equipov2>;
+
+  private destroy$ = new Subject<void>();
+
   constructor(
     private _resultadoService: ResultadoService,
     private _eventosService: EventosService,
@@ -50,9 +56,14 @@ export class ResultadosComponent implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   async getEventos() {
     try {
-      const data = await lastValueFrom(this._eventosService.GetEventos());
+      const data = await lastValueFrom(this._eventosService.GetEventos().pipe(takeUntil(this.destroy$)));
       const fechaActual = new Date();
       this.eventosanteriores = data.filter((evento: Evento) =>
         new Date(evento.fechaEvento) < fechaActual
@@ -62,16 +73,20 @@ export class ResultadosComponent implements OnInit {
     }
   }
 
+
   async cargarDatosEvento(idEvento: string) {
     if (!idEvento) return;
-
+    this.isInitialLoad = true;
+    this.resultadosAgrupados = [];
     try {
 
       const [actividades, partidosEnriquecidos] = await Promise.all([
-        lastValueFrom(this._deportesService.getDeportesEvento(idEvento)),
-        lastValueFrom(this._resultadoService.getResultadosWithEquipos(idEvento))
+        lastValueFrom(this._deportesService.getDeportesEvento(idEvento).pipe(takeUntil(this.destroy$))),
+        lastValueFrom(this._resultadoService.getResultadosWithEquipos(idEvento).pipe(takeUntil(this.destroy$)))
       ]);
-      // TODO MIRAR SI CON VARIABLE SE MEJORA
+
+
+          //Metemos cada color a su partido/equipo
       partidosEnriquecidos.forEach(partido => {
         (partido as any).colorLocalCss =
           this.getVariableColor(partido.infoLocal?.infoColor);
@@ -106,6 +121,8 @@ export class ResultadosComponent implements OnInit {
     } catch (error) {
       console.error('Error cargando datos:', error);
       this.resultadosAgrupados = [];
+    }finally {
+      this.isInitialLoad = false;
     }
   }
 
@@ -117,24 +134,32 @@ export class ResultadosComponent implements OnInit {
     return `var(--color-${clave}, var(--color-default))`;
   }
 
-  verPlantilla(idEquipo:number) {
-    if (!idEquipo) return;
+  async verPlantilla(idEquipoLocal:number,idEquipoVisitante:number,nombresEquipos:[string,string]) {
+    if (!idEquipoLocal || !idEquipoVisitante) return;
 
 
     this.loadingPlayers = true;
+    this.arrNombreEquipo=nombresEquipos;
 
-    // Llamada al servicio
-    this._equiposService.getMiembrosEquipoById(idEquipo).subscribe({
-      next: (data) => {
-        this.jugadoresEquipo = data;
-        this.loadingPlayers = false;
-        console.log("Jugadores cargados:", data);
-      },
-      error: (e) => {
-        console.error(e);
-        this.loadingPlayers = false;
-      }
-    });
+    const peticionLocal = this._equiposService.getMiembrosEquipoById(idEquipoLocal);
+    const peticionVisitante = this._equiposService.getMiembrosEquipoById(idEquipoVisitante);
+
+    forkJoin({
+      locales: peticionLocal,
+      visitantes: peticionVisitante
+    }).pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data) => {
+          this.jugadoresEquipoLocal=data.locales;
+          this.jugadoresEquipoVisitante=data.visitantes;
+
+          this.loadingPlayers = false;
+          console.log("Ambos equipos cargados con éxito");
+        },error:(e)=>{
+          console.error("Error al cargar algun equipo",e);
+          this.loadingPlayers = false;
+        }
+      })
   }
 
   async onEventoChange(idEvento: string) {
@@ -143,4 +168,6 @@ export class ResultadosComponent implements OnInit {
     this.resultadosAgrupados = [];
     await this.cargarDatosEvento(idEvento);
   }
+
+  protected readonly console = console;
 }
