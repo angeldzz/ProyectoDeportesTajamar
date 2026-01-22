@@ -22,6 +22,11 @@ export class DeportesService {
     return this._http.get<Array<Deporte>>(url);
     }
 
+    getDeportes():Observable<Array<Deporte>>{
+      let url=environment.urlActividades;
+      return this._http.get<Array<Deporte>>(url);
+      }
+
 
     crearActividad(nombre:String,minJugadores:Number):Observable<any> {
       let url=environment.urlActividades+"create";
