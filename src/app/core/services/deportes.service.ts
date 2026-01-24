@@ -10,11 +10,9 @@ export class DeportesService {
 
   constructor(private _http: HttpClient) {}
 
-    getDeportesEvento(idEvento:String):Observable<Array<ActividadDeportes>> {
-
+    getDeportesEvento(idEvento:number):Observable<Array<ActividadDeportes>> {
     let url=environment.urlActividades+"ActividadesEvento/"+idEvento;
     return this._http.get<Array<ActividadDeportes>>(url);
-
     }
 
     getActividades():Observable<Array<Deporte>>{

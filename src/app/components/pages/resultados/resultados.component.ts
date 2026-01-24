@@ -81,7 +81,7 @@ export class ResultadosComponent implements OnInit ,OnDestroy {
     try {
 
       const [actividades, partidosEnriquecidos] = await Promise.all([
-        lastValueFrom(this._deportesService.getDeportesEvento(idEvento).pipe(takeUntil(this.destroy$))),
+        lastValueFrom(this._deportesService.getDeportesEvento(Number(idEvento)).pipe(takeUntil(this.destroy$))),
         lastValueFrom(this._resultadoService.getResultadosWithEquipos(idEvento).pipe(takeUntil(this.destroy$)))
       ]);
 

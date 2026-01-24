@@ -1,6 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { DeportesService } from '../../../core/services/deportes.service';
 import { Deporte } from '../../../models/Deportes';
+import { ActividadDeportes } from '../../../models/ActividadDeportes';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventosService } from '../../../core/services/eventos.service';
 import { Evento } from '../../../models/Evento';
@@ -12,6 +13,9 @@ import { catchError } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 
 registerLocaleData(localeEs);
+
+// Tipo unificado para el picklist que combina Deporte y ActividadDeportes
+type DeportePicklist = Deporte & { idEventoActividad?: number };
 
 @Component({
   selector: 'app-asignacion-actividad-evento.component',
@@ -25,25 +29,51 @@ export class AsignacionActividadEventoComponent implements OnInit{
               private router: Router, 
               private route: ActivatedRoute){}
   
-  deportesDisponibles = signal<Deporte[]>([]);
-  deportesSeleccionados = signal<Deporte[]>([]);
+  deportesDisponibles = signal<DeportePicklist[]>([]);
+  deportesSeleccionados = signal<DeportePicklist[]>([]);
   public evento!: Evento;
   
   ngOnInit(): void {
-    this.LoadDeportes();
     this.LoadEvento();
   }
   public LoadDeportes () {
-    this._serviceDeportes.getDeportes().subscribe(response => {
-    this.deportesDisponibles.set(response);
-    console.log(response);
-    })
+    this._serviceDeportes.getDeportesEvento(this.evento.idEvento).subscribe(response => {
+      // Convertir ActividadDeportes a DeportePicklist
+      const seleccionados: DeportePicklist[] = response.map(act => ({
+        idActividad: act.idActividad,
+        nombre: act.nombreActividad,
+        minimoJugadores: act.minimoJugadores,
+        idEventoActividad: act.idEventoActividad
+      }));
+      
+      this.deportesSeleccionados.set(seleccionados);
+      console.log("Deportes en evento:");
+      console.log(seleccionados);
+      
+      // Cargar deportes disponibles después de obtener los seleccionados
+      this._serviceDeportes.getDeportes().subscribe(todosDeportes => {
+        // Filtrar deportes que ya están asignados al evento
+        const idsSeleccionados = response.map(d => d.idActividad);
+        const deportesFiltrados: DeportePicklist[] = todosDeportes
+          .filter(deporte => !idsSeleccionados.includes(deporte.idActividad))
+          .map(deporte => ({
+            ...deporte,
+            idEventoActividad: undefined
+          }));
+        
+        this.deportesDisponibles.set(deportesFiltrados);
+        console.log("Deportes disponibles (filtrados):");
+        console.log(deportesFiltrados);
+      });
+    });
   }
   public LoadEvento () {
     const idEvento = this.route.snapshot.params['idEvento'];
       this._serviceEvento.GetEventoIndividual(idEvento).subscribe(result => {
       this.evento = result;
-      console.log(this.evento);
+      console.log("Id evento: " + this.evento.idEvento);
+      // Load deportes after evento is loaded
+      this.LoadDeportes();
     })
   }
   public AsignarActividades() {
@@ -60,7 +90,22 @@ export class AsignacionActividadEventoComponent implements OnInit{
       return;
     }
 
-    const peticiones = deportesSelecionadosActuales.map(deporte => 
+    // Filtrar solo los deportes que NO tienen idEventoActividad asignado (recién seleccionados)
+    const deportesNuevos = deportesSelecionadosActuales.filter(deporte => 
+      !deporte.idEventoActividad || deporte.idEventoActividad === 0
+    );
+
+    if (deportesNuevos.length === 0) {
+      Swal.fire({
+          title: 'Sin cambios',
+          text: `Todos los deportes ya están asignados al evento`,
+          icon: 'info',
+          confirmButtonText: 'Aceptar'
+        });
+      return;
+    }
+
+    const peticiones = deportesNuevos.map(deporte => 
       this._serviceEvento.AsignarActividad_Evento(idevento, deporte.idActividad).pipe(
         catchError(error => {
           console.error(`Error al asignar actividad ${deporte.nombre}:`, error);

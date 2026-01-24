@@ -1,4 +1,4 @@
-<div class="picklist-container">
+<div class="picklist-container" *ngIf="evento">
     <p-picklist 
         [source]="deportesDisponibles()" 
         [target]="deportesSeleccionados()" 
@@ -17,7 +17,7 @@
             <div class="deporte-item">
                 <i class="bi bi-trophy-fill deporte-icon"></i>
                 <div class="deporte-info">
-                    <div class="deporte-nombre">{{ deporte.nombre }}</div>
+                    <div class="deporte-nombre">{{ deporte.nombreActividad || deporte.nombre }}</div>
                     <div class="deporte-detalle">Mínimo {{ deporte.minimoJugadores }} jugadores</div>
                 </div>
             </div>
