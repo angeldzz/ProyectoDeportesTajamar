@@ -11,6 +11,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
 import {UsuarioService} from '../../../core/services/usuario.service';
+import { Observable } from 'rxjs/internal/Observable';
 
 @Component({
   selector: 'app-home',
@@ -27,7 +28,7 @@ import {UsuarioService} from '../../../core/services/usuario.service';
 export class HomeComponent implements OnInit{
   public eventosanteriores!: Array<Evento>
   public eventosdisponibles!: Array<Evento>
-  public role!: number | null;
+  public role$!: Observable<number | null>;
   // Paginación eventos disponibles
   public paginaDisponibles: number = 1;
   public eventosPorPagina: number = 3;
@@ -55,7 +56,9 @@ export class HomeComponent implements OnInit{
               private _serviceEventos: EventosService) { }
 
   ngOnInit(): void {
-    this.role = this._authService.getUserRole();
+    // Suscribirse al rol de manera reactiva
+    this.role$ = this._authService.userRole$;
+    
     this._serviceEventos.GetEventos().subscribe({
       next: (data) => {
         const fechaActual = new Date();
@@ -98,9 +101,6 @@ export class HomeComponent implements OnInit{
             }
           };
         });
-
-        console.log('Eventos anteriores:', this.eventosanteriores);
-        console.log('Eventos disponibles:', this.eventosdisponibles);
       }
     });
   }

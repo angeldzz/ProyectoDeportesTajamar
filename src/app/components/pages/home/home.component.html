@@ -8,22 +8,22 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h2 class="section-title mb-0">Eventos Disponibles</h2>
               <!-- Ng if para control de rol -->
-              @if (role !== 2) {
-                <button type="button" class="btn btn-primary" [routerLink]="'/creacion_eventos'">Crear Evento</button>
+              @if ((role$ | async) !== 2) {
+                <button type="button" class="btn btn-primary mr-3" [routerLink]="'/creacion_eventos'">Crear Evento</button>
               }
             </div>
             <div class="row px-3">
               @for (evento of eventosDisponiblesPaginados; track evento.idEvento ) {
-                <div class="col-12 mb-2">
+                <div class="col-12 mb-3">
                   <div class="card event-card-horizontal">
                     <div class="card-body">
-                      <div class="d-flex align-items-center">
+                      <div class="d-flex align-items-center gap-3">
                         <div class="event-date-badge">
                           <div class="event-month">{{ evento.fechaEvento | date:'MMM' | uppercase }}</div>
                           <div class="event-day">{{ evento.fechaEvento | date:'dd' }}</div>
                         </div>
                         <div class="event-details flex-grow-1">
-                          <div class="d-flex justify-content-between align-items-start">
+                          <div class="d-flex align-items-center gap-2 mb-1">
                             <h5 class="event-title mb-0">Evento #{{ evento.idEvento }}</h5>
                             <span class="badge badge-disponible">Próxima</span>
                           </div>
@@ -36,8 +36,13 @@
                             </span>
                           </div>
                         </div>
+                        @if ((role$ | async) !== 2) {
+                          <button type="button" class="btn btn-icon-action" [routerLink]="'/asignacion-actividad-evento/' + evento.idEvento" title="Asignar actividad">
+                            <i class="bi bi-clipboard-plus"></i>
+                          </button>
+                        }
                         <button class="btn btn-join-compact" [routerLink]="'/seleccion_deportes/' + evento.idEvento">
-                          Unirse
+                          <i class="bi bi-box-arrow-in-right me-1"></i> Unirse
                         </button>
                       </div>
                     </div>
@@ -71,7 +76,7 @@
                 <div class="col-12 mb-2">
                   <div class="card event-card-horizontal past-event">
                     <div class="card-body">
-                      <div class="d-flex align-items-center">
+                      <div class="d-flex align-items-center gap-4">
                         <div class="event-date-badge past">
                           <div class="event-month">{{ evento.fechaEvento | date:'MMM' | uppercase }}</div>
                           <div class="event-day">{{ evento.fechaEvento | date:'dd' }}</div>

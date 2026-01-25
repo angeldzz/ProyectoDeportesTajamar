@@ -34,4 +34,10 @@ export class EventosService {
       null
     );
   }
+  
+  EliminarActividad_Evento(idEventoActividad: number): Observable<any> {
+    return this._http.delete<any>(
+      `${environment.urlActividadesEventos}${idEventoActividad}`
+    );
+  }
 }

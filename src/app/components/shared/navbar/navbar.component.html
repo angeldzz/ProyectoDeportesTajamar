@@ -25,13 +25,15 @@
               [routerLink]="['/pagos']"
             routerLinkActive="active-link">Pagos</a>
           </li>
-          <li class="nav-item">
+          @if ((role$ | async) !== 2) {
+            <li class="nav-item">
             <a class="nav-link px-3"
               [routerLink]="['/panel_administrador']"
               routerLinkActive="active-link">
               Panel Admin
             </a>
           </li>
+        }
         </ul>
         <div class="d-flex align-items-center justify-content-lg-end gap-3 mt-3 mt-lg-0  pt-3 pt-lg-0 border-lg-0">
           @if (nombre$ | async; as nombre) {
@@ -50,7 +52,9 @@
                   <span class="fw-bold text-orange">{{nombre$ | async}}</span>
                 </li>
                 <li><a class="dropdown-item py-2" [routerLink]="['/perfil']"><i class="bi bi-person me-2"></i>Perfil</a></li>
+                @if ((role$ | async) !== 2) {
                 <li><a class="dropdown-item py-2" [routerLink]="['/panel_administrador']"><i class="bi bi-shield-lock me-2"></i>Admin</a></li>
+                }
                 <li><hr class="dropdown-divider"></li>
                 <li>
                   <a class="dropdown-item py-2 text-danger" (click)="logout()" style="cursor: pointer;">

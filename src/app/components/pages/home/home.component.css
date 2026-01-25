@@ -1,4 +1,4 @@
-.main-content {
+plus.main-content {
         height: calc(100vh - 56px);
         background-color: #f8f9fa;
         overflow: hidden;
@@ -16,7 +16,6 @@
         max-height: calc(100vh - 56px);
         overflow-y: auto;
     }
-
     .calendario-column {
         background-color: #f8f9fa;
         padding: 40px 20px;
@@ -25,7 +24,7 @@
         position: sticky;
         top: 0;
     }
-
+    
     .events-container {
         max-width: 600px;
         margin: 0 auto;
@@ -54,108 +53,149 @@
     /* Nuevos estilos para cards horizontales */
     .event-card-horizontal {
         border: 1px solid #e0e0e0;
-        border-radius: 8px;
-        transition: all 0.2s ease;
+        border-radius: 12px;
+        transition: all 0.3s ease;
         background-color: white;
+        overflow: hidden;
     }
 
     .event-card-horizontal:hover {
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        border-color: #d0d0d0;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+        border-color: #4285f4;
+        transform: translateY(-2px);
     }
 
     .event-card-horizontal .card-body {
-        padding: 8px 12px;
+        padding: 16px 20px;
     }
 
     .event-date-badge {
-        background-color: #4285f4;
+        background: linear-gradient(135deg, #4285f4 0%, #3367d6 100%);
         color: white;
         text-align: center;
-        padding: 4px 10px;
-        border-radius: 6px;
-        min-width: 45px;
-        margin-right: 12px;
+        padding: 8px 12px;
+        border-radius: 10px;
+        min-width: 60px;
+        box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
+        flex-shrink: 0;
     }
 
     .event-date-badge.past {
-        background-color: #6c757d;
+        background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+        box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
     }
 
     .event-month {
-        font-size: 0.6rem;
-        font-weight: 600;
-        letter-spacing: 0.5px;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        opacity: 0.95;
     }
 
     .event-day {
-        font-size: 1rem;
+        font-size: 1.25rem;
         font-weight: 700;
         line-height: 1;
-        margin-top: 1px;
+        margin-top: 2px;
+    }
+
+    .event-details {
+        min-width: 0;
     }
 
     .event-title {
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: #333;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #2c3e50;
+        letter-spacing: 0.3px;
     }
 
     .event-meta {
         display: flex;
-        gap: 12px;
-        font-size: 0.75rem;
+        gap: 16px;
+        font-size: 0.8rem;
         color: #6c757d;
-        margin-top: 4px;
+        margin-top: 6px;
     }
 
     .meta-item {
         display: flex;
         align-items: center;
-        gap: 4px;
+        gap: 6px;
     }
 
     .meta-item i {
-        font-size: 0.75rem;
+        font-size: 0.85rem;
+        color: #4285f4;
     }
 
     .badge-disponible {
-        background-color: #ff6b6b;
+        background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
         color: white;
-        padding: 2px 8px;
-        border-radius: 12px;
-        font-size: 0.65rem;
-        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 14px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        box-shadow: 0 2px 6px rgba(255, 107, 107, 0.3);
     }
 
     .badge-finalizado {
-        background-color: #6c757d;
+        background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
         color: white;
-        padding: 2px 8px;
-        border-radius: 12px;
-        font-size: 0.65rem;
-        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 14px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        box-shadow: 0 2px 6px rgba(108, 117, 125, 0.3);
     }
 
     .btn-join-compact {
-        background-color: #4285f4;
+        background: linear-gradient(135deg, #4285f4 0%, #3367d6 100%);
         color: white;
         border: none;
-        padding: 5px 14px;
-        border-radius: 6px;
-        font-weight: 600;
-        font-size: 0.75rem;
-        transition: all 0.2s ease;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
         white-space: nowrap;
+        box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
+        flex-shrink: 0;
     }
 
     .btn-join-compact:hover {
-        background-color: #3367d6;
+        background: linear-gradient(135deg, #3367d6 0%, #2952b3 100%);
         color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(66, 133, 244, 0.4);
+    }
+
+    .btn-icon-action {
+        background-color: #f8f9fa;
+        color: #4285f4;
+        border: 1px solid #e0e0e0;
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+    }
+
+    .btn-icon-action:hover {
+        background-color: #4285f4;
+        color: white;
+        border-color: #4285f4;
+        transform: scale(1.05);
     }
 
     .past-event {
-        opacity: 0.8;
+        opacity: 0.85;
+        background-color: #f8f9fa;
+    }
+
+    .past-event:hover {
+        opacity: 0.95;
     }
 
     /* Estilos antiguos - mantener por compatibilidad */
