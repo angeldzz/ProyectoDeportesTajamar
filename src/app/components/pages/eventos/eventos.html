@@ -8,28 +8,39 @@
       (input)="filtro = $any($event.target).value"
       placeholder="Buscar por título, lugar o descripción"
       aria-label="Buscar eventos"
-    />
+      />
+    </div>
+
+    @if (eventos && eventos.length) {
+      <ul class="eventos-list">
+        @for (ev of eventosFiltrados(); track ev) {
+          <li class="evento-item">
+            <h4>{{ ev.titulo }}</h4>
+            <p class="meta">
+              <span>{{ ev.fecha }}</span>
+              @if (ev.lugar) {
+                <span> · {{ ev.lugar }}</span>
+              }
+            </p>
+            @if (ev.equipoLocal || ev.equipoVisitante) {
+              <p>
+                <small>
+                  {{ ev.equipoLocal || '' }}
+                  @if (ev.equipoLocal && ev.equipoVisitante) {
+                    <span> vs </span>
+                  }
+                  {{ ev.equipoVisitante || '' }}
+                </small>
+              </p>
+            }
+            @if (ev.descripcion) {
+              <p>{{ ev.descripcion }}</p>
+            }
+          </li>
+        }
+      </ul>
+    } @else {
+      <p>No hay eventos disponibles.</p>
+    }
+
   </div>
-
-  <ul class="eventos-list" *ngIf="eventos && eventos.length; else noEventos">
-    <li *ngFor="let ev of eventosFiltrados()" class="evento-item">
-      <h4>{{ ev.titulo }}</h4>
-      <p class="meta">
-        <span>{{ ev.fecha }}</span>
-        <span *ngIf="ev.lugar"> · {{ ev.lugar }}</span>
-      </p>
-      <p *ngIf="ev.equipoLocal || ev.equipoVisitante">
-        <small>
-          {{ ev.equipoLocal || '' }}
-          <span *ngIf="ev.equipoLocal && ev.equipoVisitante"> vs </span>
-          {{ ev.equipoVisitante || '' }}
-        </small>
-      </p>
-      <p *ngIf="ev.descripcion">{{ ev.descripcion }}</p>
-    </li>
-  </ul>
-
-  <ng-template #noEventos>
-    <p>No hay eventos disponibles.</p>
-  </ng-template>
-</div>

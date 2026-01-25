@@ -1,15 +1,14 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 import {SideItem} from '../../../models/SideItem';
-import {NgIf} from '@angular/common';
+
 
 @Component({
   selector: 'app-sidebar',
   imports: [
     RouterLink,
-    RouterLinkActive,
-    NgIf
-  ],
+    RouterLinkActive
+],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css',
 })

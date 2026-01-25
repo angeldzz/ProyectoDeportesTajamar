@@ -1,11 +1,11 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 const API_EQUIPOS = 'https://apideportestajamar.azurewebsites.net/api/Equipos';
 
 @Component({
   selector: 'app-seleccion-equipo',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './seleccion-equipo.component.html',
   styleUrl: './seleccion-equipo.component.css',
 })

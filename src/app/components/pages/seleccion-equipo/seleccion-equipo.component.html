@@ -1,47 +1,59 @@
 <div class="seleccion-equipo-page">
-	<h2>Seleccionar Equipo</h2>
+  <h2>Seleccionar Equipo</h2>
 
-	<div *ngIf="loading">Cargando equipos...</div>
-	<div *ngIf="error" class="error">Error: {{ error }}</div>
+  @if (loading) {
+    <div>Cargando equipos...</div>
+  }
+  @if (error) {
+    <div class="error">Error: {{ error }}</div>
+  }
 
-	<div class="buscar">
-		<input
-			placeholder="Buscar equipo por nombre"
-			[value]="filtro"
-			(input)="filtro = $any($event.target).value"
-			aria-label="Buscar equipos"
-		/>
-	</div>
+  <div class="buscar">
+    <input
+      placeholder="Buscar equipo por nombre"
+      [value]="filtro"
+      (input)="filtro = $any($event.target).value"
+      aria-label="Buscar equipos"
+      />
+    </div>
 
-	<ul *ngIf="!loading && equipos && equipos.length; else noEquipos" class="equipos-list">
-		<li *ngFor="let e of filteredEquipos()" class="equipo-item">
-			<div class="equipo-row">
-				<div class="equipo-nombre">{{ e.nombreEquipo || e.nombre }}</div>
-				<div class="equipo-actions">
-					<button type="button" (click)="selectEquipo(e)">Seleccionar</button>
-				</div>
-			</div>
-		</li>
-	</ul>
+    @if (!loading && equipos && equipos.length) {
+      <ul class="equipos-list">
+        @for (e of filteredEquipos(); track e) {
+          <li class="equipo-item">
+            <div class="equipo-row">
+              <div class="equipo-nombre">{{ e.nombreEquipo || e.nombre }}</div>
+              <div class="equipo-actions">
+                <button type="button" (click)="selectEquipo(e)">Seleccionar</button>
+              </div>
+            </div>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p>No hay equipos disponibles.</p>
+    }
 
-	<ng-template #noEquipos>
-		<p>No hay equipos disponibles.</p>
-	</ng-template>
 
-	<section *ngIf="selectedEquipo" class="detalle-equipo">
-		<h3>Equipo: {{ selectedEquipo.nombreEquipo || selectedEquipo.nombre }}</h3>
-		<button type="button" (click)="clearSelection()">Cerrar</button>
-
-		<div *ngIf="loadingMiembros">Cargando miembros...</div>
-		<div *ngIf="miembros && miembros.length; else noMiembros">
-			<h4>Miembros</h4>
-			<ul>
-				<li *ngFor="let m of miembros">{{ m.usuario || m.nombre || m.email || ('Usuario ' + (m.idUsuario || m.id)) }}</li>
-			</ul>
-		</div>
-
-		<ng-template #noMiembros>
-			<p>No hay miembros registrados para este equipo.</p>
-		</ng-template>
-	</section>
-</div>
+    @if (selectedEquipo) {
+      <section class="detalle-equipo">
+        <h3>Equipo: {{ selectedEquipo.nombreEquipo || selectedEquipo.nombre }}</h3>
+        <button type="button" (click)="clearSelection()">Cerrar</button>
+        @if (loadingMiembros) {
+          <div>Cargando miembros...</div>
+        }
+        @if (miembros && miembros.length) {
+          <div>
+            <h4>Miembros</h4>
+            <ul>
+              @for (m of miembros; track m) {
+                <li>{{ m.usuario || m.nombre || m.email || ('Usuario ' + (m.idUsuario || m.id)) }}</li>
+              }
+            </ul>
+          </div>
+        } @else {
+          <p>No hay miembros registrados para este equipo.</p>
+        }
+      </section>
+    }
+  </div>

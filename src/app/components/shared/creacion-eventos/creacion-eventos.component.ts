@@ -5,13 +5,13 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
-import { CommonModule } from '@angular/common';
+
 import { EventosService } from '../../../core/services/eventos.service';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-creacion-eventos',
-  imports: [FullCalendarModule, CommonModule],
+  imports: [FullCalendarModule],
   templateUrl: './creacion-eventos.component.html',
   styleUrl: './creacion-eventos.component.css',
 })
