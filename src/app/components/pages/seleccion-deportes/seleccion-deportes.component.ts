@@ -7,11 +7,14 @@ import {UsuarioService} from '../../../core/services/usuario.service';
 import {Usuario} from '../../../models/Usuario';
 import {InscripcionesService} from '../../../core/services/inscripciones.service';
 import {catchError} from 'rxjs';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-seleccion-deportes',
   imports: [
-    RouterLink
+    RouterLink,
+    FormsModule,
+    ReactiveFormsModule
   ],
   templateUrl: './seleccion-deportes.component.html',
   styleUrl: './seleccion-deportes.component.css',
@@ -20,9 +23,8 @@ export class SeleccionDeportesComponent implements OnInit {
 
   public idEvento!: String;
   public deportes!: Array<ActividadDeportes>;
-  private usario!: Usuario;
-
-
+  public usario!: Usuario;
+  public quiereSerCapitan: boolean=false;
   constructor(private _activeRoute: ActivatedRoute,
               private _deportesService: DeportesService,
               private _usuarioService: UsuarioService,
@@ -50,15 +52,26 @@ export class SeleccionDeportesComponent implements OnInit {
     });
   }
 
+  onChangeCapitan(){
+    console.log("cambiado")
+    this.quiereSerCapitan = !this.quiereSerCapitan;
+    console.log(this.quiereSerCapitan)
+  }
   inscribirseActividadEvento(idEvento: String, idActividad: number, idActividadEvento: number) {
+
+      //TODO CAMBIAR LA RUTA POR ESTA
+    // /api/UsuariosDeportes/InscribirmeEvento/{ideventoactividad}/{sercapitan}
     this._inscripcionesService.inscribirseActividadEvento(
       this.usario.idUsuario,
       idActividadEvento,
-      this.usario.estadoUsuario,
+      this.quiereSerCapitan,
       new Date()
     ).subscribe({
       next: () => this._router.navigate(['/deporte_eventos', idEvento, idActividad]),
-      error: err => console.error(err)
+      error: err => {
+        alert("ya estas inscrito en una actividad");
+        console.error(err)
+      }
     })
   }
 }

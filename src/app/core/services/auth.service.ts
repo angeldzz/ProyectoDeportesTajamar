@@ -64,15 +64,15 @@ export class AuthService {
 
     switch (userRoleId) {
       case "1":
-        return 1;
+        return 1;  //PROFESOR
       case "2":
-        return 2;
+        return 2; //ALUMNO
       case "3":
-        return 3;
+        return 3; //ADMINISTRADOR
       case "4":
-        return 4;
+        return 4; //ORGANIZADOR
       case "5":
-        return 5;
+        return 5; //CAPITAN
       default:
         return null;
     }

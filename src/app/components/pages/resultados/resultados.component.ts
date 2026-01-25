@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import { DatePipe, NgIf } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import {forkJoin, lastValueFrom, pipe, Subject, takeUntil} from 'rxjs';
 
 import { ResultadoService } from '../../../core/services/resultado.service';
@@ -21,8 +21,7 @@ import {Avatar} from 'primeng/avatar';
   standalone: true,
   imports: [
     DatePipe,
-    NgIf,
-    Avatar
+    Avatar,
   ],
   templateUrl: './resultados.component.html',
   styleUrl: './resultados.component.css',
