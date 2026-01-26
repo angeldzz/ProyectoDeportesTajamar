@@ -1,130 +1,137 @@
 <main class="main-content">
-    <section class="activities-section">
-        <div class="container-fluid">
-            <div class="row g-0">
-                <!-- Columna izquierda - Eventos -->
-                <div class="col-lg-6 events-column">
-                    <div class="events-container">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h2 class="section-title mb-0">Eventos Disponibles</h2>
-                            <!-- Ng if para control de rol -->
-                            <button type="button" class="btn btn-primary" *ngIf="role !== 2" [routerLink]="'/creacion_eventos'">Crear Evento</button>
-                        </div>
-                        <div class="row px-3">
-                            @for (evento of eventosDisponiblesPaginados; track evento.idEvento ) {
-                                <div class="col-12 mb-2">
-                                    <div class="card event-card-horizontal">
-                                        <div class="card-body">
-                                            <div class="d-flex align-items-center">
-                                                <div class="event-date-badge">
-                                                    <div class="event-month">{{ evento.fechaEvento | date:'MMM' | uppercase }}</div>
-                                                    <div class="event-day">{{ evento.fechaEvento | date:'dd' }}</div>
-                                                </div>
-                                                <div class="event-details flex-grow-1">
-                                                    <div class="d-flex justify-content-between align-items-start">
-                                                        <h5 class="event-title mb-0">Evento #{{ evento.idEvento }}</h5>
-                                                        <span class="badge badge-disponible">Próxima</span>
-                                                    </div>
-                                                    <div class="event-meta">
-                                                        <span class="meta-item">
-                                                            <i class="bi bi-clock"></i> {{ evento.fechaEvento | date:'HH:mm' }}
-                                                        </span>
-                                                        <span class="meta-item">
-                                                            <i class="bi bi-person-badge"></i> Profesor {{ evento.idProfesor }}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <button class="btn btn-join-compact" [routerLink]="'/seleccion_deportes/' + evento.idEvento">
-                                                    Unirse
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                        @if (totalPaginasDisponibles > 1) {
-                            <div class="pagination-controls">
-                                <button 
-                                    class="btn btn-outline-primary pagination-btn" 
-                                    (click)="anteriorPaginaDisponibles()" 
-                                    [disabled]="paginaDisponibles === 1">
-                                    <i class="bi bi-chevron-left"></i> Anterior
-                                </button>
-                                <span class="pagination-info">
-                                    Página {{ paginaDisponibles }} de {{ totalPaginasDisponibles }}
-                                </span>
-                                <button 
-                                    class="btn btn-outline-primary pagination-btn" 
-                                    (click)="siguientePaginaDisponibles()" 
-                                    [disabled]="paginaDisponibles === totalPaginasDisponibles">
-                                    Siguiente <i class="bi bi-chevron-right"></i>
-                                </button>
-                            </div>
-                        }
-
-                        <h2 class="section-title mt-5">Eventos Pasados</h2>
-                        <div class="row px-3">
-                            @for (evento of eventosAnterioresPaginados; track evento.idEvento ) {
-                                <div class="col-12 mb-2">
-                                    <div class="card event-card-horizontal past-event">
-                                        <div class="card-body">
-                                            <div class="d-flex align-items-center">
-                                                <div class="event-date-badge past">
-                                                    <div class="event-month">{{ evento.fechaEvento | date:'MMM' | uppercase }}</div>
-                                                    <div class="event-day">{{ evento.fechaEvento | date:'dd' }}</div>
-                                                </div>
-                                                <div class="event-details flex-grow-1">
-                                                    <div class="d-flex justify-content-between align-items-start">
-                                                        <h5 class="event-title mb-0">Evento #{{ evento.idEvento }}</h5>
-                                                        <span class="badge badge-finalizado">Finalizado</span>
-                                                    </div>
-                                                    <div class="event-meta">
-                                                        <span class="meta-item">
-                                                            <i class="bi bi-clock"></i> {{ evento.fechaEvento | date:'HH:mm' }}
-                                                        </span>
-                                                        <span class="meta-item">
-                                                            <i class="bi bi-person-badge"></i> Profesor {{ evento.idProfesor }}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                        @if (totalPaginasAnteriores > 1) {
-                            <div class="pagination-controls">
-                                <button 
-                                    class="btn btn-outline-secondary pagination-btn" 
-                                    (click)="anteriorPaginaAnteriores()" 
-                                    [disabled]="paginaAnteriores === 1">
-                                    <i class="bi bi-chevron-left"></i> Anterior
-                                </button>
-                                <span class="pagination-info">
-                                    Página {{ paginaAnteriores }} de {{ totalPaginasAnteriores }}
-                                </span>
-                                <button 
-                                    class="btn btn-outline-secondary pagination-btn" 
-                                    (click)="siguientePaginaAnteriores()" 
-                                    [disabled]="paginaAnteriores === totalPaginasAnteriores">
-                                    Siguiente <i class="bi bi-chevron-right"></i>
-                                </button>
-                            </div>
-                        }
-                    </div>
-                </div>
-
-                <!-- Columna derecha - Calendario -->
-                <div class="col-lg-6 calendario-column">
-                    <div class="calendario">
-                        <div class="calendario-content">
-                            <full-calendar [options]="calendarOptions"></full-calendar>
-                        </div>
-                    </div>
-                </div>
+  <section class="activities-section">
+    <div class="container-fluid">
+      <div class="row g-0">
+        <!-- Columna izquierda - Eventos -->
+        <div class="col-lg-6 events-column">
+          <div class="events-container">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h2 class="section-title mb-0">Eventos Disponibles</h2>
+              <!-- Ng if para control de rol -->
+              @if ((role$ | async) !== 2) {
+                <button type="button" class="btn btn-primary mr-3" [routerLink]="'/creacion_eventos'">Crear Evento</button>
+              }
             </div>
+            <div class="row px-3">
+              @for (evento of eventosDisponiblesPaginados; track evento.idEvento ) {
+                <div class="col-12 mb-3">
+                  <div class="card event-card-horizontal">
+                    <div class="card-body">
+                      <div class="d-flex align-items-center gap-3">
+                        <div class="event-date-badge">
+                          <div class="event-month">{{ evento.fechaEvento | date:'MMM' | uppercase }}</div>
+                          <div class="event-day">{{ evento.fechaEvento | date:'dd' }}</div>
+                        </div>
+                        <div class="event-details flex-grow-1">
+                          <div class="d-flex align-items-center gap-2 mb-1">
+                            <h5 class="event-title mb-0">Evento #{{ evento.idEvento }}</h5>
+                            <span class="badge badge-disponible">Próxima</span>
+                          </div>
+                          <div class="event-meta">
+                            <span class="meta-item">
+                              <i class="bi bi-clock"></i> {{ evento.fechaEvento | date:'HH:mm' }}
+                            </span>
+                            <span class="meta-item">
+                              <i class="bi bi-person-badge"></i> Profesor {{ evento.idProfesor }}
+                            </span>
+                          </div>
+                        </div>
+                        @if ((role$ | async) !== 2) {
+                          <button type="button" class="btn btn-icon-action" [routerLink]="'/asignacion-actividad-evento/' + evento.idEvento" title="Asignar actividad">
+                            <i class="bi bi-clipboard-plus"></i>
+                          </button>
+                        }
+                        <button class="btn btn-join-compact" [routerLink]="'/seleccion_deportes/' + evento.idEvento">
+                          <i class="bi bi-box-arrow-in-right me-1"></i> Unirse
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+            @if (totalPaginasDisponibles > 1) {
+              <div class="pagination-controls">
+                <button
+                  class="btn btn-outline-primary pagination-btn"
+                  (click)="anteriorPaginaDisponibles()"
+                  [disabled]="paginaDisponibles === 1">
+                  <i class="bi bi-chevron-left"></i> Anterior
+                </button>
+                <span class="pagination-info">
+                  Página {{ paginaDisponibles }} de {{ totalPaginasDisponibles }}
+                </span>
+                <button
+                  class="btn btn-outline-primary pagination-btn"
+                  (click)="siguientePaginaDisponibles()"
+                  [disabled]="paginaDisponibles === totalPaginasDisponibles">
+                  Siguiente <i class="bi bi-chevron-right"></i>
+                </button>
+              </div>
+            }
+
+            <h2 class="section-title mt-5">Eventos Pasados</h2>
+            <div class="row px-3">
+              @for (evento of eventosAnterioresPaginados; track evento.idEvento ) {
+                <div class="col-12 mb-2">
+                  <div class="card event-card-horizontal past-event">
+                    <div class="card-body">
+                      <div class="d-flex align-items-center gap-4">
+                        <div class="event-date-badge past">
+                          <div class="event-month">{{ evento.fechaEvento | date:'MMM' | uppercase }}</div>
+                          <div class="event-day">{{ evento.fechaEvento | date:'dd' }}</div>
+                        </div>
+                        <div class="event-details flex-grow-1">
+                          <div class="d-flex justify-content-between align-items-start">
+                            <h5 class="event-title mb-0">Evento #{{ evento.idEvento }}</h5>
+                            <span class="badge badge-finalizado">Finalizado</span>
+                          </div>
+                          <div class="event-meta">
+                            <span class="meta-item">
+                              <i class="bi bi-clock"></i> {{ evento.fechaEvento | date:'HH:mm' }}
+                            </span>
+                            <span class="meta-item">
+                              <i class="bi bi-person-badge"></i> Profesor {{ evento.idProfesor }}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+            @if (totalPaginasAnteriores > 1) {
+              <div class="pagination-controls">
+                <button
+                  class="btn btn-outline-secondary pagination-btn"
+                  (click)="anteriorPaginaAnteriores()"
+                  [disabled]="paginaAnteriores === 1">
+                  <i class="bi bi-chevron-left"></i> Anterior
+                </button>
+                <span class="pagination-info">
+                  Página {{ paginaAnteriores }} de {{ totalPaginasAnteriores }}
+                </span>
+                <button
+                  class="btn btn-outline-secondary pagination-btn"
+                  (click)="siguientePaginaAnteriores()"
+                  [disabled]="paginaAnteriores === totalPaginasAnteriores">
+                  Siguiente <i class="bi bi-chevron-right"></i>
+                </button>
+              </div>
+            }
+          </div>
         </div>
-    </section>
+
+        <!-- Columna derecha - Calendario -->
+        <div class="col-lg-6 calendario-column">
+          <div class="calendario">
+            <div class="calendario-content">
+              <full-calendar [options]="calendarOptions"></full-calendar>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>

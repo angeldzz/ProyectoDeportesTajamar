@@ -1,11 +1,11 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { addDays, format, isSameDay, subDays } from 'date-fns';
 import { es } from 'date-fns/locale';
-import {CommonModule} from '@angular/common';
+
 
 @Component({
   selector: 'app-calendario',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './calendario.component.html',
   styleUrl: './calendario.component.css',
 })

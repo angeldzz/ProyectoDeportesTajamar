@@ -1,32 +1,34 @@
-<div class="picklist-container">
-    <p-picklist 
-        [source]="deportesDisponibles()" 
-        [target]="deportesSeleccionados()" 
-        [dragdrop]="true" 
-        [responsive]="true" 
-        filterBy="nombre"
-        sourceFilterPlaceholder="Buscar por nombre..."
-        targetFilterPlaceholder="Buscar por nombre..."
-        breakpoint="1400px"
-        scrollHeight="580px"
-        sourceHeader="Deportes Disponibles dia {{ evento.fechaEvento | date: 'fullDate' : '' : 'es-ES' }}"
-        targetHeader="Deportes Seleccionados dia {{ evento.fechaEvento | date: 'fullDate' : '' : 'es-ES' }}"
-        [showSourceControls]="false"
-        [showTargetControls]="false">
-        <ng-template let-deporte #item>
-            <div class="deporte-item">
-                <i class="bi bi-trophy-fill deporte-icon"></i>
-                <div class="deporte-info">
-                    <div class="deporte-nombre">{{ deporte.nombre }}</div>
-                    <div class="deporte-detalle">Mínimo {{ deporte.minimoJugadores }} jugadores</div>
-                </div>
-            </div>
-        </ng-template>
+@if (evento) {
+  <div class="picklist-container">
+    <p-picklist
+      [source]="deportesDisponibles()"
+      [target]="deportesSeleccionados()"
+      [dragdrop]="true"
+      [responsive]="true"
+      filterBy="nombre"
+      sourceFilterPlaceholder="Buscar por nombre..."
+      targetFilterPlaceholder="Buscar por nombre..."
+      breakpoint="1400px"
+      scrollHeight="580px"
+      sourceHeader="Deportes Disponibles dia {{ evento.fechaEvento | date: 'fullDate' : '' : 'es-ES' }}"
+      targetHeader="Deportes Seleccionados dia {{ evento.fechaEvento | date: 'fullDate' : '' : 'es-ES' }}"
+      [showSourceControls]="false"
+      [showTargetControls]="false">
+      <ng-template let-deporte #item>
+        <div class="deporte-item">
+          <i class="bi bi-trophy-fill deporte-icon"></i>
+          <div class="deporte-info">
+            <div class="deporte-nombre">{{ deporte.nombreActividad || deporte.nombre }}</div>
+            <div class="deporte-detalle">Mínimo {{ deporte.minimoJugadores }} jugadores</div>
+          </div>
+        </div>
+      </ng-template>
     </p-picklist>
     <div class="button-container">
-        <button type="button" class="btn btn-secondary" (click)="AsignarActividades()">
-            <i class="bi bi-check-circle"></i>
-            Asignar Actividades
-        </button>
+      <button type="button" class="btn btn-secondary" (click)="AsignarActividades()">
+        <i class="bi bi-check-circle"></i>
+        Asignar Actividades
+      </button>
     </div>
-</div>
+  </div>
+}

@@ -20,39 +20,45 @@
 
 <!--</div>-->
 <div class="admin-layout">
-  <div class="sidebar-overlay" *ngIf="sidebarOpen" (click)="toggleSidebar()"></div>
+  @if (sidebarOpen) {
+    <div class="sidebar-overlay" (click)="toggleSidebar()"></div>
+  }
 
   <button class="mobile-toggle-btn d-lg-none shadow-sm" (click)="toggleSidebar()">
     <i class="bi bi-list"></i>
   </button>
 
   <div class="sidebar-container shadow-sm"
-       [class.sidebar-collapsed]="!sidebarOpen"
-       [class.mobile-open]="sidebarOpen">
+    [class.sidebar-collapsed]="!sidebarOpen"
+    [class.mobile-open]="sidebarOpen">
 
-<!--    <button class="desktop-collapse-btn d-none d-lg-flex shadow-sm" (click)="toggleSidebar()">-->
-<!--      <i class="bi" [class.bi-chevron-left]="sidebarOpen" [class.bi-chevron-right]="!sidebarOpen"></i>-->
-<!--    </button>-->
+    <!--    <button class="desktop-collapse-btn d-none d-lg-flex shadow-sm" (click)="toggleSidebar()">-->
+    <!--      <i class="bi" [class.bi-chevron-left]="sidebarOpen" [class.bi-chevron-right]="!sidebarOpen"></i>-->
+  <!--    </button>-->
 
-    <div class="sidebar-content">
-      <div class="sidebar-header">
-        <i class="bi bi-lightning-charge-fill me-2 text-orange fs-4"></i>
-        <span class="fw-bold brand-text" *ngIf="sidebarOpen">Administrar</span>
-      </div>
-
-      <ul class="nav-links">
-        @for (item of sideItems; track item) {
-          <li>
-            <a [routerLink]="[item.route]"
-               routerLinkActive="active-link"
-               class="nav-item"
-               (click)="closeSidebarOnMobile()"
-               [title]="!sidebarOpen ? item.label : ''">
-              <span class="nav-label" *ngIf="sidebarOpen">{{ item.label }}</span>
-            </a>
-          </li>
-        }
-      </ul>
+  <div class="sidebar-content">
+    <div class="sidebar-header">
+      <i class="bi bi-lightning-charge-fill me-2 text-orange fs-4"></i>
+      @if (sidebarOpen) {
+        <span class="fw-bold brand-text">Administrar</span>
+      }
     </div>
+
+    <ul class="nav-links">
+      @for (item of sideItems; track item) {
+        <li>
+          <a [routerLink]="[item.route]"
+            routerLinkActive="active-link"
+            class="nav-item"
+            (click)="closeSidebarOnMobile()"
+            [title]="!sidebarOpen ? item.label : ''">
+            @if (sidebarOpen) {
+              <span class="nav-label">{{ item.label }}</span>
+            }
+          </a>
+        </li>
+      }
+    </ul>
   </div>
+</div>
 </div>

@@ -17,8 +17,10 @@ export class AuthService {
   loggedIn = new BehaviorSubject<boolean>(this.hasToken());
 
   nombreSubject = new BehaviorSubject<string | null>(localStorage.getItem('usuario'));
+  roleSubject = new BehaviorSubject<number | null>(this.getUserRole());
 
   public nombreUsuario$: Observable<string | null> = this.nombreSubject.asObservable();
+  public userRole$: Observable<number | null> = this.roleSubject.asObservable();
 
   get isLoggedInUser(): Observable<boolean> {
     return this.loggedIn.asObservable();
@@ -50,7 +52,8 @@ export class AuthService {
 
   //** TEMPORAL ** //
   storeRole(role:string){
-    localStorage.setItem("role", role)
+    localStorage.setItem("role", role);
+    this.roleSubject.next(this.getUserRole()); // Actualizar el observable
   }
   //** ----- ** //
 
@@ -83,6 +86,7 @@ export class AuthService {
     localStorage.removeItem("usuario");
 
     this.nombreSubject.next(null);
+    this.roleSubject.next(null);
     this.loggedIn.next(false); // Avisamos que ya no tiene token
     this.router.navigate(['/login']); // Redirección automática
   }

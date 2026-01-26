@@ -1,30 +1,41 @@
 <div class="equipos-page">
   <h2>Equipos</h2>
 
-  <div *ngIf="loading">Cargando equipos...</div>
-  <div *ngIf="error" class="error">Error: {{ error }}</div>
+  @if (loading) {
+    <div>Cargando equipos...</div>
+  }
+  @if (error) {
+    <div class="error">Error: {{ error }}</div>
+  }
 
-  <ul class="equipos-list" *ngIf="!loading && equipos && equipos.length; else noEquipos">
-    <li *ngFor="let e of equipos" class="equipos-item">
-      <div class="item-row">
-        <button type="button" (click)="selectEquipo(e)">
-          {{ e.nombreEquipo }}
-        </button>
-        <div class="actions">
-          <button type="button" (click)="selectEquipo(e)">Ver</button>
-          <button type="button" (click)="eliminarEquipo(e.idEquipo)">Eliminar</button>
-        </div>
-      </div>
-    </li>
-  </ul>
-
-  <ng-template #noEquipos>
+  @if (!loading && equipos && equipos.length) {
+    <ul class="equipos-list">
+      @for (e of equipos; track e) {
+        <li class="equipos-item">
+          <div class="item-row">
+            <button type="button" (click)="selectEquipo(e)">
+              {{ e.nombreEquipo }}
+            </button>
+            <div class="actions">
+              <button type="button" (click)="selectEquipo(e)">Ver</button>
+              <button type="button" (click)="eliminarEquipo(e.idEquipo)">Eliminar</button>
+            </div>
+          </div>
+        </li>
+      }
+    </ul>
+  } @else {
     <p>No hay equipos disponibles.</p>
-  </ng-template>
+  }
+
 
   <section class="form-section">
-    <h3 *ngIf="!selected">Crear equipo</h3>
-    <h3 *ngIf="selected">Editar equipo</h3>
+    @if (!selected) {
+      <h3>Crear equipo</h3>
+    }
+    @if (selected) {
+      <h3>Editar equipo</h3>
+    }
 
     <div class="form-row">
       <label>Nombre</label>
@@ -52,17 +63,27 @@
     </div>
 
     <div class="form-actions">
-      <button type="button" (click)="crearEquipo()" *ngIf="!selected">Crear</button>
-      <button type="button" (click)="actualizarEquipo()" *ngIf="selected">Guardar</button>
+      @if (!selected) {
+        <button type="button" (click)="crearEquipo()">Crear</button>
+      }
+      @if (selected) {
+        <button type="button" (click)="actualizarEquipo()">Guardar</button>
+      }
       <button type="button" (click)="clearSelection()">Cancelar</button>
     </div>
   </section>
 
-  <section *ngIf="selected" class="detalle">
-    <h3>Detalle</h3>
-    <p><strong>Nombre:</strong> {{ selected.nombreEquipo }}</p>
-    <p><strong>Mínimo jugadores:</strong> {{ selected.minimoJugadores }}</p>
-    <p *ngIf="selected.idColor"><strong>Id color:</strong> {{ selected.idColor }}</p>
-    <p *ngIf="selected.idCurso"><strong>Id curso:</strong> {{ selected.idCurso }}</p>
-  </section>
+  @if (selected) {
+    <section class="detalle">
+      <h3>Detalle</h3>
+      <p><strong>Nombre:</strong> {{ selected.nombreEquipo }}</p>
+      <p><strong>Mínimo jugadores:</strong> {{ selected.minimoJugadores }}</p>
+      @if (selected.idColor) {
+        <p><strong>Id color:</strong> {{ selected.idColor }}</p>
+      }
+      @if (selected.idCurso) {
+        <p><strong>Id curso:</strong> {{ selected.idCurso }}</p>
+      }
+    </section>
+  }
 </div>

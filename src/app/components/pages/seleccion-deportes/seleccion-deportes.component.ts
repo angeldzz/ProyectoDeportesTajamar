@@ -39,7 +39,7 @@ export class SeleccionDeportesComponent implements OnInit {
         this.idEvento = parametros['idEvento'];
         console.log('ID del evento:', this.idEvento);
 
-        this._deportesService.getDeportesEvento(this.idEvento).subscribe(value => {
+        this._deportesService.getDeportesEvento(Number(this.idEvento)).subscribe(value => {
           this.deportes = value;
           console.log(this.deportes);
         });

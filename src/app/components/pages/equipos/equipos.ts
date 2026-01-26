@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-equipos',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './equipos.html',
   styleUrls: ['./equipos.css']
 })

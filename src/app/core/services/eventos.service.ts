@@ -3,6 +3,7 @@ import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
 import {Evento} from "../../models/Evento";
 import {environment} from "../../../environments/environment.development";
+import { Deporte } from "../../models/Deportes";
 
 @Injectable({
   providedIn: 'root'
@@ -29,9 +30,14 @@ export class EventosService {
   }
   AsignarActividad_Evento(idEvento: number, idActividad: number): Observable<any> {
     return this._http.post<any>(
-      `${environment.urlActividadesEventos}create/`, 
-      null,
-      { params: { idevento: idEvento.toString(), idactividad: idActividad.toString() } }
+      `${environment.urlActividadesEventos}create/${idEvento}/${idActividad}`, 
+      null
+    );
+  }
+  
+  EliminarActividad_Evento(idEventoActividad: number): Observable<any> {
+    return this._http.delete<any>(
+      `${environment.urlActividadesEventos}${idEventoActividad}`
     );
   }
 }
