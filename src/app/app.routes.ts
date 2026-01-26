@@ -63,6 +63,11 @@ export const routes: Routes = [
     component: DeporteEventoComponent,
     canActivate: [loginGuard],
     //TODO METER EL GUARD
+  },{
+    path: "seleccionar-equipo/:idEvento/:idActividad",
+    component: SeleccionEquipoComponent,
+    canActivate: [loginGuard],
+    //TODO METER EL GUARD
   },
   {
     path: "creacion_eventos",
@@ -86,6 +91,8 @@ export const routes: Routes = [
       [
         {path: 'colores-form', component: ColoresComponent},
         {path: 'actividades-form', component: DeportesFormComponent},
+        //TODO QUITAR ESTA RUTA SELCCIONAR
+        {path: 'seleccionar-equipo', component: SeleccionEquipoComponent},
       ]
 
   },

@@ -28,6 +28,8 @@ import { Observable } from 'rxjs/internal/Observable';
 export class HomeComponent implements OnInit{
   public eventosanteriores!: Array<Evento>
   public eventosdisponibles!: Array<Evento>
+
+
   public role$!: Observable<number | null>;
   // Paginación eventos disponibles
   public paginaDisponibles: number = 1;
@@ -53,34 +55,36 @@ export class HomeComponent implements OnInit{
   };
 
   constructor(private _authService: AuthService,
-              private _serviceEventos: EventosService) { }
+              private _serviceEventos: EventosService) {
+
+    this.role$ = this._authService.userRole$;
+  }
 
   ngOnInit(): void {
     // Suscribirse al rol de manera reactiva
-    this.role$ = this._authService.userRole$;
-    
+
     this._serviceEventos.GetEventos().subscribe({
       next: (data) => {
         const fechaActual = new Date();
         fechaActual.setHours(0, 0, 0, 0); // Normalizar a medianoche para comparación precisa
-        
+
         this.eventosanteriores = data
           .filter((evento: Evento) => {
             const fechaEvento = new Date(evento.fechaEvento);
             fechaEvento.setHours(0, 0, 0, 0);
             return fechaEvento < fechaActual;
           })
-          .sort((a: Evento, b: Evento) => 
+          .sort((a: Evento, b: Evento) =>
             new Date(b.fechaEvento).getTime() - new Date(a.fechaEvento).getTime()
           );
-        
+
         this.eventosdisponibles = data
           .filter((evento: Evento) => {
             const fechaEvento = new Date(evento.fechaEvento);
             fechaEvento.setHours(0, 0, 0, 0);
             return fechaEvento >= fechaActual;
           })
-          .sort((a: Evento, b: Evento) => 
+          .sort((a: Evento, b: Evento) =>
             new Date(a.fechaEvento).getTime() - new Date(b.fechaEvento).getTime()
           );
 

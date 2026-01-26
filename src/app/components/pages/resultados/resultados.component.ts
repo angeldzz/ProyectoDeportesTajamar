@@ -30,7 +30,7 @@ export class ResultadosComponent implements OnInit ,OnDestroy {
 
   resultadosAgrupados: ResultadoDeporteEvento[] = [];
   eventosanteriores: Evento[] = [];
-  idEventoSeleccionado: string = "2";
+  idEventoSeleccionado: number = 2;
   loadingPlayers: boolean = false;
   isInitialLoad: boolean = true;
   jugadoresEquipoLocal!:Array<Usuario>;
@@ -73,7 +73,7 @@ export class ResultadosComponent implements OnInit ,OnDestroy {
   }
 
 
-  async cargarDatosEvento(idEvento: string) {
+  async cargarDatosEvento(idEvento: number) {
     if (!idEvento) return;
     this.isInitialLoad = true;
     this.resultadosAgrupados = [];
@@ -163,9 +163,9 @@ export class ResultadosComponent implements OnInit ,OnDestroy {
 
   async onEventoChange(idEvento: string) {
     if (!idEvento) return;
-    this.idEventoSeleccionado = idEvento;
+    this.idEventoSeleccionado = parseInt(idEvento);
     this.resultadosAgrupados = [];
-    await this.cargarDatosEvento(idEvento);
+    await this.cargarDatosEvento(parseInt(idEvento));
   }
 
   protected readonly console = console;

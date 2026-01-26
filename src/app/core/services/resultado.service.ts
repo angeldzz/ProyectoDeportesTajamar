@@ -33,9 +33,9 @@ export class ResultadoService {
   }
 
 
-  getResultadosWithEquipos(idEvento?: string): Observable<Array<PartidoResultado>> {
+  getResultadosWithEquipos(idEvento?: number): Observable<Array<PartidoResultado>> {
     const urlResultados = environment.urlResultados;
-    const id = idEvento || "2";
+    const id = idEvento || 2;
 
     const reqResultados = this._http.get<Array<PartidoResultado>>(urlResultados);
     const reqEquipos = this._equiposService.getEquiposEvento(id);
