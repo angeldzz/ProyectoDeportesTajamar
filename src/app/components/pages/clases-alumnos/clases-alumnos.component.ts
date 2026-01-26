@@ -62,4 +62,3 @@ export class ClasesAlumnosComponent implements OnInit {
     return u?.apellidos ?? u?.surname ?? u?.apellido ?? '';
   }
 }
-}
