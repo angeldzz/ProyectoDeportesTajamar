@@ -36,8 +36,15 @@ export const routes: Routes = [
     canActivate: [loginGuard],
   },
 
+
+  //ruta para la seleccion de un deporte en un evento seleccionando el idEvento y del  deporte el idActividad
   {
     path: "seleccion_deportes/:idEvento",
+    component: SeleccionDeportesComponent,
+    canActivate: [loginGuard],
+  },
+  {
+    path: "seleccion_deportes/:idEvento/:idActividad",
     component: SeleccionDeportesComponent,
     canActivate: [loginGuard],
     //TODO METER EL GUARD
