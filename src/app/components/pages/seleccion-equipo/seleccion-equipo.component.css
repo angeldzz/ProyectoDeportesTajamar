@@ -1,14 +1,208 @@
+/*!* Contenedor *!*/
+/*.equipos-container {*/
+/*  display: flex;*/
+/*  flex-wrap: wrap;*/
+/*  gap: 1.5rem;*/
+/*  justify-content: center;   !* 👈 centra horizontalmente *!*/
+/*  align-items: flex-start;   !* evita que se estiren en altura *!*/
+/*  padding: 1rem;             !* aire en los bordes *!*/
+/*  max-width: 1200px;   !* límite de anchura *!*/
+/*  margin: 0 auto;*/
+/*}*/
+/*!* Tarjeta *!*/
+/*.accordion-card {*/
+/*  flex: 1 1 260px;*/
+/*  max-width: 320px;*/
+/*  border-radius: 16px;*/
+/*  overflow: hidden;*/
+/*  background: white;*/
+/*  box-shadow: 0 6px 18px rgba(0,0,0,0.08);*/
+/*  transition: transform 0.2s ease, box-shadow 0.2s ease;*/
+/*}*/
+
+/*.accordion-card:hover {*/
+/*  transform: translateY(-4px);*/
+/*  box-shadow: 0 10px 22px rgba(0,0,0,0.12);*/
+/*}*/
+
+/*!* Header *!*/
+/*.accordion-header {*/
+/*  padding: 1rem 1.2rem;*/
+/*  color: white;*/
+/*  cursor: pointer;*/
+/*}*/
+
+/*.accordion-header.azul {*/
+/*  background: linear-gradient(135deg, #1e88e5, #1565c0);*/
+/*}*/
+
+/*.accordion-header.naranja {*/
+/*  background: linear-gradient(135deg, #fb8c00, #ef6c00);*/
+/*}*/
+
+/*.header-content {*/
+/*  display: flex;*/
+/*  justify-content: space-between;*/
+/*  align-items: center;*/
+/*}*/
+
+/*.equipo-nombre {*/
+/*  margin: 0;*/
+/*  font-weight: 600;*/
+/*}*/
+
+/*.curso-badge {*/
+/*  font-size: 0.8rem;*/
+/*  opacity: 0.9;*/
+/*}*/
+
+/*.arrow {*/
+/*  font-size: 1.2rem;*/
+/*  transition: transform 0.3s ease;*/
+/*}*/
+
+/*.arrow.open {*/
+/*  transform: rotate(180deg);*/
+/*}*/
+
+/*!* Body *!*/
+/*.accordion-body {*/
+/*  max-height: 0;*/
+/*  overflow: hidden;*/
+/*  transition: all 0.35s ease;*/
+/*  background: #f8fafc;*/
+/*  padding: 0 1.2rem;*/
+/*}*/
+
+/*.accordion-body.open {*/
+/*  padding: 1.2rem;*/
+/*  max-height: 500px;*/
+/*}*/
+
+/*!* Título miembros *!*/
+/*.miembros-titulo {*/
+/*  font-weight: 600;*/
+/*  margin-bottom: 0.8rem;*/
+/*  color: #334155;*/
+/*}*/
+
+/*!* Lista miembros *!*/
+/*.miembros-lista {*/
+/*  display: flex;*/
+/*  flex-direction: column;*/
+/*  gap: 0.5rem;*/
+/*}*/
+
+/*.member {*/
+/*  display: flex;*/
+/*  justify-content: space-between;*/
+/*  align-items: center;*/
+/*  background: white;*/
+/*  padding: 0.6rem 0.8rem;*/
+/*  border-radius: 10px;*/
+/*  box-shadow: 0 2px 6px rgba(0,0,0,0.05);*/
+/*}*/
+
+/*.member-info {*/
+/*  display: flex;*/
+/*  align-items: center;*/
+/*  gap: 0.6rem;*/
+/*}*/
+
+/*.avatar {*/
+/*  width: 32px;*/
+/*  height: 32px;*/
+/*  background: #e2e8f0;*/
+/*  border-radius: 50%;*/
+/*  display: flex;*/
+/*  align-items: center;*/
+/*  justify-content: center;*/
+/*  color: #475569;*/
+/*  font-size: 0.9rem;*/
+/*}*/
+
+/*.member-name {*/
+/*  font-weight: 500;*/
+/*  color: #1e293b;*/
+/*}*/
+
+/*!* Botón eliminar *!*/
+/*.btn-delete {*/
+/*  background: transparent;*/
+/*  border: none;*/
+/*  color: #ef4444;*/
+/*  font-size: 1rem;*/
+/*  cursor: pointer;*/
+/*  transition: transform 0.15s ease, color 0.2s ease;*/
+/*}*/
+
+/*.btn-delete:hover {*/
+/*  transform: scale(1.2);*/
+/*  color: #dc2626;*/
+/*}*/
+
+/*!* Sin miembros *!*/
+/*.sin-miembros {*/
+/*  text-align: center;*/
+/*  color: #64748b;*/
+/*  padding: 1rem 0;*/
+/*}*/
+/*.equipo-footer {*/
+/*  margin-top: 1rem;*/
+/*  text-align: center;*/
+/*}*/
+
+/*!* Botón unirse *!*/
+/*.btn-unirse {*/
+/*  width: 100%;*/
+/*  padding: 0.7rem 1rem;*/
+/*  border-radius: 10px;*/
+/*  border: none;*/
+/*  font-weight: 600;*/
+/*  font-size: 0.95rem;*/
+/*  cursor: pointer;*/
+/*  background: linear-gradient(135deg, #22c55e, #16a34a);*/
+/*  color: white;*/
+/*  display: flex;*/
+/*  align-items: center;*/
+/*  justify-content: center;*/
+/*  gap: 0.5rem;*/
+/*  transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;*/
+/*}*/
+
+/*.player-avatar {*/
+/*  width: 35px;*/
+/*  height: 35px;*/
+
+/*  border-radius: 100%;*/
+/*  display: flex;*/
+/*  align-items: center;*/
+/*  justify-content: center;*/
+/*  color: #6a6d71;*/
+/*  margin-right: 12px;*/
+/*}*/
+/*.btn-unirse:hover:not(.disabled) {*/
+/*  transform: translateY(-2px);*/
+/*  box-shadow: 0 6px 14px rgba(0,0,0,0.15);*/
+/*}*/
+
+/*.btn-unirse.disabled {*/
+/*  background: #94a3b8;*/
+/*  cursor: not-allowed;*/
+/*  opacity: 0.85;*/
+/*}*/
 /* Contenedor */
 .equipos-container {
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
-  justify-content: center;   /* 👈 centra horizontalmente */
-  align-items: flex-start;   /* evita que se estiren en altura */
-  padding: 1rem;             /* aire en los bordes */
-  max-width: 1200px;   /* límite de anchura */
+  justify-content: center;
+  align-items: flex-start;
+  padding: 1rem;
+  max-width: 1200px;
   margin: 0 auto;
 }
+
 /* Tarjeta */
 .accordion-card {
   flex: 1 1 260px;
@@ -46,9 +240,43 @@
   align-items: center;
 }
 
+/* Contenedor de info del equipo */
+.equipo-info {
+  flex: 1;
+}
+
+/* Fila del nombre + basura */
+.equipo-header-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.3rem;
+}
+
 .equipo-nombre {
   margin: 0;
   font-weight: 600;
+  flex: 1;
+}
+
+/* Botón eliminar en el header */
+.btn-delete-header {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 0.4rem 0.5rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-delete-header:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(1.1);
 }
 
 .curso-badge {
@@ -126,7 +354,7 @@
   color: #1e293b;
 }
 
-/* Botón eliminar */
+/* Botón eliminar general */
 .btn-delete {
   background: transparent;
   border: none;
@@ -147,6 +375,7 @@
   color: #64748b;
   padding: 1rem 0;
 }
+
 .equipo-footer {
   margin-top: 1rem;
   text-align: center;
@@ -173,7 +402,6 @@
 .player-avatar {
   width: 35px;
   height: 35px;
-
   border-radius: 100%;
   display: flex;
   align-items: center;
@@ -181,6 +409,7 @@
   color: #6a6d71;
   margin-right: 12px;
 }
+
 .btn-unirse:hover:not(.disabled) {
   transform: translateY(-2px);
   box-shadow: 0 6px 14px rgba(0,0,0,0.15);

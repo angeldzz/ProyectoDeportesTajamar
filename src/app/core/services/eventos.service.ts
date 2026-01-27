@@ -24,17 +24,17 @@ export class EventosService {
     return this._http.post<Evento>(environment.urlEventos + "create/" + fechaFormateada, null);
   }
   findActividadEvento(idEvento:String,idActividad:String):Observable<any>{
-    let url=environment.urlEventos+"FindIdEventoActividad/"+idEvento+"/"+idActividad;
+    let url=environment.urlActividadesEventos+"FindIdEventoActividad/"+idEvento+"/"+idActividad;
 
     return this._http.get(url);
   }
   AsignarActividad_Evento(idEvento: number, idActividad: number): Observable<any> {
     return this._http.post<any>(
-      `${environment.urlActividadesEventos}create/${idEvento}/${idActividad}`, 
+      `${environment.urlActividadesEventos}create/${idEvento}/${idActividad}`,
       null
     );
   }
-  
+
   EliminarActividad_Evento(idEventoActividad: number): Observable<any> {
     return this._http.delete<any>(
       `${environment.urlActividadesEventos}${idEventoActividad}`

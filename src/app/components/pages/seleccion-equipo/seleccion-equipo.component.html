@@ -1,21 +1,54 @@
+<button class="btn btn-info"
+        data-bs-toggle="modal"
+        data-bs-target="#modalEquipos"
+        (click)="abrirModalCrearEquipo()"
+>Crear Equipo</button>
+
 <div class="equipos-container">
+
+
   <div class="accordion-card" *ngFor="let equipo of equiposDisponibles; let idx = index">
 
     <!-- Header -->
+<!--    <div class="accordion-header"-->
+<!--         [ngClass]="idx % 2 === 0 ? 'azul' : 'naranja'"-->
+<!--         (click)="togglePanel(idx)">-->
+
+<!--      <div class="header-content">-->
+<!--        <div>-->
+<!--          <h5 class="equipo-nombre">{{ equipo.nombreEquipo }}</h5>-->
+<!--          <span class="curso-badge">Curso {{ equipo.idCurso }}</span><br>-->
+<!--          <span class="curso-badge">Equipacion {{ equipo.infoColor?.nombreColor }}</span>-->
+
+<!--          <button class="btn-delete"-->
+<!--                  (click)="borrarEquipo(equipo.idEquipo)">-->
+<!--            <i class="pi pi-trash"></i>-->
+<!--          </button>-->
+<!--        </div>-->
+
+<!--        <i class="pi pi-chevron-down arrow" [class.open]="openIndex === idx"></i>-->
+<!--      </div>-->
+<!--    </div>-->
     <div class="accordion-header"
          [ngClass]="idx % 2 === 0 ? 'azul' : 'naranja'"
          (click)="togglePanel(idx)">
 
       <div class="header-content">
-        <div>
-          <h5 class="equipo-nombre">{{ equipo.nombreEquipo }}</h5>
-          <span class="curso-badge">Curso {{ equipo.idCurso }}</span>
+        <div class="equipo-info">
+          <div class="equipo-header-row">
+            <h5 class="equipo-nombre">{{ equipo.nombreEquipo }}</h5>
+            <button class="btn-delete btn-delete-header"
+                    (click)="borrarEquipo(equipo.idEquipo); $event.stopPropagation()">
+              <i class="pi pi-trash"></i>
+            </button>
+          </div>
+          <span class="curso-badge">Curso {{ equipo.idCurso }}</span><br>
+          <span class="curso-badge">Equipacion {{ equipo.infoColor?.nombreColor }}</span>
         </div>
 
         <i class="pi pi-chevron-down arrow" [class.open]="openIndex === idx"></i>
       </div>
     </div>
-
     <!-- Body -->
     <div class="accordion-body" [class.open]="openIndex === idx">
       <h6 class="miembros-titulo">Miembros del equipo</h6>
@@ -63,5 +96,79 @@
       </button>
     </div>
 
+  </div>
+</div>
+
+<div class="modal fade" id="modalEquipos" tabindex="-1" aria-labelledby="modalEquiposLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg rounded-4">
+      <div class="modal-header bg-light border-0 py-3">
+        <h5 class="modal-title fw-bold" id="modalEquiposLabel">
+          <i class="bi bi-pencil-fill me-2 text-primary"></i>Crear Equipo
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body p-4">
+        <form>
+          <!-- Nombre del equipo -->
+          <div class="mb-3">
+            <label for="nombreEquipo" class="form-label fw-semibold">
+              <i class="bi bi-shield-fill-check me-2 text-primary"></i>Nombre del Equipo
+            </label>
+            <input
+              type="text"
+              class="form-control rounded-3"
+              id="nombreEquipo"
+              [(ngModel)]="nombreEquipo"
+              name="nombreEquipo"
+              placeholder="Ej: Real Madrid">
+          </div>
+
+          <!-- Número de jugadores -->
+          <div class="mb-3">
+            <label for="numJugadores" class="form-label fw-semibold">
+              <i class="bi bi-people-fill me-2 text-primary"></i>Número de Jugadores
+            </label>
+            <input
+              type="number"
+              class="form-control rounded-3"
+              id="numJugadores"
+              [(ngModel)]="numJugadores"
+              name="numJugadores"
+              placeholder="Ej: 11"
+              min="1">
+          </div>
+
+          <!-- Color del equipo -->
+          <div class="mb-3">
+            <label for="color" class="form-label fw-semibold">
+              <i class="bi bi-palette-fill me-2 text-primary"></i>Color del Equipo
+            </label>
+            <select
+              class="form-select rounded-3"
+              id="color"
+              [(ngModel)]="color"
+              name="color">
+              <option value="" disabled selected>Selecciona un color</option>
+              @for (color of this.coloresDisponibles; track color.idColor){
+                <option [value]="color.idColor">
+                  {{ color.nombreColor }}
+                </option>
+              }
+            </select>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer border-0 bg-light p-3">
+        <button type="button" class="btn btn-secondary rounded-3 px-4" data-bs-dismiss="modal">
+          <i class="bi bi-x-circle me-2"></i>Cancelar
+        </button>
+        <button type="button" (click)="crearEquipo()" class="btn btn-primary rounded-3 px-4 shadow-sm">
+          <i class="bi bi-check-circle me-2"></i>Crear Equipo
+        </button>
+      </div>
+    </div>
   </div>
 </div>
