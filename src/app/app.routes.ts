@@ -42,6 +42,7 @@ export const routes: Routes = [
     path: "seleccion_deportes/:idEvento",
     component: SeleccionDeportesComponent,
     canActivate: [loginGuard],
+    //TODO METER EL GUARD
   },
   // {
   //   path: "seleccion_deportes/:idEvento/:idActividad",
