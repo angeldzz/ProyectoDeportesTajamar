@@ -9,26 +9,6 @@
 
   <div class="accordion-card" *ngFor="let equipo of equiposDisponibles; let idx = index">
 
-    <!-- Header -->
-<!--    <div class="accordion-header"-->
-<!--         [ngClass]="idx % 2 === 0 ? 'azul' : 'naranja'"-->
-<!--         (click)="togglePanel(idx)">-->
-
-<!--      <div class="header-content">-->
-<!--        <div>-->
-<!--          <h5 class="equipo-nombre">{{ equipo.nombreEquipo }}</h5>-->
-<!--          <span class="curso-badge">Curso {{ equipo.idCurso }}</span><br>-->
-<!--          <span class="curso-badge">Equipacion {{ equipo.infoColor?.nombreColor }}</span>-->
-
-<!--          <button class="btn-delete"-->
-<!--                  (click)="borrarEquipo(equipo.idEquipo)">-->
-<!--            <i class="pi pi-trash"></i>-->
-<!--          </button>-->
-<!--        </div>-->
-
-<!--        <i class="pi pi-chevron-down arrow" [class.open]="openIndex === idx"></i>-->
-<!--      </div>-->
-<!--    </div>-->
     <div class="accordion-header"
          [ngClass]="idx % 2 === 0 ? 'azul' : 'naranja'"
          (click)="togglePanel(idx)">

@@ -15,6 +15,7 @@ import {Equipov2} from '../../../models/EquipoV2';
 import {Equipov2Service} from '../../../core/services/equipov2.service';
 import {Usuario} from '../../../models/Usuario';
 import {Avatar} from 'primeng/avatar';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-resultados',
@@ -22,6 +23,7 @@ import {Avatar} from 'primeng/avatar';
   imports: [
     DatePipe,
     Avatar,
+    FormsModule,
   ],
   templateUrl: './resultados.component.html',
   styleUrl: './resultados.component.css',
@@ -168,5 +170,7 @@ export class ResultadosComponent implements OnInit ,OnDestroy {
     await this.cargarDatosEvento(parseInt(idEvento));
   }
 
-  protected readonly console = console;
+  crearResultado() {
+
+  }
 }
