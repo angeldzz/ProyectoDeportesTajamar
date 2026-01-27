@@ -63,7 +63,7 @@
               <!-- boton para que de la pagina de seleccion deportes me lleve a la pagina de materiales para seleccionar materiales -->
               <button
                 class="btn btn-enroll px-4 py-2 fw-bold shadow-sm"
-                [routerLink]="['/materiales',idEvento,deporte.idActividad]">
+                [routerLink]="[`/materiales/${idEvento}/${deporte.idActividad}}`]">
                 Materiales
               </button>
 

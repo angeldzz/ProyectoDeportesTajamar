@@ -43,12 +43,12 @@ export const routes: Routes = [
     component: SeleccionDeportesComponent,
     canActivate: [loginGuard],
   },
-  {
-    path: "seleccion_deportes/:idEvento/:idActividad",
-    component: SeleccionDeportesComponent,
-    canActivate: [loginGuard],
-    //TODO METER EL GUARD
-  },
+  // {
+  //   path: "seleccion_deportes/:idEvento/:idActividad",
+  //   component: SeleccionDeportesComponent,
+  //   canActivate: [loginGuard],
+  //   //TODO METER EL GUARD
+  // },
   {
     path: "seleccion_equipo",
     component: SeleccionEquipoComponent,
@@ -72,7 +72,7 @@ export const routes: Routes = [
     component: ClasesAlumnosComponent
   },
   {
-    path: "materiales",
+    path: "materiales/:idEvento/:idActividad",
     component: MaterialesComponent
   },
   {
