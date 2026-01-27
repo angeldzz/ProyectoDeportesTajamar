@@ -2,12 +2,12 @@
   <div class="row">
     <div class="col-12">
       <h2 class="mb-4">Cursos y Pagos</h2>
-      
+
       <div class="accordion" id="cursosAccordion">
         <div class="accordion-item" *ngFor="let curso of cursos; let i = index">
           <h2 class="accordion-header" [id]="'heading' + i">
-            <button class="accordion-button" [class.collapsed]="i !== 0" type="button" 
-                    data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + i" 
+            <button class="accordion-button" [class.collapsed]="i !== 0" type="button"
+                    data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + i"
                     [attr.aria-expanded]="i === 0" [attr.aria-controls]="'collapse' + i">
               <div class="w-100 d-flex justify-content-between align-items-center me-3">
                 <div>
@@ -27,7 +27,7 @@
                [attr.aria-labelledby]="'heading' + i" data-bs-parent="#cursosAccordion">
             <div class="accordion-body">
               <h5 class="mb-3">Pagos del Curso</h5>
-              
+
               <div *ngIf="getPagosPorCurso(curso.idCurso).length > 0; else noPagos">
                 <div class="row">
                   <div class="col-lg-9 col-md-8">
@@ -49,13 +49,13 @@
                             <td>
                               <!-- Vista para rol 2 (solo lectura) -->
                               <div *ngIf="(role$ | async) === 2">
-                                <span class="badge" 
+                                <span class="badge"
                                       [ngClass]="{
                                         'bg-success': pago.estado.toLowerCase() === 'pagado' || pago.estado.toLowerCase() === 'completado',
                                         'bg-warning text-dark': pago.estado.toLowerCase() === 'pendiente',
                                         'bg-danger': pago.estado.toLowerCase() === 'sin pagar' || pago.estado.toLowerCase() === 'cancelado' || pago.estado.toLowerCase() === 'impagado'
                                       }">
-                                  <i class="bi" 
+                                  <i class="bi"
                                      [ngClass]="{
                                        'bi-check-circle-fill': pago.estado.toLowerCase() === 'pagado' || pago.estado.toLowerCase() === 'completado',
                                        'bi-clock-fill': pago.estado.toLowerCase() === 'pendiente',
@@ -64,15 +64,15 @@
                                   {{ pago.estado }}
                                 </span>
                               </div>
-                              
+
                               <!-- Vista para otros roles (con select) -->
                               <div *ngIf="(role$ | async) === 4" class="d-flex align-items-center gap-2">
-                                <select class="form-select form-select-sm estado-select" 
+                                <select class="form-select form-select-sm estado-select"
                                         [(ngModel)]="pago.estado"
                                         (ngModelChange)="onEstadoChange(pago)"
-                                        [class.select-pagado]="pago.estado?.toLowerCase() === 'pagado'"
-                                        [class.select-pendiente]="pago.estado?.toLowerCase() === 'pendiente'"
-                                        [class.select-sin-pagar]="pago.estado?.toLowerCase() === 'sin pagar'">
+                                        [class.select-pagado]="pago.estado.toLowerCase() === 'pagado'"
+                                        [class.select-pendiente]="pago.estado.toLowerCase() === 'pendiente'"
+                                        [class.select-sin-pagar]="pago.estado.toLowerCase() === 'sin pagar'">
                                   <option value="Pagado">✓ Pagado</option>
                                   <option value="Pendiente">⏱ Pendiente</option>
                                   <option value="Sin Pagar">✗ Sin Pagar</option>
@@ -84,7 +84,7 @@
                       </table>
                     </div>
                   </div>
-                  
+
                   <div class="col-lg-3 col-md-4">
                     <!-- Resumen de pagos -->
                     <div class="p-3 bg-light rounded h-100 d-flex flex-column justify-content-center">
@@ -100,7 +100,7 @@
                   </div>
                 </div>
               </div>
-              
+
               <ng-template #noPagos>
                 <div class="alert alert-info" role="alert">
                   <i class="bi bi-info-circle"></i> No hay pagos registrados para este curso.
@@ -110,7 +110,7 @@
           </div>
         </div>
       </div>
-      
+
       <div *ngIf="!cursos || cursos.length === 0" class="alert alert-warning mt-3" role="alert">
         <i class="bi bi-exclamation-triangle"></i> No hay cursos activos disponibles.
       </div>
