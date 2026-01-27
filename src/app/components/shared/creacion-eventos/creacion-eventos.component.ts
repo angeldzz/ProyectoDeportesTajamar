@@ -5,17 +5,29 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
-import { CommonModule } from '@angular/common';
+
+import { EventosService } from '../../../core/services/eventos.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-creacion-eventos',
-  imports: [FullCalendarModule, CommonModule],
+  imports: [FullCalendarModule],
   templateUrl: './creacion-eventos.component.html',
   styleUrl: './creacion-eventos.component.css',
 })
 export class CreacionEventosComponent implements OnInit {
+  constructor(private _eventosService: EventosService, private router: Router){}
   selectedDate: Date | null = null;
   selectedDateStr: string = '';
+  showTimeModal: boolean = false;
+  selectedHour: number = 12;
+  selectedMinute: number = 0;
+  hours: number[] = Array.from({length: 24}, (_, i) => i);
+  minutes: number[] = Array.from({length: 60}, (_, i) => i);
+  isDraggingHour: boolean = false;
+  isDraggingMinute: boolean = false;
+  startY: number = 0;
+  startScrollTop: number = 0;
 
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
@@ -38,27 +50,18 @@ export class CreacionEventosComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    console.log('Componente de creación de eventos inicializado');
   }
 
   handleDateSelect(selectInfo: DateSelectArg) {
     this.selectedDate = selectInfo.start;
     this.selectedDateStr = this.formatDate(selectInfo.start);
-    console.log('Fecha seleccionada (rango):', {
-      inicio: selectInfo.start,
-      fin: selectInfo.end,
-      formatoLegible: this.selectedDateStr
-    });
+    this.showTimeModal = true;
   }
 
   handleDateClick(arg: any) {
     this.selectedDate = arg.date;
     this.selectedDateStr = this.formatDate(arg.date);
-    console.log('Fecha clickeada:', {
-      fecha: arg.date,
-      formatoLegible: this.selectedDateStr,
-      dateStr: arg.dateStr
-    });
+    this.showTimeModal = true;
   }
 
   formatDate(date: Date): string {
@@ -71,19 +74,99 @@ export class CreacionEventosComponent implements OnInit {
     return date.toLocaleDateString('es-ES', options);
   }
 
+  closeTimeModal() {
+    this.showTimeModal = false;
+  }
+
+  confirmTime() {
+    if (this.selectedDate) {
+      // Crear una nueva fecha con la hora seleccionada
+      const fechaConHora = new Date(this.selectedDate);
+      fechaConHora.setHours(this.selectedHour, this.selectedMinute, 0, 0);
+      this.selectedDate = fechaConHora;
+      this.selectedDateStr = this.formatDateWithTime(fechaConHora);
+    }
+    this.showTimeModal = false;
+  }
+
+  formatDateWithTime(date: Date): string {
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    };
+    return date.toLocaleDateString('es-ES', options);
+  }
+
+  onHourScroll(event: Event) {
+    const element = event.target as HTMLElement;
+    const scrollTop = element.scrollTop;
+    const itemHeight = 40;
+    const index = Math.round(scrollTop / itemHeight);
+    this.selectedHour = this.hours[index];
+  }
+
+  onMinuteScroll(event: Event) {
+    const element = event.target as HTMLElement;
+    const scrollTop = element.scrollTop;
+    const itemHeight = 40;
+    const index = Math.round(scrollTop / itemHeight);
+    this.selectedMinute = this.minutes[index];
+  }
+
+  // Métodos para arrastre con ratón - Horas
+  onHourMouseDown(event: MouseEvent) {
+    this.isDraggingHour = true;
+    this.startY = event.clientY;
+    const element = event.currentTarget as HTMLElement;
+    this.startScrollTop = element.scrollTop;
+    event.preventDefault();
+  }
+
+  onHourMouseMove(event: MouseEvent) {
+    if (!this.isDraggingHour) return;
+    const element = event.currentTarget as HTMLElement;
+    const deltaY = this.startY - event.clientY;
+    element.scrollTop = this.startScrollTop + deltaY;
+  }
+
+  onHourMouseUp() {
+    this.isDraggingHour = false;
+  }
+
+  // Métodos para arrastre con ratón - Minutos
+  onMinuteMouseDown(event: MouseEvent) {
+    this.isDraggingMinute = true;
+    this.startY = event.clientY;
+    const element = event.currentTarget as HTMLElement;
+    this.startScrollTop = element.scrollTop;
+    event.preventDefault();
+  }
+
+  onMinuteMouseMove(event: MouseEvent) {
+    if (!this.isDraggingMinute) return;
+    const element = event.currentTarget as HTMLElement;
+    const deltaY = this.startY - event.clientY;
+    element.scrollTop = this.startScrollTop + deltaY;
+  }
+
+  onMinuteMouseUp() {
+    this.isDraggingMinute = false;
+  }
+
   crearEvento() {
     if (this.selectedDate) {
-      console.log('=== CREAR EVENTO ===');
-      console.log('Fecha seleccionada:', this.selectedDate);
-      console.log('Fecha formateada:', this.selectedDateStr);
-      console.log('Timestamp:', this.selectedDate.getTime());
-      console.log('ISO String:', this.selectedDate.toISOString());
-      
-      // Aquí puedes agregar la lógica para crear el evento
-      alert(`Evento creado para el día: ${this.selectedDateStr}`);
-    } else {
-      console.warn('No se ha seleccionado ninguna fecha');
-      alert('Por favor, selecciona una fecha en el calendario');
+      this._eventosService.createEvento(this.selectedDate).subscribe({
+        next: (eventoCreado: any) => {
+          this.router.navigate(['/asignacion-actividad-evento', eventoCreado.idEvento]);
+        },
+        error: (error: any) => {
+          console.error('Error al crear el evento:', error);
+        }
+      });
     }
   }
 }

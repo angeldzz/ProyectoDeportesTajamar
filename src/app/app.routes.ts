@@ -18,6 +18,7 @@ import {DeporteEventoComponent} from './components/pages/deporte-evento/deporte-
 import {ColoresComponent} from './components/pages/forms/colores-form/colores.component';
 import {DeportesFormComponent} from './components/pages/forms/deportes-form/deportes-form.component';
 import {ResultadosComponent} from './components/pages/resultados/resultados.component';
+import { AsignacionActividadEventoComponent } from './components/shared/asignacion-actividad-evento.component/asignacion-actividad-evento.component';
 
 export const routes: Routes = [
   {
@@ -72,10 +73,20 @@ export const routes: Routes = [
     component: DeporteEventoComponent,
     canActivate: [loginGuard],
     //TODO METER EL GUARD
+  },{
+    path: "seleccionar-equipo/:idEvento/:idActividad",
+    component: SeleccionEquipoComponent,
+    canActivate: [loginGuard],
+    //TODO METER EL GUARD
   },
   {
     path: "creacion_eventos",
     component: CreacionEventosComponent,
+    canActivate: [adminGuard]
+  },
+  {
+    path: "asignacion-actividad-evento/:idEvento",
+    component: AsignacionActividadEventoComponent,
     canActivate: [adminGuard]
   },
   {
@@ -90,6 +101,8 @@ export const routes: Routes = [
       [
         {path: 'colores-form', component: ColoresComponent},
         {path: 'actividades-form', component: DeportesFormComponent},
+        //TODO QUITAR ESTA RUTA SELCCIONAR
+        {path: 'seleccionar-equipo', component: SeleccionEquipoComponent},
       ]
 
   },

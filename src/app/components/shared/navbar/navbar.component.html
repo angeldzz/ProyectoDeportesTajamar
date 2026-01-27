@@ -1,66 +1,70 @@
-<nav *ngIf="_authService.loggedIn | async" class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
-  <div class="container-fluid">
-    <a class="navbar-brand fw-bold text-orange" [routerLink]="['']">
-      Tajamar <span class="text-dark">Events</span>
-    </a>
-
-    <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarCollapse">
-      <ul class="navbar-nav mx-auto mb-2 mb-lg-0 fw-medium">
-        <li class="nav-item">
-          <a class="nav-link px-3"
-             [routerLink]="['']"
-             routerLinkActive="active-link"
-             [routerLinkActiveOptions]="{exact: true}">Inicio</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link px-3"
-             [routerLink]="['/resultados']"
-             routerLinkActive="active-link">Resultados</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link px-3"
-             [routerLink]="['/pagos']"
-             routerLinkActive="active-link">Pagos</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link px-3"
-             [routerLink]="['/panel_administrador']"
-             routerLinkActive="active-link">
-            Panel Admin
-          </a>
-        </li>
-      </ul>
-
-      <div class="d-flex align-items-center justify-content-lg-end gap-3 mt-3 mt-lg-0  pt-3 pt-lg-0 border-lg-0">
-        <span *ngIf="nombre$ | async as nombre" class="small fw-bold text-muted d-none d-sm-inline">
-          {{nombre}}
-        </span>
-
-        <div class="dropdown">
-          <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle no-caret"
-             data-bs-toggle="dropdown">
-            <img src="https://ui-avatars.com/api/?name={{(nombre$ | async) || 'U'}}&background=fff5f0&color=ff793f&bold=true"
-                 alt="user" width="38" height="38" class="rounded-circle border-orange shadow-sm">
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4 mt-2">
-            <li class="px-3 py-2 d-lg-none border-bottom mb-2">
-              <span class="fw-bold text-orange">{{nombre$ | async}}</span>
-            </li>
-            <li><a class="dropdown-item py-2" [routerLink]="['/perfil']"><i class="bi bi-person me-2"></i>Perfil</a></li>
-            <li><a class="dropdown-item py-2" [routerLink]="['/panel_administrador']"><i class="bi bi-shield-lock me-2"></i>Admin</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li>
-              <a class="dropdown-item py-2 text-danger" (click)="logout()" style="cursor: pointer;">
-                <i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión
+@if (_authService.loggedIn | async) {
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold text-orange" [routerLink]="['']">
+        Tajamar <span class="text-dark">Events</span>
+      </a>
+      <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mx-auto mb-2 mb-lg-0 fw-medium">
+          <li class="nav-item">
+            <a class="nav-link px-3"
+              [routerLink]="['']"
+              routerLinkActive="active-link"
+            [routerLinkActiveOptions]="{exact: true}">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link px-3"
+              [routerLink]="['/resultados']"
+            routerLinkActive="active-link">Resultados</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link px-3"
+              [routerLink]="['/pagos']"
+            routerLinkActive="active-link">Pagos</a>
+          </li>
+          @if ((role$ | async) !== 2) {
+            <li class="nav-item">
+            <a class="nav-link px-3"
+              [routerLink]="['/panel_administrador']"
+              routerLinkActive="active-link">
+              Panel Admin
+            </a>
+          </li>
+        }
+        </ul>
+        <div class="d-flex align-items-center justify-content-lg-end gap-3 mt-3 mt-lg-0  pt-3 pt-lg-0 border-lg-0">
+          @if (nombre$ | async; as nombre) {
+            <span class="small fw-bold text-muted d-none d-sm-inline">
+              {{nombre}}
+            </span>
+          }
+          <div class="dropdown">
+            <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle no-caret"
+              data-bs-toggle="dropdown">
+              <img src="https://ui-avatars.com/api/?name={{(nombre$ | async) || 'U'}}&background=fff5f0&color=ff793f&bold=true"
+                alt="user" width="38" height="38" class="rounded-circle border-orange shadow-sm">
               </a>
-            </li>
-          </ul>
+              <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4 mt-2">
+                <li class="px-3 py-2 d-lg-none border-bottom mb-2">
+                  <span class="fw-bold text-orange">{{nombre$ | async}}</span>
+                </li>
+                <li><a class="dropdown-item py-2" [routerLink]="['/perfil']"><i class="bi bi-person me-2"></i>Perfil</a></li>
+                @if ((role$ | async) !== 2) {
+                <li><a class="dropdown-item py-2" [routerLink]="['/panel_administrador']"><i class="bi bi-shield-lock me-2"></i>Admin</a></li>
+                }
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <a class="dropdown-item py-2 text-danger" (click)="logout()" style="cursor: pointer;">
+                    <i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</nav>
+    </nav>
+  }

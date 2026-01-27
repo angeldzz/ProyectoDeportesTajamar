@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../../../models/Usuario';
 import { UsuarioService } from '../../../core/services/usuario.service';
 import { CommonModule } from '@angular/common';
+import { ActividadDeportesInscrito } from '../../../models/ActividadDeporteInscrito';
 
 @Component({
   selector: 'app-perfil',
@@ -11,6 +12,7 @@ import { CommonModule } from '@angular/common';
 })
 export class PerfilComponent implements OnInit{
   public perfil: Usuario | undefined;
+  public Actividades: Array<ActividadDeportesInscrito> = [];
 
   constructor(
     private _usuarioService: UsuarioService
@@ -19,7 +21,10 @@ export class PerfilComponent implements OnInit{
   ngOnInit(): void {
     this._usuarioService.getDatosUsuario().subscribe(perfil => {
       this.perfil = perfil;
-      console.log(perfil);
     });
+    this._usuarioService.getActividadesUser().subscribe(actividad => {
+      this.Actividades = actividad;
+      console.log(actividad);
+    })
   }
 }

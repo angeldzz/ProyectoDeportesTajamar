@@ -1,47 +1,67 @@
-<div class="seleccion-equipo-page">
-	<h2>Seleccionar Equipo</h2>
+<div class="equipos-container">
+  <div class="accordion-card" *ngFor="let equipo of equiposDisponibles; let idx = index">
 
-	<div *ngIf="loading">Cargando equipos...</div>
-	<div *ngIf="error" class="error">Error: {{ error }}</div>
+    <!-- Header -->
+    <div class="accordion-header"
+         [ngClass]="idx % 2 === 0 ? 'azul' : 'naranja'"
+         (click)="togglePanel(idx)">
 
-	<div class="buscar">
-		<input
-			placeholder="Buscar equipo por nombre"
-			[value]="filtro"
-			(input)="filtro = $any($event.target).value"
-			aria-label="Buscar equipos"
-		/>
-	</div>
+      <div class="header-content">
+        <div>
+          <h5 class="equipo-nombre">{{ equipo.nombreEquipo }}</h5>
+          <span class="curso-badge">Curso {{ equipo.idCurso }}</span>
+        </div>
 
-	<ul *ngIf="!loading && equipos && equipos.length; else noEquipos" class="equipos-list">
-		<li *ngFor="let e of filteredEquipos()" class="equipo-item">
-			<div class="equipo-row">
-				<div class="equipo-nombre">{{ e.nombreEquipo || e.nombre }}</div>
-				<div class="equipo-actions">
-					<button type="button" (click)="selectEquipo(e)">Seleccionar</button>
-				</div>
-			</div>
-		</li>
-	</ul>
+        <i class="pi pi-chevron-down arrow" [class.open]="openIndex === idx"></i>
+      </div>
+    </div>
 
-	<ng-template #noEquipos>
-		<p>No hay equipos disponibles.</p>
-	</ng-template>
+    <!-- Body -->
+    <div class="accordion-body" [class.open]="openIndex === idx">
+      <h6 class="miembros-titulo">Miembros del equipo</h6>
 
-	<section *ngIf="selectedEquipo" class="detalle-equipo">
-		<h3>Equipo: {{ selectedEquipo.nombreEquipo || selectedEquipo.nombre }}</h3>
-		<button type="button" (click)="clearSelection()">Cerrar</button>
+      <div *ngIf="equipo.jugadores.length > 0; else sinMiembros" class="miembros-lista">
+        <div class="member" *ngFor="let jugador of equipo.jugadores">
+          <div class="member-info">
+            <div class="player-avatar">
+              <p-avatar
+                [image]="jugador.imagen"
+                size="normal"
+                shape="circle">
+              </p-avatar>
+            </div>
+            <span class="member-name">{{ jugador.usuario }}</span>
+          </div>
 
-		<div *ngIf="loadingMiembros">Cargando miembros...</div>
-		<div *ngIf="miembros && miembros.length; else noMiembros">
-			<h4>Miembros</h4>
-			<ul>
-				<li *ngFor="let m of miembros">{{ m.usuario || m.nombre || m.email || ('Usuario ' + (m.idUsuario || m.id)) }}</li>
-			</ul>
-		</div>
+          <button class="btn-delete"
+                  (click)="borrarMiembroEquipoPorUsuario(jugador.idUsuario, jugador.idEquipo)">
+            <i class="pi pi-trash"></i>
+          </button>
+        </div>
+      </div>
 
-		<ng-template #noMiembros>
-			<p>No hay miembros registrados para este equipo.</p>
-		</ng-template>
-	</section>
+      <ng-template #sinMiembros>
+        <div class="sin-miembros">
+          <i class="pi pi-users"></i>
+          <p>Este equipo aún no tiene miembros</p>
+        </div>
+      </ng-template>
+    </div>
+
+    <div class="equipo-footer">
+      <button
+        class="btn-unirse"
+        [class.disabled]="usuarioYaEstaInscrito"
+        [disabled]="usuarioYaEstaInscrito"
+        (click)="unirseEquipo(equipo.idEquipo); $event.stopPropagation()">
+
+        <i class="pi"
+           [class.pi-check]="usuarioYaEstaInscrito"
+           [class.pi-sign-in]="!usuarioYaEstaInscrito"></i>
+
+        {{ usuarioYaEstaInscrito ? 'Ya perteneces a un equipo' : 'Unirse al equipo' }}
+      </button>
+    </div>
+
+  </div>
 </div>

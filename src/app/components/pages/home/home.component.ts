@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../../core/services/auth.service';
 import { EventosService } from '../../../core/services/eventos.service';
 import { Evento } from '../../../models/Evento';
-import { DatePipe, UpperCasePipe } from '@angular/common';
+import { CommonModule, DatePipe, UpperCasePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions } from '@fullcalendar/core';
@@ -11,6 +11,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
 import {UsuarioService} from '../../../core/services/usuario.service';
+import { Observable } from 'rxjs/internal/Observable';
 
 @Component({
   selector: 'app-home',
@@ -18,7 +19,8 @@ import {UsuarioService} from '../../../core/services/usuario.service';
     DatePipe,
     UpperCasePipe,
     RouterLink,
-    FullCalendarModule
+    FullCalendarModule,
+    CommonModule
   ],
   standalone: true,
   templateUrl: './home.component.html',
@@ -28,6 +30,8 @@ export class HomeComponent implements OnInit{
   public eventosanteriores!: Array<Evento>
   public eventosdisponibles!: Array<Evento>
 
+
+  public role$!: Observable<number | null>;
   // Paginación eventos disponibles
   public paginaDisponibles: number = 1;
   public eventosPorPagina: number = 3;
@@ -52,22 +56,44 @@ export class HomeComponent implements OnInit{
   };
 
   constructor(private _authService: AuthService,
-              private _serviceEventos: EventosService) { }
+              private _serviceEventos: EventosService) {
+
+    this.role$ = this._authService.userRole$;
+  }
 
   ngOnInit(): void {
+    // Suscribirse al rol de manera reactiva
+
     this._serviceEventos.GetEventos().subscribe({
       next: (data) => {
         const fechaActual = new Date();
-        this.eventosanteriores = data.filter((evento: Evento) =>
-          new Date(evento.fechaEvento) < fechaActual
-        );
-        this.eventosdisponibles = data.filter((evento: Evento) =>
-          new Date(evento.fechaEvento) >= fechaActual
-        );
+        fechaActual.setHours(0, 0, 0, 0); // Normalizar a medianoche para comparación precisa
+
+        this.eventosanteriores = data
+          .filter((evento: Evento) => {
+            const fechaEvento = new Date(evento.fechaEvento);
+            fechaEvento.setHours(0, 0, 0, 0);
+            return fechaEvento < fechaActual;
+          })
+          .sort((a: Evento, b: Evento) =>
+            new Date(b.fechaEvento).getTime() - new Date(a.fechaEvento).getTime()
+          );
+
+        this.eventosdisponibles = data
+          .filter((evento: Evento) => {
+            const fechaEvento = new Date(evento.fechaEvento);
+            fechaEvento.setHours(0, 0, 0, 0);
+            return fechaEvento >= fechaActual;
+          })
+          .sort((a: Evento, b: Evento) =>
+            new Date(a.fechaEvento).getTime() - new Date(b.fechaEvento).getTime()
+          );
 
         // Convertir eventos para FullCalendar
         this.calendarOptions.events = data.map((evento: Evento) => {
-          const esPasado = new Date(evento.fechaEvento) < fechaActual;
+          const fechaEvento = new Date(evento.fechaEvento);
+          fechaEvento.setHours(0, 0, 0, 0);
+          const esPasado = fechaEvento < fechaActual;
           return {
             id: evento.idEvento.toString(),
             title: `#${evento.idEvento}`,
@@ -80,9 +106,6 @@ export class HomeComponent implements OnInit{
             }
           };
         });
-
-        console.log('Eventos anteriores:', this.eventosanteriores);
-        console.log('Eventos disponibles:', this.eventosdisponibles);
       }
     });
   }

@@ -1,104 +1,121 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-const API_EQUIPOS = 'https://apideportestajamar.azurewebsites.net/api/Equipos';
+import {Component, OnInit,} from '@angular/core';
+import {Equipov2Service} from '../../../core/services/equipov2.service';
+import {ActivatedRoute, Params} from '@angular/router';
+import {Equipov2} from '../../../models/EquipoV2';
+import {UsuarioService} from '../../../core/services/usuario.service';
+import {Usuario} from '../../../models/Usuario';
+import {EMPTY, switchMap} from 'rxjs';
+import {CommonModule, NgStyle} from '@angular/common';
+import {AccordionModule} from 'primeng/accordion';
+import {Avatar} from 'primeng/avatar';
 
 @Component({
   selector: 'app-seleccion-equipo',
-  imports: [CommonModule],
+  imports: [
+    NgStyle, AccordionModule, CommonModule, Avatar
+  ],
   templateUrl: './seleccion-equipo.component.html',
-  styleUrls: ['./seleccion-equipo.component.css'],
+  styleUrl: './seleccion-equipo.component.css',
 })
 export class SeleccionEquipoComponent implements OnInit {
-  /**
-   * Componente para listar y seleccionar equipos.
-   * - Carga la lista completa desde `/api/Equipos`.
-   * - Al seleccionar un equipo carga sus usuarios con `/api/Equipos/UsuariosEquipo/{idequipo}`.
-   * - Emite el equipo seleccionado por medio de `equipoSeleccionado` si se desea usar desde padre.
-   */
-  @Output() equipoSeleccionado = new EventEmitter<any>();
+  idEvento!: number;
+  idActividad!: number;
+  usuario!: Usuario;
+  equipoExpandido: number | null = null;
+  openIndex: number | null = null;
+  equiposDisponibles: Array<Equipov2> = [];
 
-  equipos: any[] = [];
-  filtro: string = '';
-  loading = false;
-  error: string | null = null;
-
-  selectedEquipo: any = null;
-  miembros: any[] = [];
-  loadingMiembros = false;
-
-  constructor() {}
+  constructor(private _equipoService: Equipov2Service,
+              private _activeRoute: ActivatedRoute,
+              private _usuarioService: UsuarioService) {
+  }
 
   ngOnInit(): void {
-    this.loadEquipos();
-  }
 
-  /**
-   * loadEquipos: obtiene la lista de equipos desde la API y guarda en `this.equipos`.
-   * Maneja `loading` y `error` para feedback en la UI.
-   */
-  async loadEquipos() {
-    this.loading = true;
-    this.error = null;
-    try {
-      const res = await fetch(API_EQUIPOS);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      this.equipos = await res.json();
-    } catch (err: any) {
-      this.error = err?.message || String(err);
-      this.equipos = [];
-    } finally {
-      this.loading = false;
-    }
-  }
+    this._activeRoute.params.subscribe((parametros: Params) => {
+      if (parametros['idEvento'] != null && parametros['idActividad'] != null) {
 
-  /**
-   * filteredEquipos: devuelve la lista de equipos filtrada por `this.filtro`.
-   */
-  filteredEquipos() {
-    const q = this.filtro.trim().toLowerCase();
-    if (!q) return this.equipos;
-    return this.equipos.filter((e: any) => {
-      const nombre = (e.nombreEquipo || e.nombre || '').toString().toLowerCase();
-      return nombre.includes(q);
+        console.log("golaaaa")
+        this.idActividad = parametros['idActividad'];
+        this.idEvento = parametros['idEvento'];
+        console.log('ID del evento:', this.idEvento);
+
+        // this.getEquiposDisponibles(this.idActividad,this.idEvento);
+        this.getEquiposConJugadores(this.idActividad, this.idEvento);
+        this._usuarioService.getDatosUsuario().pipe().subscribe(value => {
+          this.usuario = value;
+        });
+      }
     });
   }
 
-  /**
-   * selectEquipo: marca un equipo como seleccionado y carga sus miembros.
-   * Emite el equipo seleccionado por `equipoSeleccionado`.
-   */
-  selectEquipo(e: any) {
-    this.selectedEquipo = e;
-    this.equipoSeleccionado.emit(e);
-    this.loadMiembrosEquipo(e.idEquipo ?? e.id ?? 0);
-  }
-
-  /**
-   * loadMiembrosEquipo: solicita a la API los usuarios de un equipo concreto.
-   * Endpoint: GET `/api/Equipos/UsuariosEquipo/{idequipo}`
-   */
-  async loadMiembrosEquipo(idequipo: number) {
-    this.loadingMiembros = true;
-    this.miembros = [];
-    try {
-      const res = await fetch(`${API_EQUIPOS}/UsuariosEquipo/${idequipo}`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      this.miembros = await res.json();
-    } catch (err: any) {
-      // No detener la experiencia: mostrar error en UI
-      this.error = err?.message || String(err);
-      this.miembros = [];
-    } finally {
-      this.loadingMiembros = false;
+  togglePanel(idx: number) {
+    if (this.openIndex === idx) {
+      // Si el mismo panel ya estaba abierto, cerrarlo
+      this.openIndex = null;
+    } else {
+      // Abrir el panel seleccionado y cerrar los demás
+      this.openIndex = idx;
     }
+
+  }
+    getEquiposConJugadores(idActividad: number, idEvento: number) {
+    this._equipoService.getEquiposConJugadores(idActividad, idEvento).subscribe(value => {
+      console.log("Los Equipos:")
+      console.log(value)
+      this.equiposDisponibles = value;
+    })
   }
 
-  /**
-   * clearSelection: limpia la selección actual y la lista de miembros.
-   */
-  clearSelection() {
-    this.selectedEquipo = null;
-    this.miembros = [];
+  unirseEquipo(idEquipo: number) {
+    const yaTieneEquipo = this.equiposDisponibles.some(equipo =>
+      equipo.jugadores?.some(jugador => jugador.idUsuario === this.usuario.idUsuario)
+    );
+
+    if (yaTieneEquipo) {
+      alert('ya estás inscrito en un equipo y no se permiten cambios.');
+      return;
+    }
+
+    this._equipoService.unirseEquipo(this.usuario.idUsuario, idEquipo).subscribe({
+      next: (res) => {
+        console.log('Te has unido con éxito');
+        this.getEquiposConJugadores(this.idActividad, this.idEvento);
+      },
+      error: (err) => {
+        alert('Hubo un error al intentar unirse al equipo.');
+      }
+    });
   }
+
+  get usuarioYaEstaInscrito(): boolean {
+    return this.equiposDisponibles.some(equipo =>
+      equipo.jugadores?.some(miembro => miembro.idUsuario === this.usuario?.idUsuario)
+    );
+  }
+
+  borrarMiembroEquipoPorUsuario(idUsuario: number, idEquipo: number) {
+    this._equipoService.obtenerMiembroEspecifico(idUsuario, idEquipo).pipe(
+      switchMap(miembro => {
+        if (!miembro) {
+          // Si no existe el miembro, lanzar un error o devolver un observable vacío
+          console.log('Miembro no encontrado');
+          return EMPTY; // RxJS EMPTY
+        }
+        // miembro.idMiembroEquipo contiene el id que necesitamos borrar
+        return this._equipoService.borrarMiembroEquipo(miembro.idMiembroEquipo);
+      })
+    ).subscribe({
+      next: result => {
+        console.log('Miembro borrado exitosamente', result);
+        window.location.reload();
+      },
+      error: err => {
+        console.error('Error al borrar el miembro', err);
+      }
+    });
+  }
+
+
 }
+ 

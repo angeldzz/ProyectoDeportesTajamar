@@ -1,46 +1,577 @@
-/* Colores Naranja */
-.bg-orange-light {
-  background-color: #fff5f0 !important;
-  color: #ff793f;
+.resultados-page {
+  background-color: #0f1012;
+  min-height: 100vh;
+  color: #fff;
 }
 
-.border-bottom-orange {
-  border-bottom: 3px solid #ff793f !important;
+/* Layout del Grid */
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
 }
 
-.btn-orange {
-  background-color: #ff793f;
+/* Estilo de la Tarjeta (Imagen 3) */
+.match-card {
+  background-color: #1a1c1e;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.3s ease;
+}
+
+.match-card.live {
+  border-color: #ff5722; /* Borde naranja de la imagen central */
+}
+
+.match-card:hover {
+  background-color: #232529;
+}
+
+/* Headers internos */
+.card-header-match {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.status-pill {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #6a6d71;
+  background: #25282c;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.matchday {
+  color: #6a6d71;
+  font-size: 11px;
+}
+
+/* Marcadores (Cuerpo) */
+.team-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.team-name {
+  font-weight: 700;
+  font-size: 14px;
+  color: #d1d2d4;
+}
+.team-name:hover {
+  font-weight: 700;
+  font-size: 14px;
+  color: #485267;
+  cursor: pointer;
+}
+
+.team-mini-logo {
+  width: 32px;
+  height: 32px;
+  background-color: #2d3136;
+  border-radius: 4px;
+}
+
+.score-value {
+  font-size: 26px;
+  font-weight: 800;
+  color: #3e4247; /* Color apagado */
+}
+
+.score-value.highlight {
+  color: #ff5722; /* Naranja resaltado */
+}
+
+/* Footer (Imagen 3) */
+.card-footer-match {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #25282c;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stadium {
+  font-size: 11px;
+  color: #6a6d71;
+}
+
+.action-link {
+  color: #00d2d3;
+  font-size: 11px;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Badge Live (Círculo rojo) */
+.live-dot {
+  background: #ff5722;
   color: white;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+.view-standings {
+  color: #ff5722;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+
+/* Contenedor del Scroll (Ocultamos la barra para que sea limpio) */
+.pills-scroll-container {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 5px;
+  /* Ocultar scrollbar en navegadores modernos */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.pills-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* La Pastilla Base */
+.event-pill {
+  background-color: #1a1c1e; /* Fondo oscuro igual que tus cards */
+  border: 1px solid #2a2a2a;
+  color: #a0a0a0;
+  padding: 10px 24px;
+  border-radius: 50px; /* Esto hace la forma de pastilla */
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  white-space: nowrap; /* Evita que el texto salte de línea */
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  outline: none;
+}
+
+/* Hover (Sutil iluminación) */
+.event-pill:hover {
+  background-color: #25282c;
+  border-color: #444;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* ESTADO ACTIVO (Naranja) */
+.event-pill.active {
+  background-color: #ff793f; /* Tu naranja corporativo */
+  border-color: #ff793f;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(255, 121, 63, 0.3); /* Resplandor naranja */
+}
+
+/* Ajuste de iconos */
+.event-pill i {
+  font-size: 1.1rem;
+}
+
+/* Ajuste de texto */
+.pill-date {
+  letter-spacing: 0.5px;
+  text-transform: uppercase; /* Opcional: Para que ponga ENE, FEB, etc */
+}
+.history-timeline-bar {
+  background-color: #1a1c1e; /* Mismo color oscuro que tus cards */
+  border: 1px solid #2a2a2a;
+  border-radius: 50px; /* Bordes muy redondos */
+  padding: 6px 12px;
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%; /* Para que no se salga en móvil */
+  gap: 5px;
+}
+
+/* --- SCROLL INTERNO --- */
+.timeline-scroll {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  overflow-x: auto;
+  scrollbar-width: none; /* Ocultar scrollbar Firefox */
+  -ms-overflow-style: none; /* Ocultar scrollbar IE */
+  max-width: 600px; /* Limite de ancho para que aparezcan flechas si hay muchos */
+}
+
+.timeline-scroll::-webkit-scrollbar {
+  display: none; /* Ocultar scrollbar Chrome/Safari */
+}
+
+/* --- ITEM INDIVIDUAL (Fecha) --- */
+.timeline-item {
+  padding: 8px 16px;
+  border-radius: 30px;
+  cursor: pointer;
+  color: #6a6d71; /* Gris apagado cuando no está activo */
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2;
+}
+
+.timeline-item:hover {
+  color: #fff; /* Blanco al pasar el ratón */
+}
+
+/* --- ESTADO ACTIVO (El botón naranja) --- */
+.timeline-item.active {
+  background-color: #ff793f; /* Tu Naranja */
+  color: #fff;
+  padding: 8px 20px; /* Un pelín más ancho */
+  box-shadow: 0 4px 10px rgba(255, 121, 63, 0.3);
+  transform: scale(1.05);
+}
+
+/* El año solo aparece en el activo para ahorrar espacio */
+.year-label {
+  font-size: 0.6rem;
+  opacity: 0.9;
+}
+
+/* --- ELEMENTOS DECORATIVOS (Flechas y separador) --- */
+.nav-arrow {
+  background: none;
+  border: none;
+  padding: 0 8px;
+  color: #444;
+  cursor: pointer;
+}
+.nav-arrow:hover { color: #fff; }
+
+.divider {
+  width: 1px;
+  height: 20px;
+  background-color: #333;
+}
+
+.picker-icon {
+  padding: 0 10px;
+  cursor: pointer;
+}
+/* Contenedor del estado vacío */
+.empty-state-box {
+  padding: 80px 20px;
+  background-color: #1a1c1e; /* Mismo fondo que las cards */
+  border: 1px dashed #2a2a2a; /* Borde punteado sutil */
+  border-radius: 20px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Círculo del icono */
+.empty-icon-wrapper {
+  width: 80px;
+  height: 80px;
+  background-color: #25282c;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: #ff793f; /* Tu naranja corporativo */
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  margin-bottom: 20px;
+}
+
+/* Tipografía */
+.empty-state-box h3 {
+  font-size: 1.5rem;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+
+.empty-state-box p {
+  font-size: 0.95rem;
+  color: #6a6d71;
+}
+
+
+/* Fondo oscuro del modal */
+.bg-dark-panel {
+  background-color: #1a1c1e;
+  color: #fff;
+}
+
+/* Borde inferior de la cabecera */
+.border-bottom-gray {
+  border-bottom: 1px solid #2a2a2a;
+}
+
+/* Tarjeta de jugador (más compacta para modal) */
+.player-card {
+  display: flex;
+  align-items: center;
+  background-color: #232529;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+
+.player-avatar {
+  width: 35px;
+  height: 35px;
+  background-color: #151719; /* Fondo avatar */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6a6d71;
+  margin-right: 12px;
+}
+.player-card {
+  min-height: 64px;
+}
+
+.player-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+
+.modal-open .app-content {
+  filter: blur(6px) brightness(0.7);
+  transition: filter 0.3s ease;
+}
+
+.app-content {
+  transition: filter 0.3s ease;
+}
+
+.modal-backdrop.show {
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+}
+.bg-dark-panel {
+  background: rgba(26, 26, 26, 0.85) !important;
+  backdrop-filter: blur(8px);
+}
+.col-md-5 .player-card {
+  justify-content: flex-start;
+}
+
+.resultados-page {
+  background-color: var(--bg-custom);
+  min-height: 100vh;
+  color: var(--blue-primary);
+}
+
+.match-card {
+  background-color: #ffffff;
+  border: 1px solid #dbe4f0;
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 6px 18px rgba(31, 58, 95, 0.08);
+}
+.match-card:hover {
+  box-shadow: 0 10px 28px rgba(31, 58, 95, 0.14);
+  transform: translateY(-2px);
+}
+.score-value.highlight {
+  color: var(--orange-accent);
+  font-size: 28px;
+}
+.score-value {
+  color: #9aa9bf;
+  font-size: 24px;
+}
+.team-row {
+  position: relative;
+}
+
+.team-row .score-value.highlight::before {
+  content: '';
+  position: absolute;
+  right: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 18px;
+  background-color: var(--orange-accent);
+  border-radius: 2px;
+}
+.status-pill {
+  background-color: #e9f1fb;
+  color: #1f3a5f;
+  font-weight: 700;
+  border-radius: 8px;
+}
+.btn-icon-action {
+  background-color: transparent;
+  border: 1px solid #dbe4f0;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #1f3a5f;
+}
+
+.btn-icon-action:hover {
+  background-color: var(--orange-soft);
+  border-color: var(--orange-accent);
+  color: var(--orange-accent);
+}
+
+.resultados-page {
+  background-color: var(--bg-main);
+  background-image: radial-gradient(circle at top right, #16263d 0%, var(--bg-main) 70%);
+  min-height: 100vh;
+  padding-bottom: 50px;
+}
+
+/* Sección de Liga/Deporte */
+.league-section h4 {
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  letter-spacing: 1px;
+}
+
+.league-logo-container {
+  background: var(--orange-accent);
+  width: 10px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(255, 121, 63, 0.4);
+}
+.player-username {
+  color: var(--orange-accent);
+  font-size: 0.85rem;
+}
+/* Grid y Match Cards */
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 24px;
+}
+
+.match-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 24px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.match-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  border-color: var(--orange-accent);
+}
+
+/* Indicador lateral naranja en hover */
+.match-card::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 5px;
+  background: var(--orange-accent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.match-card:hover::after {
+  opacity: 1;
+}
+
+/* Marcadores y Equipos */
+.team-name {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--navy-primary);
+  letter-spacing: 0.5px;
+}
+
+.score-value {
+  font-size: 28px;
+  font-weight: 900;
+  color: #cbd5e1; /* Gris cuando no resalta */
+  font-family: 'Inter', sans-serif;
+}
+
+.score-value.highlight {
+  color: var(--navy-primary);
+  position: relative;
+}
+
+/* Status Pill */
+.status-pill {
+  background-color: #f1f5f9;
+  color: var(--navy-secondary);
+  font-size: 10px;
+  padding: 5px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+/* Botón Ver Jugadores */
+.btn-icon-action {
+  background-color: var(--navy-primary);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
   transition: all 0.2s;
 }
 
-.btn-orange:hover {
-  background-color: #e66733;
-  color: white;
-  transform: translateY(-2px);
+.btn-icon-action:hover {
+  background-color: var(--orange-accent);
+  transform: scale(1.05);
 }
 
-/* Personalización del Select */
-.form-select {
-  cursor: pointer;
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ff793f' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 0.75rem center;
-  background-size: 16px 12px;
+/* Modal Estilo Premium */
+.modal-content.bg-dark-panel {
+  background: linear-gradient(135deg, #1a2636 0%, #0f172a 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
-/* Ajustes de la tabla que ya teníamos */
-.marcador-pill {
-  background-color: #f8f9fa;
-  color: #636e72;
-  font-weight: 800;
-  padding: 6px 14px;
-  border-radius: 10px;
-  border: 1px solid #eee;
+.orange-indicator {
+  width: 4px;
+  height: 18px;
+  background: var(--orange-accent);
+  border-radius: 2px;
 }
 
-.marcador-pill.winner {
-  background-color: #ff793f;
-  color: white;
-  border-color: #ff793f;
+.player-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background 0.2s;
+}
+
+.player-card:hover {
+  background: rgba(255, 255, 255, 0.1);
 }

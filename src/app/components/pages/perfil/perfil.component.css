@@ -181,6 +181,179 @@
   }
 }
 
+/* Estilos para la sección de actividades */
+.actividades-card {
+  margin-top: 3rem;
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.actividades-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid #e0e7ff;
+}
+
+.actividades-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1e40af;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.actividades-badge {
+  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+  color: white;
+  padding: 0.5rem 1.25rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+}
+
+.table-responsive {
+  overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.actividades-table {
+  margin-bottom: 0;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.actividades-table thead {
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  color: white;
+}
+
+.actividades-table thead th {
+  border: none;
+  padding: 1.25rem 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  vertical-align: middle;
+}
+
+.th-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.th-content svg {
+  opacity: 0.9;
+}
+
+.actividades-table tbody tr {
+  transition: all 0.2s ease;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.actividades-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.actividades-table tbody tr:hover {
+  background-color: #eff6ff;
+  transform: scale(1.01);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+}
+
+.actividades-table tbody tr.row-even {
+  background-color: #f9fafb;
+}
+
+.actividades-table tbody tr.row-even:hover {
+  background-color: #eff6ff;
+}
+
+.actividades-table tbody td {
+  padding: 1.25rem 1rem;
+  vertical-align: middle;
+  border: none;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+.id-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  color: #1e40af;
+  padding: 0.35rem 0.85rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border: 1px solid #93c5fd;
+}
+
+.actividad-nombre {
+  font-weight: 600;
+  color: #1e40af;
+  display: block;
+}
+
+.fecha-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #6b7280;
+}
+
+.fecha-container svg {
+  color: #3b82f6;
+}
+
+.capitan-badge {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-align: center;
+  min-width: 60px;
+}
+
+.capitan-badge.capitan-si {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+}
+
+.capitan-badge.capitan-no {
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  color: #6b7280;
+  border: 1px solid #d1d5db;
+}
+
+.jugadores-badge {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-align: center;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  color: #92400e;
+  border: 1px solid #fbbf24;
+  box-shadow: 0 2px 4px rgba(251, 191, 36, 0.2);
+}
+
 @media (max-width: 768px) {
   .perfil-banner {
     height: 150px;
@@ -213,5 +386,66 @@
   }
   .detail-value{
     font-size: 0.9rem;
+  }
+
+  .actividades-card {
+    padding: 1.25rem;
+  }
+
+  .actividades-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .actividades-title {
+    font-size: 1.35rem;
+  }
+
+  .actividades-table thead th {
+    padding: 0.85rem 0.5rem;
+    font-size: 0.7rem;
+  }
+
+  .actividades-table tbody td {
+    padding: 0.85rem 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .th-content {
+    flex-direction: column;
+    gap: 0.25rem;
+    text-align: center;
+  }
+
+  .th-content svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .id-badge {
+    padding: 0.25rem 0.6rem;
+    font-size: 0.75rem;
+  }
+
+  .actividad-nombre {
+    font-size: 0.85rem;
+  }
+
+  .fecha-container {
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.8rem;
+  }
+
+  .capitan-badge {
+    padding: 0.3rem 0.75rem;
+    font-size: 0.75rem;
+    min-width: 50px;
+  }
+
+  .jugadores-badge {
+    padding: 0.3rem 0.75rem;
+    font-size: 0.75rem;
   }
 }

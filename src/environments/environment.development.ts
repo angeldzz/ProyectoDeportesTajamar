@@ -1,7 +1,7 @@
 export const environment = {
     url:"https://apideportestajamar.azurewebsites.net/",
     urlActividades:"https://apideportestajamar.azurewebsites.net/api/Actividades/",
-    urlActividadesEventos:"https://apideportestajamar.azurewebsites.net/api/ActividadesEventos/",
+    urlActividadesEventos:"https://apideportestajamar.azurewebsites.net/api/ActividadesEvento/",
     urlCapitanActividades:"https://apideportestajamar.azurewebsites.net/api/CapitanActividades/",
     urlColores:"https://apideportestajamar.azurewebsites.net/api/Colores/",
     urlEquipos:"https://apideportestajamar.azurewebsites.net/api/Equipos/",

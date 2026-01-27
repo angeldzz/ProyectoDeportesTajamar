@@ -1,48 +1,116 @@
-/* El contenedor ocupa el 100% del alto del viewport */
-.sidebar-wrapper {
-  width: 280px;
-  height: 100vh;
+/* Layout base */
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar base (Escritorio) */
+.sidebar-container {
+  width: 260px;
+  min-height: 100vh;
+  background: #fff;
+  border-right: 1px solid #fff5f0;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s ease;
   position: sticky;
   top: 0;
-  background-color: #ffffff;
-  border-right: 1px solid rgba(0,0,0,0.05);
-  font-family: 'Outfit', sans-serif;
+  z-index: 1050;
 }
 
-.brand-text {
-  color: #2d3436;
-  letter-spacing: -0.5px;
+/* ESTADO REDUCIDO (Escritorio) */
+.sidebar-container.sidebar-collapsed {
+  width: 80px;
 }
 
-.logo-icon {
-  background: linear-gradient(135deg, #6c5ce7, #00d2d3);
+.sidebar-container.sidebar-collapsed .nav-item {
+  justify-content: center;
+  padding: 12px 0;
+}
+
+/* BOTONES DE CONTROL */
+.desktop-collapse-btn {
+  position: absolute;
+  right: -12px;
+  top: 25px;
+  width: 24px;
+  height: 24px;
+  background: #ff793f;
   color: white;
-  width: 35px;
-  height: 35px;
-  display: flex;
+  border: none;
+  border-radius: 50%;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
-  font-size: 1.2rem;
+  cursor: pointer;
 }
 
-/* Estilo de los links */
-.nav-link {
+.mobile-toggle-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1100;
+  background: #ff793f;
+  color: white;
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 24px;
+}
+
+/* LINKS Y ESTILOS */
+.nav-links {
+  list-style: none;
+  padding: 10px 0;
+  margin: 0;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
   color: #636e72;
+  text-decoration: none;
+  transition: 0.2s;
+  white-space: nowrap;
+}
+
+.nav-icon {
+  font-size: 1.3rem;
+  min-width: 25px;
+  text-align: center;
+}
+
+.nav-label {
+  margin-left: 15px;
   font-weight: 500;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-  padding: 12px 15px;
 }
 
-.nav-link:hover {
-  background-color: #f1f0ff;
-  color: #6c5ce7;
+.active-link {
+  color: #ff793f !important;
+  background: #fff5f0;
+  border-right: 4px solid #ff793f;
 }
 
-/* Estilo cuando el link está activo (Angular Router) */
-.nav-link.active {
-  background-color: #6c5ce7 !important;
-  color: white !important;
-  box-shadow: 0 4px 15px rgba(108, 92, 231, 0.2);
+/* --- MOBILE (Ajustes finales) --- */
+@media (max-width: 991px) {
+  .sidebar-container {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 280px !important; /* Siempre ancho en móvil */
+    transform: translateX(-100%);
+    min-vh: 100vh;
+  }
+
+  .sidebar-container.mobile-open {
+    transform: translateX(0);
+  }
+
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 1040;
+    backdrop-filter: blur(2px);
+  }
 }
+

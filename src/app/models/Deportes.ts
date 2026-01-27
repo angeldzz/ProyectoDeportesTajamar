@@ -4,4 +4,6 @@
     public nombre: string,
     public minimoJugadores: number
   ){}
+
+
 }

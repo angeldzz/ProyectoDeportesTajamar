@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {AuthService} from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-deporte-evento',
@@ -8,8 +9,14 @@ import {HttpClient} from '@angular/common/http';
   styleUrl: './deporte-evento.component.css',
 })
 export class DeporteEventoComponent implements OnInit {
+  public isCapitan: boolean=false;
+  constructor(private _authService:AuthService) { }
 
-  constructor() { }
+  ngOnInit() {
 
-  ngOnInit() {}
+    if(this._authService.getUserRole() == 5){
+      this.isCapitan=true;
+    }
+
+  }
 }

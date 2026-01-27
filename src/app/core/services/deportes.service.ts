@@ -9,23 +9,21 @@ import {ActividadDeportes} from '../../models/ActividadDeportes';
 export class DeportesService {
 
   constructor(private _http: HttpClient) {}
-  getDeportes():Observable<Array<Deporte>> {
 
-    let url=environment.urlActividades;
-    return this._http.get<Array<Deporte>>(url);
-
-    }
-    getDeportesEvento(idEvento:String):Observable<Array<ActividadDeportes>> {
-
+    getDeportesEvento(idEvento:number):Observable<Array<ActividadDeportes>> {
     let url=environment.urlActividades+"ActividadesEvento/"+idEvento;
     return this._http.get<Array<ActividadDeportes>>(url);
-
     }
 
     getActividades():Observable<Array<Deporte>>{
     let url=environment.urlActividades;
     return this._http.get<Array<Deporte>>(url);
     }
+
+    getDeportes():Observable<Array<Deporte>>{
+      let url=environment.urlActividades;
+      return this._http.get<Array<Deporte>>(url);
+      }
 
 
     crearActividad(nombre:String,minJugadores:Number):Observable<any> {
