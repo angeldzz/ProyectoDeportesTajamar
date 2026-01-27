@@ -14,6 +14,10 @@
             </option>
           }
         </select>
+
+        <button class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#modalCrearResultado">Crear Resultado</button>
       </div>
     </div>
     <div class="container-fluid px-lg-5">
@@ -132,7 +136,92 @@
   </div>
 </div>
 
+<!--MODAL FORMULARIO-->
 
+<div class="modal fade" id="modalCrearResultado" tabindex="-1" aria-labelledby="modalCrearResultadoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg rounded-4">
+      <div class="modal-header bg-light border-0 py-3">
+        <h5 class="modal-title fw-bold" id="modalCrearResultadoLabel">
+          <i class="bi bi-pencil-fill me-2 text-primary"></i>Crear Resultado
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body p-4">
+        <form>
+
+
+          <!-- Color del equipo -->
+          <div class="mb-3">
+            <label for="color" class="form-label fw-semibold">
+              <i class="bi bi-palette-fill me-2 text-primary"></i>Equipo Local
+            </label>
+            <select
+              class="form-select rounded-3"
+              id="equipoV"
+              name="equipoV">
+<!--              [(ngModel)]="equipoV"-->
+              <option value="" disabled selected>A</option>
+
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="color" class="form-label fw-semibold">
+              <i class="bi bi-palette-fill me-2 text-primary"></i>Equipo Visitante
+            </label>
+            <select
+              class="form-select rounded-3"
+              id="equipoV"
+              name="equipoV">
+<!--              [(ngModel)]="equipoV"-->
+              <option value="" disabled selected>A</option>
+
+            </select>
+          </div>
+          <!-- Equipo Local -->
+          <div class="mb-3">
+            <label for="nombreEquipo" class="form-label fw-semibold">
+              <i class="bi bi-shield-fill-check me-2 text-primary"></i>Resultado Local
+            </label>
+            <input
+              type="text"
+              class="form-control rounded-3"
+              id="nombreEquipo"
+
+              name="nombreEquipo"
+              placeholder="Ej: Real Madrid">
+          </div>
+          <!-- Equipo Local -->
+          <div class="mb-3">
+            <label for="nombreEquipo" class="form-label fw-semibold">
+              <i class="bi bi-shield-fill-check me-2 text-primary"></i>Resultado Visitante
+            </label>
+            <input
+              type="text"
+              class="form-control rounded-3"
+              id="nombreEquipo"
+
+              name="nombreEquipo"
+              placeholder="Ej: Real Madrid">
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer border-0 bg-light p-3">
+        <button type="button" class="btn btn-secondary rounded-3 px-4" data-bs-dismiss="modal">
+          <i class="bi bi-x-circle me-2"></i>Cancelar
+        </button>
+        <button type="button" (click)="crearResultado()" class="btn btn-primary rounded-3 px-4 shadow-sm">
+          <i class="bi bi-check-circle me-2"></i>Crear Resultado
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--MODAL RESULTADO-->
 <div class="modal fade"
      id="playersModal"
      tabindex="-1"

@@ -16,7 +16,10 @@
   background: #ff793f;
   border-radius: 10px;
 }
-
+.navbar-logo {
+  height: 40px;          /* tamaño consistente */
+  width: auto;
+}
 .text-orange-admin {
   color: #ff793f;
   font-weight: 600;
