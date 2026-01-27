@@ -13,9 +13,9 @@ export class PrecioService {
 
 
 
-  // getPrecioActividadById(idActividadEvento:number):Observable<PrecioActividad>{
-  //
-  //   let url= environment.urlPrecioActividad
-  //
-  // }
+  getPrecioActividadById(idActividadEvento:number):Observable<any>{
+
+    let url= environment.urlPrecioActividad+"FindPrecioByIdEventoActividad/"+idActividadEvento
+    return this._http.get(url);
+  }
 }

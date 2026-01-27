@@ -7,6 +7,8 @@ import {Usuario} from '../../models/Usuario';
 import {MiembroEquipo, MiembroEquipoData} from '../../models/MiembroEquipoData';
 import {ColoresService} from './colores.service';
 import {Colores} from '../../models/Colores';
+import {ActividadDeportes} from '../../models/ActividadDeportes';
+import {ActividadEvento} from '../../models/ActividadEvento';
 
 @Injectable({providedIn: 'root'})
 export class Equipov2Service {
@@ -22,6 +24,8 @@ export class Equipov2Service {
     let url = environment.urlEquipos + "EquiposEvento/" + idEvento
     return this._http.get<any[]>(url);
   }
+
+
 //TODO CAMBIAR EL OBJETO QUE DEVUELVE POR MiembroEquipoData
   getMiembrosEquipoById(idEquipo:number):Observable<Array<Usuario>>{
     let url = environment.urlEquipos+"UsuariosEquipo/"+idEquipo
@@ -66,6 +70,7 @@ export class Equipov2Service {
   //       })
   //     );
   // }
+
   getEquiposConJugadores(idActividad: number, idEvento: number): Observable<Equipov2[]> {
     return this._http
       .get<Equipov2[]>(
@@ -114,6 +119,7 @@ export class Equipov2Service {
       map(usuarios => !usuarios.some(u => u.idUsuario === idUsuario))
     );
   }
+
   getMiembrosEquipos():Observable<any>{
     let url=environment.urlMiembroEquipos
     return this._http.get(url)
@@ -154,9 +160,13 @@ export class Equipov2Service {
     let url= environment.urlEquipos+"EquiposActividadEvento/"+idActividad+"/"+idEvento;
     return this._http.get<Array<Equipov2>>(url);
   }
+  getActividadAndEvento(idActividadEvento:number):Observable<ActividadEvento>{
+    let url=environment.urlActividadesEventos+idActividadEvento;
+
+    return this._http.get<ActividadEvento>(url);
+  }
 
   colores: any[] = []; // Array completo de colores
-  coloresDisponibles: any[] = []; // Array de colores disponibles
   obtenerColoresDisponibles(idActividad: number, idEvento: number): Observable<any[]> {
     return this._http.get<any[]>(environment.urlColores).pipe(
       switchMap(todosLosColores =>
@@ -169,6 +179,7 @@ export class Equipov2Service {
       )
     );
   }
+
   obtenerEquipoConColor(idActividad: number, idEvento: number): Observable<Equipov2[]> {
     return this._http.get<Equipov2[]>(
       environment.urlEquipos + "EquiposActividadEvento/" + idActividad + "/" + idEvento

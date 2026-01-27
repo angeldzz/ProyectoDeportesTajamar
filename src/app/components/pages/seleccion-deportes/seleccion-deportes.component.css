@@ -1,11 +1,19 @@
-
-/* Contenedor Principal */
-.bg-light-custom {
-  background-color: var(--bg-custom);
+/* ------------------ PAGE & CONTAINER ------------------ */
+.container-fluid.bg-light-custom {
+  background-color: var(--bg-main);
   min-height: 100vh;
+  padding: 50px 20px;
 }
 
-/* Indicador de Título */
+/* ------------------ TITLE BAR ------------------ */
+/*.title-bar {*/
+/*  width: 5rem;*/
+/*  height: 4px;*/
+/*  background-color: var(--blue-primary);*/
+/*  border-radius: 2px;*/
+/*  box-shadow: 0 2px 4px rgba(0,0,0,0.2);*/
+/*}*/
+
 .title-bar {
   width: 6px;
   height: 32px;
@@ -13,57 +21,130 @@
   border-radius: 50px;
 }
 
-/* Tarjeta Deportiva */
+
+/* ------------------ CAPITAN CHECKBOX ------------------ */
+.contenedor-capitan {
+  background-color: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  font-size: 1rem;
+}
+
+/* ------------------ CARD DE DEPORTES ------------------ */
 .card-hover-simple {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border-radius: 1.25rem !important; /* rounded-4 */
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.25s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* para que las cards tengan altura uniforme */
 }
 
 .card-hover-simple:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 15px 35px rgba(255, 126, 95, 0.15) !important;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+  border-color: var(--blue-accent);
 }
 
-/* Badges sobre imagen */
+/* Imagen de deporte */
+.card-hover-simple img.card-img-top {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 16px;
+  transition: transform 0.3s ease;
+}
+
+.card-hover-simple:hover img.card-img-top {
+  transform: scale(1.05);
+}
+
+/* Badges */
 .badge-status {
-  background-color: var(--success-soft);
-  color: var(--success-text);
-  border-radius: 50px;
-  font-size: 0.7rem;
-  font-weight: 800;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  background-color: #28a745;
+  padding: 5px 10px;
+  border-radius: 12px;
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
 }
 
 .badge-sport-type {
-  font-family: 'Outfit', sans-serif; /* Aplicamos la nueva fuente */
-  background-color: #e5f5eb;
-  color: var(--text-main);
-  border-radius: 8px;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  backdrop-filter: blur(4px);
-}
-
-/* Iconos de información */
-.icon-container {
-  background-color: var(--sport-yellow-light);
-  border-radius: 10px;
-}
-
-.icon-people {
-  color: var(--sport-orange);
-}
-
-/* Botón de Inscripción */
-.btn-enroll {
-  background: linear-gradient(135deg, var(--sport-orange), var(--sport-yellow));
-  color: white !important;
+  color: #fff;
+  background-color: var(--blue-accent);
+  padding: 4px 10px;
   border-radius: 12px;
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  z-index: 2;
+}
+
+/* ------------------ CARD BODY ------------------ */
+.card-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* para que el contenido empuje los botones abajo */
+}
+
+.card-body h5 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.card-body .small.text-muted {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.card-body hr {
   border: none;
-  font-size: 0.85rem;
-  transition: opacity 0.2s;
+  border-top: 1px solid rgba(108,117,125,0.25);
+  margin: 1rem 0;
+}
+
+/* ------------------ BOTONES ------------------ */
+.btn-enroll {
+  background-color: var(--blue-accent);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  padding: 0.5rem 1.2rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  margin-left: 0.5rem;
 }
 
 .btn-enroll:hover {
-  opacity: 0.9;
-  box-shadow: 0 4px 12px rgba(255, 126, 95, 0.3);
+  background-color: #1c7ed6;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* ------------------ MIN JUGADORES & INSCRITOS ------------------ */
+.card-body .d-flex.align-items-center div span.d-block {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.card-body .d-flex.align-items-center div span.text-muted {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  color: var(--text-secondary);
 }

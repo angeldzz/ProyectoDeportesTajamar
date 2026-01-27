@@ -1,3 +1,5 @@
+import {PrecioActividad} from './PrecioActividad';
+
 export class ActividadDeportes{
   constructor(
     public fechaEvento: Date,
@@ -6,6 +8,7 @@ export class ActividadDeportes{
     public idEventoActividad: number,
     public idProfesor: number,
     public nombreActividad: string,
-    public minimoJugadores: number
+    public minimoJugadores: number,
+    public precio?:PrecioActividad
   ){}
 }

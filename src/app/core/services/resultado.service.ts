@@ -75,7 +75,7 @@ export class ResultadoService {
                  puntosLocal:number,
                  puntosVisitante:number):Observable<any> {
 
-    let url= environment.urlResultados;
+    let url= environment.urlResultados+"create";
 
    const body= {
       "idPartidoResultado": 0,

@@ -16,3 +16,16 @@
 .input-group button i {
   font-size: 1.1rem;
 }
+.input-group .form-control:focus {
+  z-index: 3;
+}
+
+.card {
+  border: none;
+  border-radius: 15px; /* Bordes más modernos */
+}
+
+.register a {
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
