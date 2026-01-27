@@ -12,7 +12,7 @@ import {Avatar} from 'primeng/avatar';
 @Component({
   selector: 'app-seleccion-equipo',
   imports: [
-    NgStyle, AccordionModule, CommonModule, Avatar
+    AccordionModule, CommonModule, Avatar
   ],
   templateUrl: './seleccion-equipo.component.html',
   styleUrl: './seleccion-equipo.component.css',
