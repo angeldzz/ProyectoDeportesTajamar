@@ -82,8 +82,6 @@ export class ResultadosComponent implements OnInit ,OnDestroy {
     }
   }
 
-
-
   deportesFiltrados!:{ id: number; nombre: string }[]
   async cargarDatosEvento(idEvento: number) {
     if (!idEvento) return;
@@ -129,10 +127,11 @@ export class ResultadosComponent implements OnInit ,OnDestroy {
         }
       });
 
-      this.resultadosAgrupados = Object.keys(grupos).map(nombre =>
-        new ResultadoDeporteEvento(nombre, grupos[nombre])
-      );
-
+      this.resultadosAgrupados = Object.keys(grupos).map(nombre => {
+        const grupo = new ResultadoDeporteEvento(nombre, grupos[nombre]);
+        (grupo as any).expandido = true;
+        return grupo;
+      });
       console.log("Resultados Listos:", this.resultadosAgrupados);
 
     } catch (error) {
@@ -142,7 +141,9 @@ export class ResultadosComponent implements OnInit ,OnDestroy {
       this.isInitialLoad = false;
     }
   }
-
+  toggleGrupo(grupo: any) {
+    grupo.expandido = !grupo.expandido;
+  }
   getVariableColor(color: Colores | undefined | null): string {
     if (!color?.nombreColor) return 'var(--color-default)';
 

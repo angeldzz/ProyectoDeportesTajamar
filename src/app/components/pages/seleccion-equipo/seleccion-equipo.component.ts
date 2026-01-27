@@ -1,10 +1,10 @@
-import {Component, ElementRef, OnInit, ViewChild,} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild,} from '@angular/core';
 import {Equipov2Service} from '../../../core/services/equipov2.service';
 import {ActivatedRoute, Params} from '@angular/router';
 import {Equipov2} from '../../../models/EquipoV2';
 import {UsuarioService} from '../../../core/services/usuario.service';
 import {Usuario} from '../../../models/Usuario';
-import {EMPTY, switchMap} from 'rxjs';
+import {EMPTY, Subject, switchMap, takeUntil} from 'rxjs';
 import {CommonModule, NgStyle} from '@angular/common';
 import {AccordionModule} from 'primeng/accordion';
 import {Avatar} from 'primeng/avatar';
@@ -22,7 +22,7 @@ import Swal from 'sweetalert2';
   templateUrl: './seleccion-equipo.component.html',
   styleUrl: './seleccion-equipo.component.css',
 })
-export class SeleccionEquipoComponent implements OnInit {
+export class SeleccionEquipoComponent implements OnInit,OnDestroy  {
   idEvento!: number;
   idActividad!: number;
   usuario!: Usuario;
@@ -31,6 +31,8 @@ export class SeleccionEquipoComponent implements OnInit {
   equiposDisponibles: Array<Equipov2> = [];
   colores:Colores[] = [];
   idEventoActividad!: number;
+
+  private destroy$ = new Subject<void>();
   constructor(private _equipoService: Equipov2Service,
               private _activeRoute: ActivatedRoute,
               private _usuarioService: UsuarioService,
@@ -39,8 +41,7 @@ export class SeleccionEquipoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    this._activeRoute.params.subscribe((parametros: Params) => {
+    this._activeRoute.params.pipe(takeUntil(this.destroy$)).subscribe((parametros: Params) => {
       if (parametros['idEvento'] != null && parametros['idActividad'] != null) {
 
         console.log("golaaaa")
@@ -49,21 +50,28 @@ export class SeleccionEquipoComponent implements OnInit {
 
         console.log('ID del evento:', this.idEvento);
 
-        this._eventoService.findActividadEvento(this.idEvento.toString(),this.idActividad.toString()).subscribe((value) => {
-          this.idEventoActividad=value.idEventoActividad;
-        })
-        // this.getEquiposDisponibles(this.idActividad,this.idEvento);
+        this._eventoService.findActividadEvento(this.idEvento.toString(),this.idActividad.toString())
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((value) => {
+            this.idEventoActividad=value.idEventoActividad;
+          });
+
         this.getEquiposConJugadores(this.idActividad, this.idEvento);
-        this._usuarioService.getDatosUsuario().pipe().subscribe(value => {
+
+        this._usuarioService.getDatosUsuario().pipe(takeUntil(this.destroy$)).subscribe(value => {
           this.usuario = value;
         });
       }
     });
-    this._colorService.getColores().subscribe(value => {
+
+    this._colorService.getColores().pipe(takeUntil(this.destroy$)).subscribe(value => {
       this.colores=value;
-    })
+    });
+  }
 
-
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   togglePanel(idx: number) {
@@ -76,12 +84,14 @@ export class SeleccionEquipoComponent implements OnInit {
     }
 
   }
-    getEquiposConJugadores(idActividad: number, idEvento: number) {
-    this._equipoService.getEquiposConJugadores(idActividad, idEvento).subscribe(value => {
-      console.log("Los Equipos:")
-      console.log(value)
-      this.equiposDisponibles = value;
-    })
+  getEquiposConJugadores(idActividad: number, idEvento: number) {
+    this._equipoService.getEquiposConJugadores(idActividad, idEvento)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(value => {
+        console.log("Los Equipos:")
+        console.log(value)
+        this.equiposDisponibles = value;
+      });
   }
 
   unirseEquipo(idEquipo: number) {
@@ -94,15 +104,17 @@ export class SeleccionEquipoComponent implements OnInit {
       return;
     }
 
-    this._equipoService.unirseEquipo(this.usuario.idUsuario, idEquipo).subscribe({
-      next: (res) => {
-        console.log('Te has unido con éxito');
-        this.getEquiposConJugadores(this.idActividad, this.idEvento);
-      },
-      error: (err) => {
-        alert('Hubo un error al intentar unirse al equipo.');
-      }
-    });
+    this._equipoService.unirseEquipo(this.usuario.idUsuario, idEquipo)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          console.log('Te has unido con éxito');
+          this.getEquiposConJugadores(this.idActividad, this.idEvento);
+        },
+        error: (err) => {
+          alert('Hubo un error al intentar unirse al equipo.');
+        }
+      });
   }
 
   get usuarioYaEstaInscrito(): boolean {
@@ -112,25 +124,26 @@ export class SeleccionEquipoComponent implements OnInit {
   }
 
   borrarMiembroEquipoPorUsuario(idUsuario: number, idEquipo: number) {
-    this._equipoService.obtenerMiembroEspecifico(idUsuario, idEquipo).pipe(
-      switchMap(miembro => {
-        if (!miembro) {
-          // Si no existe el miembro, lanzar un error o devolver un observable vacío
-          console.log('Miembro no encontrado');
-          return EMPTY; // RxJS EMPTY
+    this._equipoService.obtenerMiembroEspecifico(idUsuario, idEquipo)
+      .pipe(
+        takeUntil(this.destroy$),
+        switchMap(miembro => {
+          if (!miembro) {
+            console.log('Miembro no encontrado');
+            return EMPTY;
+          }
+          return this._equipoService.borrarMiembroEquipo(miembro.idMiembroEquipo).pipe(takeUntil(this.destroy$));
+        })
+      )
+      .subscribe({
+        next: result => {
+          console.log('Miembro borrado exitosamente', result);
+          window.location.reload();
+        },
+        error: err => {
+          console.error('Error al borrar el miembro', err);
         }
-        // miembro.idMiembroEquipo contiene el id que necesitamos borrar
-        return this._equipoService.borrarMiembroEquipo(miembro.idMiembroEquipo);
-      })
-    ).subscribe({
-      next: result => {
-        console.log('Miembro borrado exitosamente', result);
-        window.location.reload();
-      },
-      error: err => {
-        console.error('Error al borrar el miembro', err);
-      }
-    });
+      });
   }
 
 
@@ -155,7 +168,7 @@ export class SeleccionEquipoComponent implements OnInit {
           this.numJugadores,
           this.color,
           this.usuario.idCurso
-        ).subscribe({
+        ).pipe(takeUntil(this.destroy$)).subscribe({
           next: value => {
             Swal.fire({
               title: "Equipo Creado",
@@ -189,7 +202,7 @@ export class SeleccionEquipoComponent implements OnInit {
       confirmButtonText: "Si, Borrar"
     }).then((result) => {
       if (result.isConfirmed) {
-        this._equipoService.borrarEquipo(idEquipo).subscribe({
+        this._equipoService.borrarEquipo(idEquipo).pipe(takeUntil(this.destroy$)).subscribe({
           next: value => {
             Swal.fire({
               title: "Borrado",
@@ -214,7 +227,7 @@ export class SeleccionEquipoComponent implements OnInit {
 
   coloresDisponibles: any[] = [];
   abrirModalCrearEquipo(): void {
-    this._equipoService.obtenerColoresDisponibles(this.idActividad, this.idEvento).subscribe({
+    this._equipoService.obtenerColoresDisponibles(this.idActividad, this.idEvento).pipe(takeUntil(this.destroy$)).subscribe({
       next: (colores) => {
         this.coloresDisponibles = colores;
         console.log('Colores disponibles:', colores);
@@ -226,4 +239,3 @@ export class SeleccionEquipoComponent implements OnInit {
     });
   }
 }
- 

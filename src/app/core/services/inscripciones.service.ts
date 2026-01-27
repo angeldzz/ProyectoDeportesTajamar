@@ -4,6 +4,8 @@ import { Observable } from "rxjs";
 import { Evento } from "../../models/Evento";
 import { environment } from "../../../environments/environment.development";
 import {Inscripciones} from '../../models/Inscripciones';
+import {MiembroEquipoData} from '../../models/MiembroEquipoData';
+import {ActividadDeportes} from '../../models/ActividadDeportes';
 @Injectable({
   providedIn: 'root'
 })
@@ -27,6 +29,13 @@ export class InscripcionesService {
     }
 
     return this._http.post<Inscripciones>(url, body);
+  }
+
+  getInscripcionesByIdEvento(idEvento:number):Observable<Array<ActividadDeportes>>{
+    let url= environment.urlInscripciones+"InscripcionesUsuariosEvento/"+idEvento;
+
+
+    return this._http.get<Array<ActividadDeportes>>(url);
   }
 
 

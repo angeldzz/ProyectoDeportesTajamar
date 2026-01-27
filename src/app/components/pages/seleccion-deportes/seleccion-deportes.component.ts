@@ -35,10 +35,8 @@ export class SeleccionDeportesComponent implements OnInit, OnDestroy {
               private _precioService: PrecioService,) {
   }
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+  public yaInscrito: boolean = false;
+
 
   ngOnInit(): void {
     this._activeRoute.params.pipe(takeUntil(this.destroy$)).subscribe((parametros: Params) => {
@@ -52,10 +50,10 @@ export class SeleccionDeportesComponent implements OnInit, OnDestroy {
             if (!deportes || deportes.length === 0) return of([]);
             const peticiones = deportes.map(d =>
               this._precioService.getPrecioActividadById(d.idEventoActividad).pipe(takeUntil(this.destroy$),
-                map(precioResp => ({ ...d, precio: precioResp })) // añade `precio` al objeto deporte
+                map(precioResp => ({ ...d, precio: precioResp }))
               )
             );
-            return forkJoin(peticiones); // espera todas las peticiones y devuelve array con deportes+precio
+            return forkJoin(peticiones);
           })
         ).subscribe({
           next: (deportesConPrecio) => {
@@ -65,34 +63,52 @@ export class SeleccionDeportesComponent implements OnInit, OnDestroy {
           error: err => console.error(err)
         });
 
-        this._usuarioService.getDatosUsuario().pipe(takeUntil(this.destroy$)).subscribe(value => {
-          this.usario = value;
-          console.log(this.usario);
-        })
+        this._usuarioService.getDatosUsuario().pipe(
+          takeUntil(this.destroy$),
+          switchMap(user => {
+            this.usario = user;
+            // Llamamos al endpoint de la imagen para ver los inscritos del evento
+            return this._inscripcionesService.getInscripcionesByIdEvento(Number(this.idEvento)).pipe(takeUntil(this.destroy$));
+          })
+        ).subscribe({
+          next: (inscritos: any[]) => {
+            this.yaInscrito = inscritos.some(i => i.idUsuario === this.usario.idUsuario);
+            console.log("¿Usuario ya inscrito en este evento?", this.yaInscrito);
+          },
+          error: err => console.error("Error al comprobar inscritos:", err)
+        });
       }
     });
   }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
 
   onChangeCapitan(){
     console.log("cambiado")
     this.quiereSerCapitan = !this.quiereSerCapitan;
     console.log(this.quiereSerCapitan)
   }
-  inscribirseActividadEvento(idEvento: String, idActividad: number, idActividadEvento: number) {
 
-      //TODO CAMBIAR LA RUTA POR ESTA
-    // /api/UsuariosDeportes/InscribirmeEvento/{ideventoactividad}/{sercapitan}
+  inscribirseActividadEvento(idEvento: String, idActividad: number, idActividadEvento: number) {
     this._inscripcionesService.inscribirseActividadEvento(
       this.usario.idUsuario,
       idActividadEvento,
       this.quiereSerCapitan,
       new Date()
     ).pipe(takeUntil(this.destroy$)).subscribe({
-      next: () => this._router.navigate(['/deporte_eventos', idEvento, idActividad]),
+      next: () => {
+        this.yaInscrito = true;
+        this._router.navigate(['/deporte_eventos', idEvento, idActividad]);
+      },
       error: err => {
-        alert("ya estas inscrito en una actividad");
-        console.error(err)
+        this.yaInscrito = true;
+        alert("Ya estás inscrito en una actividad");
+        console.error(err);
       }
-    })
+    });
   }
 }
