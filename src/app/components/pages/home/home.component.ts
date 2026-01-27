@@ -22,8 +22,9 @@ import { Observable } from 'rxjs/internal/Observable';
     FullCalendarModule,
     CommonModule
   ],
+  standalone: true,
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css',
+  styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit{
   public eventosanteriores!: Array<Evento>

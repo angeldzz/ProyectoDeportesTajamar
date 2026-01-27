@@ -1,0 +1,8 @@
+.clases-alumnos{display:flex;gap:20px}
+.clases-alumnos .cursos{width:30%;border-right:1px solid #ddd;padding-right:16px}
+.clases-alumnos .alumnos{flex:1}
+.clases-alumnos ul{list-style:none;padding:0;margin:0}
+.clases-alumnos li{padding:8px;cursor:pointer}
+.clases-alumnos li.selected{background:#eef}
+.clases-alumnos table{width:100%;border-collapse:collapse}
+.clases-alumnos th,.clases-alumnos td{padding:8px;border:1px solid #ddd;text-align:left}

@@ -7,6 +7,8 @@ import {PagosComponent} from './components/pages/pagos/pagos.component';
 import {PerfilComponent} from './components/pages/perfil/perfil.component';
 import {SeleccionDeportesComponent} from './components/pages/seleccion-deportes/seleccion-deportes.component';
 import {SeleccionEquipoComponent} from './components/pages/seleccion-equipo/seleccion-equipo.component';
+import {ClasesAlumnosComponent} from './components/pages/clases-alumnos/clases-alumnos.component';
+import {MaterialesComponent} from './components/pages/materiales/materiales.component';
 import {NotFoundComponent} from './components/pages/not-found/not-found.component';
 import {authGuard} from './core/guards/auth.guard';
 import {loginGuard} from './core/guards/login.guard';
@@ -57,6 +59,14 @@ export const routes: Routes = [
     component: PagosComponent,
     canActivate: [loginGuard],
     //TODO METER EL GUARD
+  },
+  {
+    path: "clases-alumnos",
+    component: ClasesAlumnosComponent
+  },
+  {
+    path: "materiales",
+    component: MaterialesComponent
   },
   {
     path: "deporte_eventos/:idEvento/:idDeporte",
