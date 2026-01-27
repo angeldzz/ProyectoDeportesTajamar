@@ -37,7 +37,7 @@ export class EventosService {
 
   EliminarActividad_Evento(idEventoActividad: number): Observable<any> {
     return this._http.delete<any>(
-      `${environment.urlActividadesEventos}${idEventoActividad}`
+      `${environment.urlActividadesEventos}DeleteEventoActividadPanic/${idEventoActividad}`
     );
   }
 }

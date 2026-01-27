@@ -1,8 +1,8 @@
 @if (evento) {
   <div class="picklist-container">
     <p-picklist
-      [source]="deportesDisponibles()"
-      [target]="deportesSeleccionados()"
+      [(source)]="deportesDisponibles"
+      [(target)]="deportesSeleccionados"
       [dragdrop]="true"
       [responsive]="true"
       filterBy="nombre"

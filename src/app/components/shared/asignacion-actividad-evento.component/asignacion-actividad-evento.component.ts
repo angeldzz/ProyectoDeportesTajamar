@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DeportesService } from '../../../core/services/deportes.service';
 import { Deporte } from '../../../models/Deportes';
 import { ActividadDeportes } from '../../../models/ActividadDeportes';
@@ -8,8 +8,6 @@ import { Evento } from '../../../models/Evento';
 import { DatePipe, registerLocaleData, CommonModule } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 import { PickListModule } from 'primeng/picklist';
-import { forkJoin, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 
 registerLocaleData(localeEs);
@@ -29,8 +27,8 @@ export class AsignacionActividadEventoComponent implements OnInit{
               private router: Router, 
               private route: ActivatedRoute){}
   
-  deportesDisponibles = signal<DeportePicklist[]>([]);
-  deportesSeleccionados = signal<DeportePicklist[]>([]);
+  deportesDisponibles: DeportePicklist[] = [];
+  deportesSeleccionados: DeportePicklist[] = [];
   deportesSeleccionadosOriginales: DeportePicklist[] = []; // Para comparar qué se eliminó
   public evento!: Evento;
   
@@ -47,7 +45,7 @@ export class AsignacionActividadEventoComponent implements OnInit{
         idEventoActividad: act.idEventoActividad
       }));
       
-      this.deportesSeleccionados.set(seleccionados);
+      this.deportesSeleccionados = seleccionados;
       this.deportesSeleccionadosOriginales = [...seleccionados]; // Guardar copia del estado original
       console.log("Deportes en evento:");
       console.log(seleccionados);
@@ -63,7 +61,7 @@ export class AsignacionActividadEventoComponent implements OnInit{
             idEventoActividad: undefined
           }));
         
-        this.deportesDisponibles.set(deportesFiltrados);
+        this.deportesDisponibles = deportesFiltrados;
         console.log("Deportes disponibles (filtrados):");
         console.log(deportesFiltrados);
       });
@@ -79,7 +77,7 @@ export class AsignacionActividadEventoComponent implements OnInit{
     })
   }
   public AsignarActividades() {
-    const deportesSelecionadosActuales = this.deportesSeleccionados();
+    const deportesSelecionadosActuales = this.deportesSeleccionados;
     const idevento = this.evento.idEvento;
     
     // Detectar deportes a crear (nuevos, sin idEventoActividad)
@@ -121,9 +119,9 @@ export class AsignacionActividadEventoComponent implements OnInit{
     if (deportesAEliminar.length > 0) {
       // Eliminar primero
       this.eliminarActividadesSecuencial(deportesAEliminar, 0, [], [], () => {
-        // Después de eliminar, verificar y crear las nuevas
+        // Después de eliminar, crear las nuevas
         if (deportesNuevos.length > 0) {
-          this.verificarYAsignarActividades(deportesNuevos, idevento);
+          this.asignarActividadesSecuencial(deportesNuevos, idevento, 0, [], []);
         } else {
           // Solo había eliminaciones
           this.LoadDeportes();
@@ -137,53 +135,11 @@ export class AsignacionActividadEventoComponent implements OnInit{
       });
     } else {
       // Solo hay creaciones
-      this.verificarYAsignarActividades(deportesNuevos, idevento);
+      this.asignarActividadesSecuencial(deportesNuevos, idevento, 0, [], []);
     }
   }
 
-  private verificarYAsignarActividades(deportesNuevos: DeportePicklist[], idevento: number) {
-    // Verificar cuáles ya están asignadas
-    const verificaciones = deportesNuevos.map(deporte =>
-      this._serviceEvento.findActividadEvento(
-        idevento.toString(), 
-        deporte.idActividad.toString()
-      ).pipe(
-        catchError(() => of(null)) // Si falla, asumimos que no existe
-      )
-    );
 
-    forkJoin(verificaciones).subscribe({
-      next: (existencias) => {
-        // Filtrar deportes que realmente NO existen en el evento
-        const deportesParaAsignar = deportesNuevos.filter((deporte, index) => 
-          !existencias[index] || existencias[index] === null
-        );
-
-        if (deportesParaAsignar.length === 0) {
-          this.LoadDeportes();
-          Swal.fire({
-            title: 'Sin cambios',
-            text: 'Todas las actividades seleccionadas ya están asignadas al evento',
-            icon: 'info',
-            confirmButtonText: 'Aceptar'
-          });
-          return;
-        }
-
-        // Asignar actividades de manera secuencial
-        this.asignarActividadesSecuencial(deportesParaAsignar, idevento, 0, [], []);
-      },
-      error: (error) => {
-        console.error('Error al verificar actividades:', error);
-        Swal.fire({
-          title: 'Error',
-          text: 'Hubo un problema al verificar las actividades. Intenta nuevamente.',
-          icon: 'error',
-          confirmButtonText: 'Aceptar'
-        });
-      }
-    });
-  }
 
   private eliminarActividadesSecuencial(
     deportes: DeportePicklist[], 

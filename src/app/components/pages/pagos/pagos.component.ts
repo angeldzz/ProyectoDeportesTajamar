@@ -59,6 +59,17 @@ export class PagosComponent implements OnInit {
     });
   }
 
+  onCantidadChange(pago: Pagos): void {
+    this._pagosService.UpdatePagos(pago).subscribe({
+      next: (response) => {
+        console.log('Cantidad actualizada correctamente:', response);
+      },
+      error: (error) => {
+        console.error('Error al actualizar la cantidad:', error);
+      }
+    });
+  }
+
   getPagosPorCurso(idCurso: number): Pagos[] {
     if (!this.pagos) return [];
     return this.pagos.filter(pago => pago.idCurso === idCurso);
@@ -67,5 +78,19 @@ export class PagosComponent implements OnInit {
   getTotalCantidadPorCurso(idCurso: number): number {
     const pagosCurso = this.getPagosPorCurso(idCurso);
     return pagosCurso.reduce((total, pago) => total + pago.cantidad, 0);
+  }
+
+  getTotalPagadoPorCurso(idCurso: number): number {
+    const pagosCurso = this.getPagosPorCurso(idCurso);
+    return pagosCurso
+      .filter(pago => pago.estado.toLowerCase() === 'pagado')
+      .reduce((total, pago) => total + pago.cantidad, 0);
+  }
+
+  getPendientePorCurso(idCurso: number): number {
+    const pagosCurso = this.getPagosPorCurso(idCurso);
+    return pagosCurso
+      .filter(pago => pago.estado.toLowerCase() === 'pendiente' || pago.estado.toLowerCase() === 'sin pagar')
+      .reduce((total, pago) => total + pago.cantidad, 0);
   }
 }
