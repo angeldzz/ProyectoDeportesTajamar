@@ -10,7 +10,7 @@
       <input type="checkbox" (change)="onChangeCapitan()"></p>
   </div>
 
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-5">
+  <div class="row-cols-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-3">
 
     @for(deporte of deportes; track deporte.idActividad) {
 
@@ -59,8 +59,13 @@
               <button class="btn btn-enroll px-4 py-2 fw-bold shadow-sm"
               (click)="inscribirseActividadEvento(this.idEvento,deporte.idActividad,deporte.idEventoActividad)">
                 Inscribirse
+              </button>    
+              <!-- boton para que de la pagina de seleccion deportes me lleve a la pagina de materiales para seleccionar materiales -->
+              <button
+                class="btn btn-enroll px-4 py-2 fw-bold shadow-sm"
+                [routerLink]="['/materiales',idEvento,deporte.idActividad]">
+                Materiales
               </button>
-
 
             </div>
           </div>

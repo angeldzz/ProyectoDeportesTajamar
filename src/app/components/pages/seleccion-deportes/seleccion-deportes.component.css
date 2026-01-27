@@ -17,12 +17,34 @@
 .card-hover-simple {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border-radius: 1.25rem !important; /* rounded-4 */
+  /* necesito aumentar el tamaño de la tarjeta
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1) !important;
+  height: 100%;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 400px; */
+
+
 }
 
 .card-hover-simple:hover {
   transform: translateY(-8px);
   box-shadow: 0 15px 35px rgba(255, 126, 95, 0.15) !important;
+
 }
+.card-hover-simple {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 1.25rem !important;
+  height: 100%;
+  min-height: 450px;   /* ⬅ más alta */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+
 
 /* Badges sobre imagen */
 .badge-status {
