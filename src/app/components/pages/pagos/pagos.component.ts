@@ -143,31 +143,39 @@ export class PagosComponent implements OnInit {
       return;
     }
 
-    // Convertir idCurso e idPrecioActividad a números
-    const pagoParaCrear = {
-      idPago: 0,
-      idCurso: Number(this.nuevoPago.idCurso), // Convertir a número
-      idPrecioActividad: Number(this.nuevoPago.idPrecioActividad), // Convertir a número
-      cantidad: Number(this.nuevoPago.cantidad), // Asegurar que sea número
-      estado: this.nuevoPago.estado.toUpperCase()
-    };
+    // Obtener el primer precio actividad ID
+    this._pagosService.GetPrimerPrecioActividadId().subscribe({
+      next: (idPrecioActividad) => {
+        const pagoParaCrear = {
+          idPago: 0,
+          idCurso: Number(this.nuevoPago.idCurso),
+          idPrecioActividad: idPrecioActividad,
+          cantidad: Number(this.nuevoPago.cantidad),
+          estado: this.nuevoPago.estado.toUpperCase()
+        };
 
-    console.log('Datos enviados al backend:', pagoParaCrear);
+        console.log('Datos enviados al backend:', pagoParaCrear);
 
-    this._pagosService.CreatePagos(pagoParaCrear as Pagos).subscribe({
-      next: (pagoCreado) => {
-        console.log('Pago creado exitosamente:', pagoCreado);
-        this.pagos.push({
-          ...pagoCreado,
-          estado: this.normalizarEstado(pagoCreado.estado)
+        this._pagosService.CreatePagos(pagoParaCrear as Pagos).subscribe({
+          next: (pagoCreado) => {
+            console.log('Pago creado exitosamente:', pagoCreado);
+            this.pagos.push({
+              ...pagoCreado,
+              estado: this.normalizarEstado(pagoCreado.estado)
+            });
+            Swal.fire('¡Éxito!', 'El pago ha sido creado correctamente', 'success');
+            this.cerrarModal();
+            this.ngOnInit();
+          },
+          error: (error) => {
+            console.error('Error completo:', error);
+            Swal.fire('Error', 'No se pudo crear el pago. Revisa la consola para más detalles.', 'error');
+          }
         });
-        Swal.fire('¡Éxito!', 'El pago ha sido creado correctamente', 'success');
-        this.cerrarModal();
-        this.ngOnInit();
       },
       error: (error) => {
-        console.error('Error completo:', error);
-        Swal.fire('Error', 'No se pudo crear el pago. Revisa la consola para más detalles.', 'error');
+        console.error('Error al obtener precio actividad:', error);
+        Swal.fire('Error', 'No se pudo obtener el precio de la actividad.', 'error');
       }
     });
   }

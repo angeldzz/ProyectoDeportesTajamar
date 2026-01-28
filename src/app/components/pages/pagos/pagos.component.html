@@ -34,13 +34,12 @@
 
               <div *ngIf="getPagosPorCurso(curso.idCurso).length > 0; else noPagos">
                 <div class="row">
-                  <div class="col-lg-9 col-md-8">
+                  <div class="col-xl-8 col-lg-12 col-md-12 mb-3">
                     <div class="table-responsive">
                       <table class="table table-sm table-bordered tabla-pagos">
                         <thead class="table-light">
                           <tr>
-                            <th>IdPago</th>
-                            <th>IdCurso</th>
+                            <th class="d-none d-lg-table-cell">IdPago</th>
                             <th>Cantidad</th>
                             <th>Estado</th>
                             <th *ngIf="(role$ | async) === 4">Acciones</th>
@@ -48,8 +47,7 @@
                         </thead>
                         <tbody>
                           <tr *ngFor="let pago of getPagosPorCurso(curso.idCurso)">
-                            <td>{{ pago.idPago }}</td>
-                            <td>{{ pago.idCurso }}</td>
+                            <td class="d-none d-lg-table-cell">{{ pago.idPago }}</td>
                             <td>
                               <!-- Vista para otros roles (solo lectura) -->
                               <div *ngIf="(role$ | async) !== 4">
@@ -118,7 +116,7 @@
                     </div>
                   </div>
 
-                    <div class="col-lg-3 col-md-4">
+                    <div class="col-xl-4 col-lg-12 col-md-12">
                     <!-- Resumen de pagos -->
                     <div class="p-3 bg-light rounded">
                       <div class="mb-3">
@@ -132,7 +130,7 @@
                       <div>
                       <strong>Pendiente de Pagar:</strong>
                       <div class="fs-4 text-warning">{{ getPendientePorCurso(curso.idCurso) | currency:'EUR':'symbol':'1.2-2' }}</div>
-                      <div class="fs-6 text-warning">para actualizar una cantidad pulse el boton verde de confirmar!</div>
+                      <div class="fs-6 text-warning" *ngIf="(role$ | async) === 4">para actualizar una cantidad pulse el boton verde de confirmar!</div>
                       </div>
                     </div>
                     </div>
@@ -174,13 +172,6 @@
                 {{ curso.nombre }} ({{ curso.fechaInicio | date: 'dd/MM/yyyy' }} - {{ curso.fechaFin | date: 'dd/MM/yyyy' }})
               </option>
             </select>
-          </div>
-
-          <div class="mb-3">
-            <label for="precioActividad" class="form-label">ID Precio Actividad</label>
-            <input type="number" class="form-control" id="precioActividad" 
-                   [(ngModel)]="nuevoPago.idPrecioActividad" name="idPrecioActividad" 
-                   min="0" placeholder="Ingrese el ID de precio actividad">
           </div>
 
           <div class="mb-3">
