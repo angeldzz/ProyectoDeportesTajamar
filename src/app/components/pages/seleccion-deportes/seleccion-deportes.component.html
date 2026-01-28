@@ -2,6 +2,9 @@
 
   <div class="d-flex align-items-center mb-5">
     <div class="title-bar"></div>
+
+
+
     <h2 class="fw-bold m-0 ms-3" style="color: var(--text-main);">Actividades Disponibles</h2>
   </div>
 
@@ -19,9 +22,19 @@
             <img src="https://img.asmedia.epimg.net/resizer/v2/Q4FRBZWWLJKJVLNER6KGG5X6WE.jpg?auth=9ac7b5ed6b83692a50a0974caa6192d003659fdc51a4f5881f7c61abdd6ee4d1&width=1472&height=828&smart=true"
                  class="card-img-top rounded-4 shadow-sm" alt="...">
 
+
+            @if(eventoPasado) {
+              <span class="badge position-absolute top-0 start-0 m-3 border-0 py-2 px-3 bg-danger  shadow-sm badge-status">
+              REGISTRO CERRADO
+            </span>
+            }@else{
+
             <span class="badge position-absolute top-0 start-0 m-3 border-0 py-2 px-3  shadow-sm badge-status">
               REGISTRO ABIERTO
             </span>
+            }
+
+
 
 
             @if(deporte.precio != null){
@@ -55,25 +68,18 @@
                 Equipo
               </button>
 
-              <button
-                class="btn btn-enroll px-4 py-2 fw-bold shadow-sm"
-                [disabled]="yaInscrito"
-                [style.opacity]="yaInscrito ? '0.5' : '1'"
-                (click)="inscribirseActividadEvento(this.idEvento, deporte.idActividad, deporte.idEventoActividad)">
 
-                {{ yaInscrito ? 'Inscrito' : 'Inscribirse' }}
-
-              </button>
-
-              <button
-                type="button"
-                class="btn btn-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#modalCapitan"
-              >
-                Ser capitán
-              </button>
-
+              @if(!eventoPasado){
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#modalCapitan"
+                  (click)="abrirModalCapitan(deporte)"
+                >
+                  Inscríbete!!
+                </button>
+              }
 
             </div>
           </div>
@@ -124,17 +130,17 @@
         <button
           type="button"
           class="btn btn-secondary"
-          data-bs-dismiss="modal"
-        >
+          data-bs-dismiss="modal">
           Cerrar
         </button>
         <button
           type="button"
           class="btn btn-primary"
           data-bs-dismiss="modal"
-          (click)="confirmarCapitan()"
+          (click)="inscribirseDesdeModal()"
+          [disabled]=" yaInscrito || eventoPasado"
         >
-          Guardar
+          Inscribirse
         </button>
       </div>
     </div>

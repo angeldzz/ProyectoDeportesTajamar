@@ -11,6 +11,9 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {PrecioService} from '../../../core/services/precio.service';
 import {CapitanService} from '../../../core/services/capitan.service';
 import {AuthService} from '../../../core/services/auth.service';
+import {Evento} from '../../../models/Evento';
+import {EventosService} from '../../../core/services/eventos.service';
+import {ActividadEvento} from '../../../models/ActividadEvento';
 
 @Component({
   selector: 'app-seleccion-deportes',
@@ -38,27 +41,41 @@ export class SeleccionDeportesComponent implements OnInit, OnDestroy {
               private _router: Router,
               private _precioService: PrecioService,
               private _capitanService:CapitanService,
-              private _authService: AuthService,) {
+              private _authService: AuthService,
+              private _eventoService:EventosService,) {
   }
 
   public yaInscrito: boolean = false;
 
+  eventoPasado:boolean = false;
+  datosEvento!:Evento;
 
   ngOnInit(): void {
     this._activeRoute.params.pipe(takeUntil(this.destroy$)).subscribe((parametros: Params) => {
       if (parametros['idEvento'] != null) {
 
+
+
         this.idEvento = parametros['idEvento'];
         console.log('ID del evento:', this.idEvento);
+
+        this._eventoService.GetEventoIndividual(Number(this.idEvento)).subscribe(value => {
+          this.datosEvento=value;
+
+         this.eventoPasado= this.eventoEstaPasado(this.datosEvento.fechaEvento);
+
+        });
 
         this._deportesService.getDeportesEvento(Number(this.idEvento)).pipe(takeUntil(this.destroy$),
           switchMap(deportes => {
             if (!deportes || deportes.length === 0) return of([]);
             const peticiones = deportes.map(d =>
               this._precioService.getPrecioActividadById(d.idEventoActividad).pipe(takeUntil(this.destroy$),
-                map(precioResp => ({ ...d, precio: precioResp }))
+                map(precioResp => ({ ...d, precio: precioResp, }))
+
               )
             );
+
             return forkJoin(peticiones);
           })
         ).subscribe({
@@ -85,8 +102,45 @@ export class SeleccionDeportesComponent implements OnInit, OnDestroy {
           error: err => console.error("Error al comprobar inscritos:", err)
         });
 
+
+
+
       }
     });
+  }
+
+
+    public modalDatos :ActividadEvento|null= null;
+
+
+  abrirModalCapitan(deporte: any): void {
+    // Guarda los 3 valores para usarlos dentro del modal
+    this.modalDatos = {
+      idEvento: Number(this.idEvento),
+      idActividad: Number(deporte.idActividad),
+      idEventoActividad: Number(deporte.idEventoActividad),
+    };
+
+    // Opcional: reset de UI del modal
+    this.quiereSerCapitan = false;
+  }
+  inscribirseDesdeModal(): void {
+    if (!this.modalDatos) return;
+    if (this.yaInscrito || this.eventoPasado) return;
+
+    this.inscribirseActividadEvento(
+      this.modalDatos.idEvento.toString(),
+      this.modalDatos.idActividad,
+      this.modalDatos.idEventoActividad
+    );
+  }
+  private eventoEstaPasado(fechaEvento: string | Date | null | undefined): boolean {
+    if (!fechaEvento) return false;
+
+    const fecha = fechaEvento instanceof Date ? fechaEvento : new Date(fechaEvento);
+    if (Number.isNaN(fecha.getTime())) return false;
+
+    return fecha.getTime() < Date.now();
   }
 
   ngOnDestroy() {

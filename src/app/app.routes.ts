@@ -20,6 +20,7 @@ import {DeportesFormComponent} from './components/pages/forms/deportes-form/depo
 import {ResultadosComponent} from './components/pages/resultados/resultados.component';
 import { AsignacionActividadEventoComponent } from './components/shared/asignacion-actividad-evento.component/asignacion-actividad-evento.component';
 import {capitanGuard} from './core/guards/capitan.guard';
+import {OrganizadoresComponent} from './components/pages/forms/organizadores/organizadores.component';
 
 export const routes: Routes = [
   {
@@ -103,8 +104,7 @@ export const routes: Routes = [
       [
         {path: 'colores-form', component: ColoresComponent},
         {path: 'actividades-form', component: DeportesFormComponent},
-        //TODO QUITAR ESTA RUTA SELCCIONAR
-        {path: 'seleccionar-equipo', component: SeleccionEquipoComponent},
+        {path: 'organizadores-form', component: OrganizadoresComponent},
       ]
 
   },
