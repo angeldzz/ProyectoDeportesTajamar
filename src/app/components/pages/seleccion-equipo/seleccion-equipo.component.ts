@@ -4,7 +4,7 @@ import {ActivatedRoute, Params} from '@angular/router';
 import {Equipov2} from '../../../models/EquipoV2';
 import {UsuarioService} from '../../../core/services/usuario.service';
 import {Usuario} from '../../../models/Usuario';
-import {EMPTY, Subject, switchMap, takeUntil} from 'rxjs';
+import {EMPTY, map, Observable, Subject, switchMap, takeUntil} from 'rxjs';
 import {CommonModule, NgStyle} from '@angular/common';
 import {AccordionModule} from 'primeng/accordion';
 import {Avatar} from 'primeng/avatar';
@@ -13,6 +13,9 @@ import {ColoresService} from '../../../core/services/colores.service';
 import {Colores} from '../../../models/Colores';
 import {EventosService} from '../../../core/services/eventos.service';
 import Swal from 'sweetalert2';
+import {AuthService} from '../../../core/services/auth.service';
+import {CapitanService} from '../../../core/services/capitan.service';
+import {InscripcionesService} from '../../../core/services/inscripciones.service';
 
 @Component({
   selector: 'app-seleccion-equipo',
@@ -31,42 +34,72 @@ export class SeleccionEquipoComponent implements OnInit,OnDestroy  {
   equiposDisponibles: Array<Equipov2> = [];
   colores:Colores[] = [];
   idEventoActividad!: number;
+  public role$!: Observable<number | null>;
 
   private destroy$ = new Subject<void>();
   constructor(private _equipoService: Equipov2Service,
               private _activeRoute: ActivatedRoute,
               private _usuarioService: UsuarioService,
               private _colorService:ColoresService,
-              private _eventoService:EventosService,) {
+              private _eventoService:EventosService,
+              private _authService:AuthService,
+              private _capitanService:CapitanService,
+              private _inscripcionesService:InscripcionesService,) {
+
+    this.role$ = this._authService.userRole$;
   }
 
   ngOnInit(): void {
-    this._activeRoute.params.pipe(takeUntil(this.destroy$)).subscribe((parametros: Params) => {
-      if (parametros['idEvento'] != null && parametros['idActividad'] != null) {
+    this._activeRoute.params
+      .pipe(
+        takeUntil(this.destroy$),
+        switchMap((parametros: Params) => {
+          this.idActividad = parametros['idActividad'];
+          this.idEvento = parametros['idEvento'];
 
-        console.log("golaaaa")
-        this.idActividad = parametros['idActividad'];
-        this.idEvento = parametros['idEvento'];
+          return this._eventoService.findActividadEvento(
+            this.idEvento.toString(),
+            this.idActividad.toString()
+          );
+        }),
+        switchMap(eventoActividad => {
+          this.idEventoActividad = eventoActividad.idEventoActividad;
 
-        console.log('ID del evento:', this.idEvento);
+          return this._usuarioService.getDatosUsuario();
+        }),
+        switchMap(usuario => {
+          this.usuario = usuario;
 
-        this._eventoService.findActividadEvento(this.idEvento.toString(),this.idActividad.toString())
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((value) => {
-            this.idEventoActividad=value.idEventoActividad;
-          });
+          this.comprobarUsuarioInscrito(this.idEvento,this.idActividad,this.usuario.idUsuario);
 
-        this.getEquiposConJugadores(this.idActividad, this.idEvento);
+          return this._capitanService.getIdCapitanUsuario(
+            this.usuario.idUsuario,
+            this.idEventoActividad
+          );
+        }),
+        switchMap(idCapitanActividad =>
+          this._capitanService.getCapitanActividad(idCapitanActividad)
+        )
+      )
+      .subscribe({
+        next: capitanActividad => {
+          this.capitanEventoActividad =
+            capitanActividad.idEventoActividad === this.idEventoActividad;
 
-        this._usuarioService.getDatosUsuario().pipe(takeUntil(this.destroy$)).subscribe(value => {
-          this.usuario = value;
-        });
-      }
-    });
+          console.log('¿Es capitán?', this.capitanEventoActividad);
 
-    this._colorService.getColores().pipe(takeUntil(this.destroy$)).subscribe(value => {
-      this.colores=value;
-    });
+
+        },
+        error: () => {
+          this.capitanEventoActividad = false;
+        }
+      });
+
+    // esto puede ir en paralelo
+    this.getEquiposConJugadores(this.idActividad, this.idEvento);
+    this._colorService.getColores()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(c => this.colores = c);
   }
 
   ngOnDestroy(): void {
@@ -238,4 +271,75 @@ export class SeleccionEquipoComponent implements OnInit,OnDestroy  {
       }
     });
   }
+
+  capitanEventoActividad: boolean = false;
+
+
+   comprobarCapitan(idUsuario: number, idEventoActividad: number) {
+    this._capitanService
+      .getIdCapitanUsuario(idUsuario, idEventoActividad)
+      .pipe(
+        switchMap(idCapitanActividad =>
+          this._capitanService.getCapitanActividad(idCapitanActividad)
+        )
+      )
+      .subscribe({
+        next: (capitanActividad) => {
+          console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+          if (capitanActividad.idEventoActividad === idEventoActividad) {
+            console.log('Capitán válido:', capitanActividad);
+            console.log(capitanActividad);
+            this.capitanEventoActividad=true;
+
+          } else {
+            console.warn('No coincide el evento actividad');
+            this.capitanEventoActividad=false;
+
+          }
+        },
+        error: err => {
+
+          console.error('Error comprobando capitán', err);
+          this.capitanEventoActividad=false;
+
+        }
+
+      });
+
+  }
+
+  get botonUnirseDeshabilitado(): boolean {
+    return (
+      this.usuarioYaEstaInscrito ||
+      !this.usuarioInscritoEventoActual
+    );
+  }
+
+  usuarioInscritoEventoActual: boolean = false;
+
+  comprobarUsuarioInscrito(idEvento: number, idActividad: number, idUsuario: number): void {
+      console.log("wefwedfgewrgewsgt4eg")
+    this._inscripcionesService
+      .getNumeroInscipcionesEventoActividad(idEvento, idActividad)
+      .pipe(
+        map(inscripciones =>
+          inscripciones.some(i => i.idUsuario === idUsuario)
+        ),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (estaInscrito: boolean) => {
+          console.log('¿Usuario inscrito?', estaInscrito);
+          if(estaInscrito) {
+            this.usuarioInscritoEventoActual=true
+          }
+          // aquí guardas el boolean
+        },
+        error: () => {
+          this.usuarioInscritoEventoActual=false
+          console.error('Error comprobando inscripción');
+        }
+      });
+  }
+
 }

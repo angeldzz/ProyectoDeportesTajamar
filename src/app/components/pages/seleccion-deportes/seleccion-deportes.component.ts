@@ -6,9 +6,11 @@ import {ActividadDeportes} from '../../../models/ActividadDeportes';
 import {UsuarioService} from '../../../core/services/usuario.service';
 import {Usuario} from '../../../models/Usuario';
 import {InscripcionesService} from '../../../core/services/inscripciones.service';
-import {catchError, forkJoin, map, of, Subject, switchMap, takeUntil} from 'rxjs';
+import {catchError, forkJoin, map, Observable, of, Subject, switchMap, takeUntil} from 'rxjs';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {PrecioService} from '../../../core/services/precio.service';
+import {CapitanService} from '../../../core/services/capitan.service';
+import {AuthService} from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-seleccion-deportes',
@@ -27,12 +29,16 @@ export class SeleccionDeportesComponent implements OnInit, OnDestroy {
   public usario!: Usuario;
   public quiereSerCapitan: boolean=false;
   private destroy$ = new Subject<void>();
+  public role$!: Observable<number | null>;
+
   constructor(private _activeRoute: ActivatedRoute,
               private _deportesService: DeportesService,
               private _usuarioService: UsuarioService,
               private _inscripcionesService: InscripcionesService,
               private _router: Router,
-              private _precioService: PrecioService,) {
+              private _precioService: PrecioService,
+              private _capitanService:CapitanService,
+              private _authService: AuthService,) {
   }
 
   public yaInscrito: boolean = false;
@@ -58,6 +64,7 @@ export class SeleccionDeportesComponent implements OnInit, OnDestroy {
         ).subscribe({
           next: (deportesConPrecio) => {
             this.deportes = deportesConPrecio;
+            // this.procesarActividades(this.deportes);
             console.log(this.deportes);
           },
           error: err => console.error(err)
@@ -67,7 +74,7 @@ export class SeleccionDeportesComponent implements OnInit, OnDestroy {
           takeUntil(this.destroy$),
           switchMap(user => {
             this.usario = user;
-            // Llamamos al endpoint de la imagen para ver los inscritos del evento
+
             return this._inscripcionesService.getInscripcionesByIdEvento(Number(this.idEvento)).pipe(takeUntil(this.destroy$));
           })
         ).subscribe({
@@ -77,6 +84,7 @@ export class SeleccionDeportesComponent implements OnInit, OnDestroy {
           },
           error: err => console.error("Error al comprobar inscritos:", err)
         });
+
       }
     });
   }
@@ -86,12 +94,6 @@ export class SeleccionDeportesComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-
-  onChangeCapitan(){
-    console.log("cambiado")
-    this.quiereSerCapitan = !this.quiereSerCapitan;
-    console.log(this.quiereSerCapitan)
-  }
 
   inscribirseActividadEvento(idEvento: String, idActividad: number, idActividadEvento: number) {
     this._inscripcionesService.inscribirseActividadEvento(
@@ -111,4 +113,66 @@ export class SeleccionDeportesComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+
+
+  onChangeCapitan(): void {
+    // Aquí ya se ha actualizado `esCapitan` por el [(ngModel)]
+    console.log('¿Es capitán?: ', this.quiereSerCapitan);
+    // lógica extra si hace falta
+  }
+
+  confirmarCapitan(): void {
+    // lógica para guardar/mandar al backend que es o no es capitán
+    console.log('Confirmado capitán: ', this.quiereSerCapitan);
+  }
+
+
+//TODO FUNCION DE ADMINISTRADOR
+  public usuariosPorCurso = new Map<number, Usuario[]>();
+
+  private getRandomUsuario(usuarios: Usuario[]): Usuario {
+    const index = Math.floor(Math.random() * usuarios.length);
+    return usuarios[index];
+  }
+
+   procesarActividades(): void {
+
+    this.deportes.forEach(actividad => {
+      this.escogerCapitanesPorActividad(actividad.idEventoActividad,actividad.idActividad);
+    });
+  }
+  public capitanesPorCurso: Usuario[] = [];
+
+  private escogerCapitanesPorActividad(idEventoActividad: number,idActividad:number): void {
+    this._capitanService
+      .getUsuariosQuierenCapiByEvento(Number(this.idEvento),idActividad )
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((usuarios: Usuario[]) => {
+
+        const usuariosPorCurso = new Map<number, Usuario[]>();
+
+        usuarios.forEach(usuario => {
+          if (!usuariosPorCurso.has(usuario.idCurso)) {
+            usuariosPorCurso.set(usuario.idCurso, []);
+          }
+          usuariosPorCurso.get(usuario.idCurso)!.push(usuario);
+        });
+
+        usuariosPorCurso.forEach((usuariosCurso) => {
+          const capitan =
+            usuariosCurso[Math.floor(Math.random() * usuariosCurso.length)];
+
+          this._capitanService.asignarCapitanEventoActividad(
+            idEventoActividad,
+            capitan.idUsuario
+          ).subscribe(value =>
+          {
+            this.role$ = this._authService.userRole$;
+          });
+        });
+      });
+  }
+
+
 }

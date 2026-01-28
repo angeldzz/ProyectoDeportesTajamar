@@ -1,8 +1,13 @@
-<button class="btn btn-info"
-        data-bs-toggle="modal"
-        data-bs-target="#modalEquipos"
-        (click)="abrirModalCrearEquipo()"
->Crear Equipo</button>
+
+@if((role$ | async) == 3 || (role$ | async) == 5 || (role$ | async) == 6 ){
+  @if(this.capitanEventoActividad){
+    <button  class="btn btn-info"
+             data-bs-toggle="modal"
+             data-bs-target="#modalEquipos"
+             (click)="abrirModalCrearEquipo()">
+      Crear Equipo</button>
+  }
+}
 
 <div class="equipos-container">
 
@@ -17,10 +22,16 @@
         <div class="equipo-info">
           <div class="equipo-header-row">
             <h5 class="equipo-nombre">{{ equipo.nombreEquipo }}</h5>
+
+            @if((role$ | async) == 3 || (role$ | async) == 5 || (role$ | async) == 6 ){
+              @if(this.capitanEventoActividad){
             <button class="btn-delete btn-delete-header"
                     (click)="borrarEquipo(equipo.idEquipo); $event.stopPropagation()">
               <i class="pi pi-trash"></i>
             </button>
+              }
+            }
+
           </div>
           <span class="curso-badge">Curso {{ equipo.idCurso }}</span><br>
           <span class="curso-badge">Equipacion {{ equipo.infoColor?.nombreColor }}</span>
@@ -46,10 +57,16 @@
             <span class="member-name">{{ jugador.usuario }}</span>
           </div>
 
+
+          @if((role$ | async) == 3 || (role$ | async) == 5 || (role$ | async) == 6 ){
+            @if(this.capitanEventoActividad){
           <button class="btn-delete"
                   (click)="borrarMiembroEquipoPorUsuario(jugador.idUsuario, jugador.idEquipo)">
             <i class="pi pi-trash"></i>
           </button>
+            }
+          }
+
         </div>
       </div>
 
@@ -62,18 +79,26 @@
     </div>
 
     <div class="equipo-footer">
+
+
       <button
         class="btn-unirse"
-        [class.disabled]="usuarioYaEstaInscrito"
-        [disabled]="usuarioYaEstaInscrito"
+        [class.disabled]="botonUnirseDeshabilitado"
+        [disabled]="botonUnirseDeshabilitado"
         (click)="unirseEquipo(equipo.idEquipo); $event.stopPropagation()">
 
-        <i class="pi"
-           [class.pi-check]="usuarioYaEstaInscrito"
-           [class.pi-sign-in]="!usuarioYaEstaInscrito"></i>
-
-        {{ usuarioYaEstaInscrito ? 'Ya perteneces a un equipo' : 'Unirse al equipo' }}
+        <i
+          class="pi"
+          [class.pi-check]="usuarioYaEstaInscrito"
+          [class.pi-sign-in]="!botonUnirseDeshabilitado">
+        </i>
+        {{ usuarioYaEstaInscrito ? 'Ya perteneces a un equipo'
+        : !usuarioInscritoEventoActual ? 'No estás inscrito en el evento'
+       : 'Unirse al equipo'
+        }}
       </button>
+
+
     </div>
 
   </div>
