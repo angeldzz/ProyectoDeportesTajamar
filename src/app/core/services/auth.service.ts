@@ -75,7 +75,9 @@ export class AuthService {
       case "4":
         return 4; //ORGANIZADOR
       case "5":
-        return 5; //CAPITAN
+        return 5;
+        case "6":
+        return 6; //CAPITAN
       default:
         return null;
     }

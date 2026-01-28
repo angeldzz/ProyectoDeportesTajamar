@@ -5,11 +5,8 @@
     <h2 class="fw-bold m-0 ms-3" style="color: var(--text-main);">Actividades Disponibles</h2>
   </div>
 
-  <div class="contenedor-capitan">
-    <p>{{usario.nombre +","}}¿Quieres ser capitan?
-      <input type="checkbox" (change)="onChangeCapitan()"></p>
-  </div>
 
+  <button (click)="procesarActividades()">Prueba Rand</button>
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-5">
 
     @for(deporte of deportes; track deporte.idActividad) {
@@ -18,6 +15,7 @@
         <div class="card border-0 shadow-sm h-100 bg-white overflow-hidden card-hover-simple">
 
           <div class="position-relative p-2">
+<!--            TODO CAMBIAR IMAGENES-->
             <img src="https://img.asmedia.epimg.net/resizer/v2/Q4FRBZWWLJKJVLNER6KGG5X6WE.jpg?auth=9ac7b5ed6b83692a50a0974caa6192d003659fdc51a4f5881f7c61abdd6ee4d1&width=1472&height=828&smart=true"
                  class="card-img-top rounded-4 shadow-sm" alt="...">
 
@@ -67,6 +65,15 @@
 
               </button>
 
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#modalCapitan"
+              >
+                Ser capitán
+              </button>
+
 
             </div>
           </div>
@@ -76,3 +83,60 @@
   </div>
 </div>
 
+
+<div
+  class="modal fade"
+  id="modalCapitan"
+  tabindex="-1"
+  aria-labelledby="modalCapitanLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCapitanLabel">
+          ¿Quieres ser capitán del evento?
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-check">
+          <input
+            id="chkCapitan"
+            class="form-check-input"
+            type="checkbox"
+            [(ngModel)]="quiereSerCapitan"
+            (change)="onChangeCapitan()"
+          />
+          <label class="form-check-label" for="chkCapitan">
+            Sí, quiero ser capitán del evento
+          </label>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >
+          Cerrar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-bs-dismiss="modal"
+          (click)="confirmarCapitan()"
+        >
+          Guardar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
