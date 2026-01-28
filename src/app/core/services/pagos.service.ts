@@ -12,8 +12,14 @@ export class PagosService {
     GetPagos(): Observable<Array<Pagos>>{
       return this._http.get<Array<Pagos>>(environment.urlPagos);
     }
+    CreatePagos(pago: Pagos): Observable<Pagos> {
+      return this._http.post<Pagos>(environment.urlPagos + "create", pago);
+    }
     UpdatePagos(pago: Pagos): Observable<Pagos> {
       console.log(pago);
       return this._http.put<Pagos>(`${environment.urlPagos}update`, pago);
+    }
+    DeletePagos(id: number): Observable<any> {
+      return this._http.delete(`${environment.urlPagos}${id}`);
     }
 }
