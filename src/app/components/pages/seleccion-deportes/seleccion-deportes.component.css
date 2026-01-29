@@ -35,34 +35,13 @@
 
 /* ------------------ CARD DE DEPORTES ------------------ */
 .card-hover-simple {
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: 20px;
-  overflow: hidden;
-  transition: all 0.25s ease;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  height: 100%; /* para que las cards tengan altura uniforme */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 1.25rem !important; /* rounded-4 */
 }
 
 .card-hover-simple:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(0,0,0,0.1);
-  border-color: var(--blue-accent);
-}
-
-/* Imagen de deporte */
-.card-hover-simple img.card-img-top {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 16px;
-  transition: transform 0.3s ease;
-}
-
-.card-hover-simple:hover img.card-img-top {
-  transform: scale(1.05);
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(255, 126, 95, 0.15) !important;
 }
 
 /* Badges */
