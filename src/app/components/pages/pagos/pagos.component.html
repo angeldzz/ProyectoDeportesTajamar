@@ -50,12 +50,12 @@
                             <td class="d-none d-lg-table-cell">{{ pago.idPago }}</td>
                             <td>
                               <!-- Vista para otros roles (solo lectura) -->
-                              <div *ngIf="(role$ | async) !== 4">
+                              <div *ngIf="(role$ | async) !== 4 && (role$ | async) !== 6">
                                 {{ pago.cantidad | currency:'EUR':'symbol':'1.2-2' }}
                               </div>
 
                               <!-- Vista para rol 4 (editable) -->
-                              <div *ngIf="(role$ | async) === 4" class="d-flex align-items-center gap-2">
+                              <div *ngIf="(role$ | async) === 4 || (role$ | async) === 6" class="d-flex align-items-center gap-2">
                                 <div class="input-group input-group-sm" style="width: 120px;">
                                   <input type="number" 
                                          class="form-control" 
@@ -73,7 +73,7 @@
                             </td>
                             <td>
                               <!-- Vista para rol 2 (solo lectura) -->
-                              <div *ngIf="(role$ | async) !== 4">
+                              <div *ngIf="(role$ | async) !== 4 && (role$ | async) !== 6">
                                 <span class="badge"
                                       [ngClass]="{
                                         'bg-success': pago.estado.toLowerCase() === 'pagado' || pago.estado.toLowerCase() === 'completado',
@@ -91,7 +91,7 @@
                               </div>
 
                               <!-- Vista para otros roles (con select) -->
-                              <div *ngIf="(role$ | async) === 4" class="d-flex align-items-center gap-2">
+                              <div *ngIf="(role$ | async) === 4 || (role$ | async) === 6" class="d-flex align-items-center gap-2">
                                 <select class="form-select form-select-sm estado-select"
                                         [(ngModel)]="pago.estado"
                                         (ngModelChange)="onEstadoChange(pago)"
