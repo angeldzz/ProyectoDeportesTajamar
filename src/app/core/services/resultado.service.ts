@@ -67,4 +67,24 @@ export class ResultadoService {
       })
     );
   }
+
+
+  crearResultado(idEventoActividad:number,
+                 idEquipoLocal:number,
+                 idEquipoVisitante:number,
+                 puntosLocal:number,
+                 puntosVisitante:number):Observable<any> {
+
+    let url= environment.urlResultados+"create";
+
+   const body= {
+      "idPartidoResultado": 0,
+      "idEventoActividad": idEventoActividad,
+      "idEquipoLocal": idEquipoLocal,
+      "idEquipoVisitante": idEquipoVisitante,
+      "puntosLocal": puntosLocal,
+      "puntosVisitante": puntosVisitante
+    }
+    return this._http.post(url, body);
+  }
 }

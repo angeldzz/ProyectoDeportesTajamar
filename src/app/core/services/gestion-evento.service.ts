@@ -4,6 +4,7 @@ import { Observable, from, of } from "rxjs";
 import { catchError, concatMap, filter, map, take, toArray } from "rxjs/operators";
 import { environment } from "../../../environments/environment.development";
 import { Usuario } from "../../models/Usuario";
+import { CursosActivos } from "../../models/CursosActivos";
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +12,8 @@ import { Usuario } from "../../models/Usuario";
 export class GestionEventoService {
   constructor(private _http: HttpClient) { }
 
-  getCursosActivos(): Observable<any[]> {
-    return this._http.get<any[]>(environment.urlGestionEvento + 'Cursos/Activos');
+  getCursosActivos(): Observable<Array<CursosActivos>> {
+    return this._http.get<Array<CursosActivos>>(environment.urlGestionEvento + 'CursosActivos');
   }
 
   /**

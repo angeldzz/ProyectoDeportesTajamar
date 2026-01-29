@@ -1,41 +1,71 @@
+<div class="loader-backdrop" *ngIf="loading">
+  <div class="spinner"></div>
+</div>
+
 <div class="container-fluid bg-light-custom p-5">
 
   <div class="d-flex align-items-center mb-5">
     <div class="title-bar"></div>
-    <h2 class="fw-bold m-0 ms-3" style="color: var(--text-main);">Eventos Disponibles</h2>
+    <h2 class="fw-bold m-0 ms-3" style="color: var(--text-main);">Actividades Disponibles</h2>
   </div>
+  <button (click)="procesarActividades()">Prueba Rand</button>
+  @if (loading) {
+    <div class="d-flex flex-column align-items-center justify-content-center py-5">
+      <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <h5 class="mt-3 text-muted">Cargando actividades...</h5>
+    </div>
+  }@else{
 
-  <div class="contenedor-capitan">
-    <p>{{usario.nombre +","}}¿Quieres ser capitan?
-      <input type="checkbox" (change)="onChangeCapitan()"></p>
-  </div>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-5">
 
-  <div class="row-cols-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-3">
-
-    @for(deporte of deportes; track deporte.idActividad) {
+    @for (deporte of deportes; track deporte.idActividad) {
 
       <div class="col">
         <div class="card border-0 shadow-sm h-100 bg-white overflow-hidden card-hover-simple">
 
           <div class="position-relative p-2">
-            <img src="https://img.asmedia.epimg.net/resizer/v2/Q4FRBZWWLJKJVLNER6KGG5X6WE.jpg?auth=9ac7b5ed6b83692a50a0974caa6192d003659fdc51a4f5881f7c61abdd6ee4d1&width=1472&height=828&smart=true"
-                 class="card-img-top rounded-4 shadow-sm" alt="...">
+            <!--            TODO CAMBIAR IMAGENES-->
+            <img
+              src="https://img.asmedia.epimg.net/resizer/v2/Q4FRBZWWLJKJVLNER6KGG5X6WE.jpg?auth=9ac7b5ed6b83692a50a0974caa6192d003659fdc51a4f5881f7c61abdd6ee4d1&width=1472&height=828&smart=true"
+              class="card-img-top rounded-4 shadow-sm" alt="...">
 
-            <span class="badge position-absolute top-0 start-0 m-3 border-0 py-2 px-3  shadow-sm badge-status">
+
+            @if (eventoPasado) {
+              <span
+                class="badge position-absolute top-0 start-0 m-3 border-0 py-2 px-3 bg-danger  shadow-sm badge-status">
+              REGISTRO FINALIZADO
+            </span>
+            } @else {
+
+              <span class="badge position-absolute top-0 start-0 m-3 border-0 py-2 px-3  shadow-sm badge-status">
               REGISTRO ABIERTO
             </span>
-            <span class="badge position-absolute bottom-0 start-0 m-3 py-1 px-3 fw-bold badge-sport-type">
-              67€
+            }
+
+            @if (deporte.precio != null) {
+
+              <span class="badge position-absolute bottom-0 start-0 m-3 py-1 px-3 fw-bold badge-sport-type">
+              {{ deporte.precio.precioTotal }} €
             </span>
+            }
+
           </div>
           <div class="card-body d-flex flex-column p-4">
-            <h5 class="fw-bold mb-3" style="color: var(--text-main); font-size: 1.2rem;">{{deporte.nombreActividad}}</h5>
+            <h5 class="fw-bold mb-3"
+                style="color: var(--text-main); font-size: 1.2rem;">{{ deporte.nombreActividad }}</h5>
+            <!--??----------------------------------------------------------------- -->
 
-            <div class="d-flex justify-content-between mb-4">
-              <span class="small text-muted"><i class="bi bi-clock-fill me-1" style="color: var(--sport-orange);"></i>
-              Precio 67€
-              </span>
-            </div>
+            @if ((role$ | async) == 3 || (role$ | async) == 4 || (role$ | async) == 6) {
+              <button class="btn btn-outline-primary btn-sm"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modalPrecio"
+                      (click)="prepararModal(deporte.idEventoActividad, deporte.precio)">
+                <i class="bi bi-currency-euro"></i>
+                {{ deporte.precio ? 'Editar Precio' : 'Poner Precio' }}
+              </button>
+            }
 
             <hr class="text-secondary opacity-25 mb-4">
 
@@ -43,35 +73,154 @@
               <div class="d-flex align-items-center">
 
                 <div>
-                  <span class="d-block fw-bold lh-1" style="color: var(--text-main);">Min Jugadores:{{deporte.minimoJugadores}}</span>
-                  <span class="text-muted fw-bold" style="font-size: 0.65rem; text-transform: uppercase;">Inscritos</span>
+                  <span class="d-block fw-bold lh-1"
+                        style="color: var(--text-main);">Min Jugadores:{{ deporte.minimoJugadores }}</span>
+                  <span class="text-muted fw-bold"
+                        style="font-size: 0.65rem; text-transform: uppercase;">Inscritos</span>
                 </div>
               </div>
 
-              <button class="btn btn-enroll px-4 py-2 fw-bold shadow-sm" [routerLink]="['/deporte_eventos',idEvento,deporte.idActividad]">
-               Detalles
-              </button>
-
-              <button class="btn btn-enroll px-4 py-2 fw-bold shadow-sm" [routerLink]="['/seleccionar-equipo',idEvento,deporte.idActividad]">
-                Equipo
+              <button class="btn btn-enroll px-4 py-2 fw-bold shadow-sm"
+                      [routerLink]="['/deporte_eventos',idEvento,deporte.idActividad]">
+                Detalles
               </button>
 
               <button class="btn btn-enroll px-4 py-2 fw-bold shadow-sm"
-              (click)="inscribirseActividadEvento(this.idEvento,deporte.idActividad,deporte.idEventoActividad)">
-                Inscribirse
-              </button>    
-              <!-- boton para que de la pagina de seleccion deportes me lleve a la pagina de materiales para seleccionar materiales -->
-              <button
-                class="btn btn-enroll px-4 py-2 fw-bold shadow-sm"
-                [routerLink]="[`/materiales/${idEvento}/${deporte.idActividad}}`]">
-                Materiales
+                      [routerLink]="['/seleccionar-equipo',idEvento,deporte.idActividad]">
+                Equipo
               </button>
+              @if (!eventoPasado) {
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#modalCapitan"
+                  [disabled]=" yaInscrito || eventoPasado"
+                  (click)="abrirModalCapitan(deporte)"
+                >
+                  Inscríbete!!
+                </button>
+              }
 
             </div>
           </div>
         </div>
       </div>
+    } @empty {
+      <div class="col-12 w-100 text-center py-5">
+        <div class="p-5 bg-white rounded-4 shadow-sm">
+          <i class="bi bi-calendar-x text-muted" style="font-size: 4rem;"></i>
+          <h3 class="mt-3 fw-bold" style="color: var(--text-main);">No hay actividades</h3>
+          <p class="text-muted">Lo sentimos, no se han encontrado actividades disponibles para este evento en este
+            momento.</p>
+          <button class="btn btn-outline-primary mt-2">
+            <i class="bi bi-arrow-clockwise me-1"></i> Reintentar
+          </button>
+        </div>
+      </div>
     }
+  </div>
+  }
+</div>
+
+
+<!--MODAL PRECIO-->
+<div class="modal fade" id="modalPrecio" tabindex="-1" aria-labelledby="modalPrecioLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg rounded-4">
+
+      <div class="modal-header bg-light border-0 py-3">
+        <h5 class="modal-title fw-bold" id="modalPrecioLabel">
+          <i class="bi" [class.bi-pencil-square]="idPrecioSeleccionado"
+             [class.bi-plus-circle]="!idPrecioSeleccionado"></i>
+          {{ idPrecioSeleccionado ? 'Editar Precio' : 'Crear Nuevo Precio' }}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body p-4">
+        <form>
+          <div class="mb-3">
+            <label class="form-label fw-bold small text-muted text-uppercase">Importe (€)</label>
+            <input type="text"
+                   name="precio"
+                   [(ngModel)]="precioInput"
+                   class="form-control form-control-lg bg-light border-0 rounded-3"
+                   placeholder="0.00">
+            <div class="form-text">
+              ID Actividad: {{ idEventoActividadActual }}
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer border-0 p-3">
+        <button type="button" #btnCerrar class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn btn-primary rounded-3 px-4 shadow-sm" (click)="guardarPrecio()">
+          {{ idPrecioSeleccionado ? 'Actualizar' : 'Guardar' }}
+        </button>
+      </div>
+
+
+    </div>
   </div>
 </div>
 
+
+<!--MODAL INSCRIPCION-->
+<div
+  class="modal fade"
+  id="modalCapitan"
+  tabindex="-1"
+  aria-labelledby="modalCapitanLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCapitanLabel">
+          ¿Quieres ser capitán del evento?
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-check">
+          <input
+            id="chkCapitan"
+            class="form-check-input"
+            type="checkbox"
+            [(ngModel)]="quiereSerCapitan"
+            (change)="onChangeCapitan()"
+          />
+          <label class="form-check-label" for="chkCapitan">
+            Sí, quiero ser capitán del evento
+          </label>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal">
+          Cerrar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-bs-dismiss="modal"
+          (click)="inscribirseDesdeModal()"
+          [disabled]=" yaInscrito || eventoPasado"
+        >
+          Inscribirse
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

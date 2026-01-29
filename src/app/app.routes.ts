@@ -19,6 +19,10 @@ import {ColoresComponent} from './components/pages/forms/colores-form/colores.co
 import {DeportesFormComponent} from './components/pages/forms/deportes-form/deportes-form.component';
 import {ResultadosComponent} from './components/pages/resultados/resultados.component';
 import { AsignacionActividadEventoComponent } from './components/shared/asignacion-actividad-evento.component/asignacion-actividad-evento.component';
+import {capitanGuard} from './core/guards/capitan.guard';
+import {OrganizadoresComponent} from './components/pages/forms/organizadores/organizadores.component';
+import {organizadorGuard} from './core/guards/organizador.guard';
+import {EventosFormComponent} from './components/pages/forms/eventos-form/eventos-form.component';
 
 export const routes: Routes = [
   {
@@ -42,7 +46,7 @@ export const routes: Routes = [
     path: "seleccion_deportes/:idEvento",
     component: SeleccionDeportesComponent,
     canActivate: [loginGuard],
-    //TODO METER EL GUARD
+
   },
   // {
   //   path: "seleccion_deportes/:idEvento/:idActividad",
@@ -54,19 +58,17 @@ export const routes: Routes = [
     path: "seleccion_equipo",
     component: SeleccionEquipoComponent,
     canActivate: [loginGuard],
-    //TODO METER EL GUARD
+
   },
   {
     path: "resultados",
     component: ResultadosComponent,
     canActivate: [loginGuard],
-    //TODO METER EL GUARD
   },
   {
     path: "pagos",
     component: PagosComponent,
     canActivate: [loginGuard],
-    //TODO METER EL GUARD
   },
   {
     path: "clases-alumnos",
@@ -80,37 +82,42 @@ export const routes: Routes = [
     path: "deporte_eventos/:idEvento/:idDeporte",
     component: DeporteEventoComponent,
     canActivate: [loginGuard],
-    //TODO METER EL GUARD
   },{
     path: "seleccionar-equipo/:idEvento/:idActividad",
     component: SeleccionEquipoComponent,
     canActivate: [loginGuard],
-    //TODO METER EL GUARD
   },
   {
     path: "creacion_eventos",
     component: CreacionEventosComponent,
-    canActivate: [adminGuard]
+    canActivate: [organizadorGuard]
   },
   {
     path: "asignacion-actividad-evento/:idEvento",
     component: AsignacionActividadEventoComponent,
-    canActivate: [adminGuard]
+    canActivate: [organizadorGuard]
+  },
+  {
+    path: "materiales",
+    component: MaterialesComponent,
+    canActivate: [capitanGuard]
   },
   {
     path: "register",
     component: RegisterComponent
   },
   {
+
+    //TODO CONTROLAR ADMIN Y ORGANIZADOR
     path: "panel_administrador",
     component: PanelAdministradorComponent,
-    canActivate: [adminGuard],
+    canActivate: [organizadorGuard],
     children:
       [
         {path: 'colores-form', component: ColoresComponent},
         {path: 'actividades-form', component: DeportesFormComponent},
-        //TODO QUITAR ESTA RUTA SELCCIONAR
-        {path: 'seleccionar-equipo', component: SeleccionEquipoComponent},
+        {path: 'eventos-form', component: EventosFormComponent},
+        {path: 'organizadores-form', component: OrganizadoresComponent},
       ]
 
   },

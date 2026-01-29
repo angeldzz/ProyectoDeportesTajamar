@@ -2,18 +2,32 @@
   <div class="resultados-page py-4">
 
 
-    <div class="container mb-5" style="max-width: 600px;">
-      <div class="card bg-dark border-secondary p-3 shadow-sm">
-        <label class=" small text-uppercase fw-bold mb-2 text-white">Seleccionar Evento Pasado</label>
-        <select class="form-select bg-dark text-white border-secondary" #fEvento
-                (change)="onEventoChange(fEvento.value)">
-          <option value="" disabled selected>Elija un evento...</option>
-          @for (evento of eventosanteriores; track evento.idEvento) {
-            <option [value]="evento.idEvento">
-              Evento del {{ evento.fechaEvento | date:'dd/MM/yyyy' }}
-            </option>
-          }
-        </select>
+    <div class="container-fluid px-lg-5 mb-4">
+      <div class="d-flex justify-content-between align-items-center gap-3">
+
+        <!-- Selector evento -->
+        <div style="max-width: 280px;">
+          <select class="form-select form-select-sm bg-dark text-white border-secondary"
+                  #fEvento
+                  (change)="onEventoChange(parseInt(fEvento.value))">
+            <option value="" disabled selected>Evento</option>
+            @for (evento of eventosanteriores; track evento.idEvento) {
+              <option [value]="evento.idEvento">
+                {{ evento.fechaEvento | date:'dd MMM yyyy' }}
+              </option>
+            }
+          </select>
+        </div>
+
+        <!-- Botón crear -->
+        @if ((role$ | async) == 5) {
+          <button class="btn btn-sm btn-outline-warning"
+                  data-bs-toggle="modal"
+                  data-bs-target="#modalCrearResultado">
+            <i class="bi bi-plus-circle me-1"></i> Resultado
+          </button>
+        }
+
       </div>
     </div>
     <div class="container-fluid px-lg-5">
@@ -30,26 +44,27 @@
           <div class="league-section mb-5">
 
             <div class="d-flex justify-content-between align-items-center mb-4">
-              <div class="d-flex align-items-center">
-                <div class="league-logo-container me-3">
+              <div class="d-flex align-items-center gap-3">
+              <div class="league-logo-container"></div>
 
-                </div>
-                <div>
-                  <h4 class="text-white fw-bold m-0">{{ grupo.deporte }}</h4>
-                </div>
+              <h4 class="fw-bold m-0" (click)="toggleGrupo(grupo)">
+                {{ grupo.deporte }}
+                <span class="text-muted fs-6 ms-2">
+                  ({{ grupo.resultados.length }})
+                </span>
+              </h4>
+            </div><div class="d-flex align-items-center">
+
               </div>
             </div>
 
             <div class="results-grid">
+
+              @if(grupo.expandido){
               @for (res of grupo.resultados; track res.idPartidoResultado) {
                 <div class="match-card" [class.live]="res.puntosLocal === res.puntosVisitante && res.puntosLocal > 0">
 
                   <div class="card-header-match">
-<!--                <span class="status-pill text-uppercase"-->
-<!--                      [class.text-live]="res.puntosLocal === res.puntosVisitante">-->
-<!--&lt;!&ndash;                  {{ res.puntosLocal === res.puntosVisitante ? 'In Progress' : 'Finished' }}&ndash;&gt;-->
-<!--                </span>-->
-
                     @if (res.puntosLocal === res.puntosVisitante) {
                       <span class="live-dot"><i class="bi bi-dot"></i> EMPATE</span>
                     }
@@ -71,8 +86,8 @@
                       </div>
                       <span class="score-value" [class.highlight]="res.puntosLocal >= res.puntosVisitante">
                     {{ res.puntosLocal }}
-                  </span>
-                    </div>
+                      </span>
+                  </div>
 
                     <div class="team-row">
                       <div class="d-flex align-items-center">
@@ -94,6 +109,7 @@
                     </div>
                   </div>
 
+
                   <div class="card-footer-match">
                     <span class="stadium"></span>
                     <a class="action-link">
@@ -107,11 +123,11 @@
                           Ver Jugadores
                         </button>
                       }
-<!--                      <i class="bi bi-graph-up-arrow ms-1" *ngIf="res.puntosLocal === res.puntosVisitante"></i>-->
-<!--                      <i class="bi bi-info-circle ms-1" *ngIf="res.puntosLocal !== res.puntosVisitante"></i>-->
                     </a>
                   </div>
                 </div>
+              }
+
               }
             </div>
           </div>
@@ -132,7 +148,104 @@
   </div>
 </div>
 
+<!--MODAL FORMULARIO-->
 
+<div class="modal fade" id="modalCrearResultado" tabindex="-1" aria-labelledby="modalCrearResultadoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg rounded-4">
+      <div class="modal-header bg-light border-0 py-3">
+        <h5 class="modal-title fw-bold" id="modalCrearResultadoLabel">
+          <i class="bi bi-pencil-fill me-2 text-primary"></i>Crear Resultado
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body p-4">
+        <form ngForm="ngForm">
+
+          <!-- ACTIVIDAD -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Actividad</label>
+            <select class="form-select"
+                    [(ngModel)]="selectedActividad"
+                    name="actividad"
+                    (ngModelChange)="onChangeActividad($event)">
+              <option [ngValue]="null" disabled>Selecciona actividad</option>
+              @for (actividad of deportesFiltrados; track actividad.id) {
+                <option [ngValue]="actividad.id">{{ actividad.nombre }}</option>
+              }
+            </select>
+          </div>
+
+          <!-- EQUIPOS -->
+          <div class="row align-items-center text-center mb-3">
+
+            <!-- LOCAL -->
+            <div class="col-5">
+              <label class="form-label fw-semibold">Local</label>
+              <select class="form-select mb-2"
+                      [(ngModel)]="selectedLocal"
+                      name="local">
+                <option [ngValue]="null" disabled>Equipo</option>
+                @for (local of equiposLocal; track local.idEquipo) {
+                  <option [ngValue]="local.idEquipo">{{ local.nombreEquipo }}</option>
+                }
+              </select>
+              <input type="number"
+                     class="form-control text-center"
+                     [(ngModel)]="cajapuntosLocal"
+                     name="puntosLocal"
+                     min="0"
+                     placeholder="0">
+            </div>
+
+            <!-- VS -->
+            <div class="col-2 fw-bold fs-4 mt-4">
+              VS
+            </div>
+
+            <!-- VISITANTE -->
+            <div class="col-5">
+              <label class="form-label fw-semibold">Visitante</label>
+              <select class="form-select mb-2"
+                      [(ngModel)]="selectedVisitante"
+                      name="visitante">
+                <option [ngValue]="null" disabled>Equipo</option>
+                @for (visitante of equiposVisitante; track visitante.idEquipo) {
+                  <option [ngValue]="visitante.idEquipo">{{ visitante.nombreEquipo }}</option>
+                }
+              </select>
+              <input type="number"
+                     class="form-control text-center"
+                     [(ngModel)]="cajapuntosVisitante"
+                     name="puntosVisitante"
+                     min="0"
+                     placeholder="0">
+            </div>
+
+          </div>
+
+        </form>
+      </div>
+
+      <div class="modal-footer border-0 bg-light p-3">
+        <button type="button" class="btn btn-secondary rounded-3 px-4" data-bs-dismiss="modal">
+          <i class="bi bi-x-circle me-2"></i>Cancelar
+        </button>
+        <button
+          class="btn btn-primary"
+          [disabled]="!selectedActividad || !selectedLocal || !selectedVisitante ||
+              cajapuntosLocal == null || cajapuntosVisitante == null"
+          (click)="crearResultado()">
+          Crear Resultado
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--MODAL RESULTADOS-->
 <div class="modal fade"
      id="playersModal"
      tabindex="-1"

@@ -17,7 +17,7 @@ export class ClasesAlumnosComponent implements OnInit {
   loadingAlumnos = false;
   idCursoInput: number | null = null;
 
-  constructor(private gestionEvento: GestionEventoService) { }
+  constructor(private _gestionEvento: GestionEventoService) { }
 
   ngOnInit(): void {
     // cargar cursos activos como referencia (opcional)
@@ -26,7 +26,7 @@ export class ClasesAlumnosComponent implements OnInit {
 
   loadCursos() {
     this.loadingCursos = true;
-    this.gestionEvento.getCursosActivos().subscribe({
+    this._gestionEvento.getCursosActivos().subscribe({
       next: (c) => { this.cursos = c || []; this.loadingCursos = false; },
       error: () => { this.cursos = []; this.loadingCursos = false; }
     });
@@ -36,7 +36,7 @@ export class ClasesAlumnosComponent implements OnInit {
     const id = this.idCursoInput;
     if (!id) { this.alumnos = []; return; }
     this.loadingAlumnos = true;
-    this.gestionEvento.getUsuariosPorCurso(id).subscribe({
+    this._gestionEvento.getUsuariosPorCurso(id).subscribe({
       next: (u:any) => { 
         this.alumnos = u || [];
         this.loadingAlumnos = false; 

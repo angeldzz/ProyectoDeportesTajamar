@@ -1,14 +1,45 @@
+.mini-panel {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: #f8f9fa;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.panel-header {
+  margin-bottom: 8px;
+}
+
+.panel-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.panel-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.panel-text {
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #333;
+}
+
 /* Contenedor */
 .equipos-container {
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
-  justify-content: center;   /* 👈 centra horizontalmente */
-  align-items: flex-start;   /* evita que se estiren en altura */
-  padding: 1rem;             /* aire en los bordes */
-  max-width: 1200px;   /* límite de anchura */
+  justify-content: center;
+  align-items: flex-start;
+  padding: 1rem;
+  max-width: 1200px;
   margin: 0 auto;
 }
+
 /* Tarjeta */
 .accordion-card {
   flex: 1 1 260px;
@@ -46,9 +77,43 @@
   align-items: center;
 }
 
+/* Contenedor de info del equipo */
+.equipo-info {
+  flex: 1;
+}
+
+/* Fila del nombre + basura */
+.equipo-header-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.3rem;
+}
+
 .equipo-nombre {
   margin: 0;
   font-weight: 600;
+  flex: 1;
+}
+
+/* Botón eliminar en el header */
+.btn-delete-header {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 0.4rem 0.5rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-delete-header:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(1.1);
 }
 
 .curso-badge {
@@ -126,7 +191,7 @@
   color: #1e293b;
 }
 
-/* Botón eliminar */
+/* Botón eliminar general */
 .btn-delete {
   background: transparent;
   border: none;
@@ -147,6 +212,7 @@
   color: #64748b;
   padding: 1rem 0;
 }
+
 .equipo-footer {
   margin-top: 1rem;
   text-align: center;
@@ -173,7 +239,6 @@
 .player-avatar {
   width: 35px;
   height: 35px;
-
   border-radius: 100%;
   display: flex;
   align-items: center;
@@ -181,6 +246,7 @@
   color: #6a6d71;
   margin-right: 12px;
 }
+
 .btn-unirse:hover:not(.disabled) {
   transform: translateY(-2px);
   box-shadow: 0 6px 14px rgba(0,0,0,0.15);
@@ -190,4 +256,45 @@
   background: #94a3b8;
   cursor: not-allowed;
   opacity: 0.85;
+}
+.empty-state-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  width: 100%;
+}
+
+.empty-state-card {
+  background: white;
+  border-radius: 15px;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  max-width: 400px;
+  border: 1px dashed #ccc;
+}
+
+.empty-icon {
+  font-size: 3rem;
+  color: #ff793f; /* Tu color naranja */
+  margin-bottom: 15px;
+}
+
+.empty-title {
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.empty-text {
+  color: #7f8c8d;
+  margin-bottom: 0;
+}
+
+.empty-hint {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: #3498db; /* Un azul informativo */
+  font-weight: 600;
 }

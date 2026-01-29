@@ -1,53 +1,65 @@
-<div class="d-flex min-vh-100 align-items-center justify-content-center bg-light">
-  <div class="card shadow-sm w-50 col-11 col-sm-8 col-md-6 col-lg-4">
-    <div class="card-body ">
-      <h4 class="card-title text-center mb-4">Iniciar sesión</h4>
+<div class="d-flex min-vh-100 align-items-center justify-content-center bg-light p-3">
+  <div class="card shadow-sm col-11 col-sm-10 col-md-9 col-lg-8 col-xl-6 overflow-hidden">
+    <div class="row g-0">
 
-      <form ngForm="ngForm" class="needs-validation " novalidate >
-        <div class="mb-3 w-75 mx-auto">
-          <label for="user" class="form-label">Usuario</label>
-          <div class="input-group ">
-            <input
-              type="text"
-              class="form-control"
-              name="cajaId"
-              #cajaUser
-              required
-            />
-            <span class="input-group-text">&commat;tajamar365.com</span>
-          </div>
+      <div class="col-md-5 d-none d-md-flex align-items-center justify-content-center bg-primary-subtle p-4">
+        <img src="/assets/images/login/Basketball.png" class="img-fluid" alt="Basketball">
+      </div>
+
+      <div class="col-md-7">
+        <div class="card-body p-4 p-lg-5">
+          <h4 class="card-title text-center mb-4 fw-bold">Iniciar sesión</h4>
+
+          <form #f="ngForm" class="needs-validation" novalidate>
+
+            <div class="mb-3">
+              <label for="user" class="form-label">Usuario</label>
+              <div class="input-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="cajaId"
+                  #cajaUser
+                  required
+                />
+                <span class="input-group-text">&commat;tajamar365.com</span>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label for="password" class="form-label">Contraseña</label>
+              <div class="input-group">
+                <input
+                  [type]="showPassword ? 'text' : 'password'"
+                  class="form-control"
+                  name="cajaPass"
+                  #cajaPass
+                  required
+                />
+                <button
+                  class="btn btn-outline-secondary"
+                  type="button"
+                  (click)="togglePasswordVisibility()"
+                >
+                  <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="d-grid mb-3">
+              <button type="submit" (click)="login()" class="btn btn-primary py-2">
+                Iniciar Sesión
+              </button>
+            </div>
+
+            <p class="register fw-semibold text-center mb-0">
+              ¿Todavía no estás registrado? <a class="text-decoration-none">Hazlo ahora</a>
+            </p>
+
+          </form>
         </div>
+      </div>
 
-        <div class="mb-3 w-75 mx-auto">
-          <label for="password" class="form-label">Contraseña</label>
-          <div class="input-group">
-            <input
-              [type]="showPassword ? 'text' : 'password'"
-              class="form-control"
-              name="cajaPass"
-              #cajaPass
-              required
-            />
-            <button
-              class="btn btn-outline-secondary"
-              type="button"
-              (click)="togglePasswordVisibility()"
-              aria-label="Toggle password visibility"
-            >
-              <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
-            </button>
-          </div>
-        </div>
-
-        <div class="d-grid w-50 mx-auto mb-1">
-          <button type="submit" (click)="login()" class="btn btn-primary">Iniciar Sesión</button>
-        </div>
-
-        <p class="register fw-semibold text-center">
-          ¿Todavía no estas registrado? <a class="text-decoration-none ">Hazlo ahora</a>
-        </p>
-
-      </form>
     </div>
   </div>
 </div>
