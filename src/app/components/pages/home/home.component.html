@@ -32,7 +32,7 @@
                               <i class="bi bi-clock"></i> {{ evento.fechaEvento | date:'HH:mm' }}
                             </span>
                             <span class="meta-item">
-                              <i class="bi bi-person-badge"></i> Profesor {{ evento.idProfesor }}
+                              <i class="bi bi-person-badge"></i> {{ getNombreProfesor(evento.idProfesor) }}
                             </span>
                           </div>
                         </div>
@@ -91,7 +91,7 @@
                               <i class="bi bi-clock"></i> {{ evento.fechaEvento | date:'HH:mm' }}
                             </span>
                             <span class="meta-item">
-                              <i class="bi bi-person-badge"></i> Profesor {{ evento.idProfesor }}
+                              <i class="bi bi-person-badge"></i> {{ getNombreProfesor(evento.idProfesor) }}
                             </span>
                           </div>
                         </div>
