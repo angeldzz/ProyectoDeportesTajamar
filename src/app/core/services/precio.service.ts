@@ -18,4 +18,31 @@ export class PrecioService {
     let url= environment.urlPrecioActividad+"FindPrecioByIdEventoActividad/"+idActividadEvento
     return this._http.get(url);
   }
+
+  updatePrecioEventoActividad(idPrecioActividad:number,idEventoActividad:number,precio:string){
+
+    let url=environment.urlPrecioActividad+"update"
+
+
+    const body={
+      "idPrecioActividad": idPrecioActividad,
+      "idEventoActividad": idEventoActividad,
+      "precioTotal": precio
+    }
+
+    return this._http.put(url, body);
+  }
+
+  createPrecioEventoActividad(idPrecioActividad:number,idEventoActividad:number,precio:string) {
+
+    let url = environment.urlPrecioActividad + "create"
+
+    const body = {
+      "idPrecioActividad": idPrecioActividad,
+      "idEventoActividad": idEventoActividad,
+      "precioTotal": precio
+    }
+
+    return this._http.post(url, body);
+  }
 }

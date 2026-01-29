@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Params, Router, RouterLink} from '@angular/router';
 import {CarouselModule} from 'primeng/carousel';
 import {DeportesService} from '../../../core/services/deportes.service';
@@ -14,13 +14,17 @@ import {AuthService} from '../../../core/services/auth.service';
 import {Evento} from '../../../models/Evento';
 import {EventosService} from '../../../core/services/eventos.service';
 import {ActividadEvento} from '../../../models/ActividadEvento';
+import Swal from 'sweetalert2';
+import {AsyncPipe, NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-seleccion-deportes',
   imports: [
     RouterLink,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AsyncPipe,
+    NgIf
   ],
   templateUrl: './seleccion-deportes.component.html',
   styleUrl: './seleccion-deportes.component.css',
@@ -33,7 +37,7 @@ export class SeleccionDeportesComponent implements OnInit, OnDestroy {
   public quiereSerCapitan: boolean=false;
   private destroy$ = new Subject<void>();
   public role$!: Observable<number | null>;
-
+  public loading: boolean = false;
   constructor(private _activeRoute: ActivatedRoute,
               private _deportesService: DeportesService,
               private _usuarioService: UsuarioService,
@@ -43,6 +47,8 @@ export class SeleccionDeportesComponent implements OnInit, OnDestroy {
               private _capitanService:CapitanService,
               private _authService: AuthService,
               private _eventoService:EventosService,) {
+
+    this.role$ = this._authService.userRole$;
   }
 
   public yaInscrito: boolean = false;
@@ -55,7 +61,6 @@ export class SeleccionDeportesComponent implements OnInit, OnDestroy {
       if (parametros['idEvento'] != null) {
 
 
-
         this.idEvento = parametros['idEvento'];
         console.log('ID del evento:', this.idEvento);
 
@@ -65,7 +70,7 @@ export class SeleccionDeportesComponent implements OnInit, OnDestroy {
          this.eventoPasado= this.eventoEstaPasado(this.datosEvento.fechaEvento);
 
         });
-
+        this.loading = true;
         this._deportesService.getDeportesEvento(Number(this.idEvento)).pipe(takeUntil(this.destroy$),
           switchMap(deportes => {
             if (!deportes || deportes.length === 0) return of([]);
@@ -81,10 +86,13 @@ export class SeleccionDeportesComponent implements OnInit, OnDestroy {
         ).subscribe({
           next: (deportesConPrecio) => {
             this.deportes = deportesConPrecio;
-            // this.procesarActividades(this.deportes);
+            this.loading = false;
             console.log(this.deportes);
           },
-          error: err => console.error(err)
+          error: err => {
+            console.error(err);
+            this.loading = false;
+          }
         });
 
         this._usuarioService.getDatosUsuario().pipe(
@@ -101,10 +109,6 @@ export class SeleccionDeportesComponent implements OnInit, OnDestroy {
           },
           error: err => console.error("Error al comprobar inscritos:", err)
         });
-
-
-
-
       }
     });
   }
@@ -226,6 +230,105 @@ export class SeleccionDeportesComponent implements OnInit, OnDestroy {
           });
         });
       });
+  }
+
+
+  public idPrecioSeleccionado: number | null = null;
+  public idEventoActividadActual: number | null = null;
+  public precioInput: string = "";
+
+// Función para preparar el modal (llamar desde tu lista de deportes)
+  prepararModal(idEventoActividad: number, precioExistente?: any) {
+    this.idEventoActividadActual = idEventoActividad;
+
+    if (precioExistente) {
+
+      this.idPrecioSeleccionado = precioExistente.idPrecioActividad;
+      this.precioInput = precioExistente.precioTotal;
+
+    } else {
+      this.idPrecioSeleccionado = null;
+      this.precioInput = "";
+    }
+  }
+  @ViewChild('btnCerrar') btnCerrar!: ElementRef;
+
+  guardarPrecio() {
+    if (this.idPrecioSeleccionado) {
+      this._precioService.updatePrecioEventoActividad(
+        this.idPrecioSeleccionado,
+        this.idEventoActividadActual!,
+        this.precioInput
+      ).subscribe({
+        next: () => {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Precio Modificado Exitosamente",
+            showConfirmButton: false,
+            timer: 1500
+          }).then(r => {
+            this.btnCerrar.nativeElement.click();
+            this.recarga()
+          });
+        },
+        error: (e) => {
+          console.error(e);
+        }
+      });
+    } else {
+      this._precioService.createPrecioEventoActividad(
+        0,
+        this.idEventoActividadActual!,
+        this.precioInput
+      ).subscribe({
+        next: () => {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Precio Creado Exitosamente",
+            showConfirmButton: false,
+            timer: 1500
+          }).then(r => {
+            this.btnCerrar.nativeElement.click();
+            this.recarga()
+          });
+
+
+        },
+        error: (e) => {
+          console.error(e)
+        }
+      });
+    }
+  }
+
+
+  recarga() {
+    this.loading = true; // Iniciamos el estado de carga
+
+    this._deportesService.getDeportesEvento(Number(this.idEvento)).pipe(
+      takeUntil(this.destroy$),
+      switchMap(deportes => {
+        if (!deportes || deportes.length === 0) return of([]);
+        const peticiones = deportes.map(d =>
+          this._precioService.getPrecioActividadById(d.idEventoActividad).pipe(
+            takeUntil(this.destroy$),
+            map(precioResp => ({ ...d, precio: precioResp }))
+          )
+        );
+        return forkJoin(peticiones);
+      })
+    ).subscribe({
+      next: (deportesConPrecio) => {
+        this.deportes = deportesConPrecio;
+        this.loading = false; // Éxito: quitamos loader
+      },
+      error: err => {
+        console.error(err);
+        this.loading = false; // Error: también quitamos loader
+      }
+    });
   }
 
 

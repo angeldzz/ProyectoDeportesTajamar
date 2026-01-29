@@ -5,12 +5,14 @@ import {Usuario} from '../../../../models/Usuario';
 import {CursosActivos} from '../../../../models/CursosActivos';
 import {FormsModule} from '@angular/forms';
 import {NgForOf} from '@angular/common';
+import {Avatar} from 'primeng/avatar';
 
 @Component({
   selector: 'app-organizadores',
   imports: [
     FormsModule,
-    NgForOf
+    NgForOf,
+    Avatar
   ],
   templateUrl: './organizadores.component.html',
   styleUrl: './organizadores.component.css',
@@ -26,10 +28,12 @@ export class OrganizadoresComponent implements OnInit {
 
   cursoSeleccionado!: number;
   usuarioSeleccionado!: number;
-
+  organizadores!: Array<Usuario>;
   ngOnInit() {
     this._usuarioService.getCursosActivos()
       .subscribe(cursos => this.cursos = cursos);
+
+    this.getOrganizadores();
   }
 
   onCursoChange(): void {
@@ -51,6 +55,14 @@ export class OrganizadoresComponent implements OnInit {
 
   borrarOrganizador(usuario:number){
     this._organizadoresService.borrarOrganizador(usuario).subscribe(value => {
+      console.log(value);
+    })
+  }
+
+
+  getOrganizadores(){
+    this._organizadoresService.getOrganizadores().subscribe(value => {
+      this.organizadores = value;
       console.log(value);
     })
   }

@@ -22,6 +22,7 @@ import { AsignacionActividadEventoComponent } from './components/shared/asignaci
 import {capitanGuard} from './core/guards/capitan.guard';
 import {OrganizadoresComponent} from './components/pages/forms/organizadores/organizadores.component';
 import {organizadorGuard} from './core/guards/organizador.guard';
+import {EventosFormComponent} from './components/pages/forms/eventos-form/eventos-form.component';
 
 export const routes: Routes = [
   {
@@ -81,12 +82,12 @@ export const routes: Routes = [
   {
     path: "creacion_eventos",
     component: CreacionEventosComponent,
-    canActivate: [adminGuard]
+    canActivate: [organizadorGuard]
   },
   {
     path: "asignacion-actividad-evento/:idEvento",
     component: AsignacionActividadEventoComponent,
-    canActivate: [adminGuard]
+    canActivate: [organizadorGuard]
   },
   {
     path: "materiales",
@@ -107,6 +108,7 @@ export const routes: Routes = [
       [
         {path: 'colores-form', component: ColoresComponent},
         {path: 'actividades-form', component: DeportesFormComponent},
+        {path: 'eventos-form', component: EventosFormComponent},
         {path: 'organizadores-form', component: OrganizadoresComponent},
       ]
 
