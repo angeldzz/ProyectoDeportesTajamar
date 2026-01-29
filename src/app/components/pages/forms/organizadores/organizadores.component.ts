@@ -6,6 +6,7 @@ import {CursosActivos} from '../../../../models/CursosActivos';
 import {FormsModule} from '@angular/forms';
 import {NgForOf} from '@angular/common';
 import {Avatar} from 'primeng/avatar';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-organizadores',
@@ -48,14 +49,48 @@ export class OrganizadoresComponent implements OnInit {
   }
 
   crearOrganizador(usuario:number){
-    this._organizadoresService.crearOrganizador(usuario).subscribe(value => {
-      console.log(value);
+    this._organizadoresService.crearOrganizador(usuario).subscribe({
+      next:(value)=>{
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Organizador creado exitosamente",
+          showConfirmButton: false,
+          timer: 1000
+        });
+      },
+      error:(e)=>{
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "No se ha podido crear",
+          showConfirmButton: false,
+          timer: 1000
+        });
+      }
     })
   }
 
   borrarOrganizador(usuario:number){
-    this._organizadoresService.borrarOrganizador(usuario).subscribe(value => {
-      console.log(value);
+    this._organizadoresService.borrarOrganizador(usuario).subscribe({
+      next:(value)=>{
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Organizador borrado exitosamente",
+          showConfirmButton: false,
+          timer: 1000
+        });
+      },
+      error:(e)=>{
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "No se ha podido borrar",
+          showConfirmButton: false,
+          timer: 1000
+        });
+      }
     })
   }
 

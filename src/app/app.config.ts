@@ -8,6 +8,12 @@ import {httpInterceptorProviders} from './core/interceptors';
 import { providePrimeNG } from 'primeng/config';
 import Lara from '@primeng/themes/lara';
 
+
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
+import { LOCALE_ID } from '@angular/core';
+
+registerLocaleData(localeEs);
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
@@ -21,6 +27,7 @@ export const appConfig: ApplicationConfig = {
       theme: {
         preset: Lara
       }
-    })
+    }),
+    { provide: LOCALE_ID, useValue: 'es-ES' },
   ]
 };

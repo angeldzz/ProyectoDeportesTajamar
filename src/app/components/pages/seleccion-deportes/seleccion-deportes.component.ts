@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Params, Router, RouterLink} from '@angular/router';
 import {CarouselModule} from 'primeng/carousel';
 import {DeportesService} from '../../../core/services/deportes.service';
@@ -15,7 +15,7 @@ import {Evento} from '../../../models/Evento';
 import {EventosService} from '../../../core/services/eventos.service';
 import {ActividadEvento} from '../../../models/ActividadEvento';
 import Swal from 'sweetalert2';
-import {AsyncPipe, NgIf} from '@angular/common';
+import {AsyncPipe, NgClass, NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-seleccion-deportes',
@@ -24,7 +24,8 @@ import {AsyncPipe, NgIf} from '@angular/common';
     FormsModule,
     ReactiveFormsModule,
     AsyncPipe,
-    NgIf
+    NgIf,
+    NgClass,
   ],
   templateUrl: './seleccion-deportes.component.html',
   styleUrl: './seleccion-deportes.component.css',
@@ -38,6 +39,7 @@ export class SeleccionDeportesComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   public role$!: Observable<number | null>;
   public loading: boolean = false;
+
   constructor(private _activeRoute: ActivatedRoute,
               private _deportesService: DeportesService,
               private _usuarioService: UsuarioService,
@@ -55,6 +57,31 @@ export class SeleccionDeportesComponent implements OnInit, OnDestroy {
 
   eventoPasado:boolean = false;
   datosEvento!:Evento;
+
+  public readonly imagenesActividades: { [key: string]: string } = {
+    'futbol': '/assets/images/deportes/iniestita.png',
+    'baloncesto': '/assets/images/deportes/basket.jpg',
+    'basket2': '/assets/images/deportes/basket.jpg',
+    'videojuegos': '/assets/images/deportes/vjuego.jpg',
+    'video juegos': '/assets/images/deportes/vjuego.jpg',
+    'tenis': '/assets/images/deportes/tenis.jpg',
+    'voley': '/assets/images/deportes/voley.jpg',
+    'default': '/assets/images/deportes/default.jpg'
+  };
+
+  getImagenActividad(nombre: string): string {
+    if (!nombre) return this.imagenesActividades['default'];
+
+    const nombreNormalizado = nombre.toLowerCase().trim();
+
+    const keyEncontrada = Object.keys(this.imagenesActividades).find(key =>
+      nombreNormalizado.includes(key)
+    );
+
+    return keyEncontrada
+      ? this.imagenesActividades[keyEncontrada]
+      : this.imagenesActividades['default'];
+  }
 
   ngOnInit(): void {
     this._activeRoute.params.pipe(takeUntil(this.destroy$)).subscribe((parametros: Params) => {
@@ -125,7 +152,7 @@ export class SeleccionDeportesComponent implements OnInit, OnDestroy {
       idEventoActividad: Number(deporte.idEventoActividad),
     };
 
-    // Opcional: reset de UI del modal
+
     this.quiereSerCapitan = false;
   }
   inscribirseDesdeModal(): void {
@@ -141,10 +168,24 @@ export class SeleccionDeportesComponent implements OnInit, OnDestroy {
   private eventoEstaPasado(fechaEvento: string | Date | null | undefined): boolean {
     if (!fechaEvento) return false;
 
-    const fecha = fechaEvento instanceof Date ? fechaEvento : new Date(fechaEvento);
-    if (Number.isNaN(fecha.getTime())) return false;
+    // 1. Convertir a objeto Date
+    let fecha = fechaEvento instanceof Date ? fechaEvento : new Date(fechaEvento);
 
-    return fecha.getTime() < Date.now();
+    if (isNaN(fecha.getTime())) return false;
+
+    const ahora = new Date();
+
+    // 2. DEBUG CRÍTICO: Mira esto en la consola (F12)
+    console.log("--- COMPROBACIÓN DE TIEMPO ---");
+    console.log("Hora Evento (Objeto):", fecha);
+    console.log("Hora Ahora  (Objeto):", ahora);
+    console.log("Evento ms:", fecha.getTime());
+    console.log("Ahora ms :", ahora.getTime());
+    console.log("Diferencia (ms):", fecha.getTime() - ahora.getTime());
+
+    // 3. Comparación estricta
+    // Si la diferencia es negativa, es que 'ahora' es mayor que 'evento'
+    return ahora.getTime() >= fecha.getTime();
   }
 
   ngOnDestroy() {
@@ -162,7 +203,7 @@ export class SeleccionDeportesComponent implements OnInit, OnDestroy {
     ).pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
         this.yaInscrito = true;
-        this._router.navigate(['/deporte_eventos', idEvento, idActividad]);
+        this._router.navigate(['/seleccionar-equipo', idEvento, idActividad]);
       },
       error: err => {
         this.yaInscrito = true;
@@ -175,29 +216,106 @@ export class SeleccionDeportesComponent implements OnInit, OnDestroy {
 
 
   onChangeCapitan(): void {
-    // Aquí ya se ha actualizado `esCapitan` por el [(ngModel)]
     console.log('¿Es capitán?: ', this.quiereSerCapitan);
-    // lógica extra si hace falta
-  }
-
-  confirmarCapitan(): void {
-    // lógica para guardar/mandar al backend que es o no es capitán
-    console.log('Confirmado capitán: ', this.quiereSerCapitan);
   }
 
 
 //TODO FUNCION DE ADMINISTRADOR
-  public usuariosPorCurso = new Map<number, Usuario[]>();
 
-  private getRandomUsuario(usuarios: Usuario[]): Usuario {
-    const index = Math.floor(Math.random() * usuarios.length);
-    return usuarios[index];
+
+  procesarActividades(): void {
+    Swal.fire({
+      title: "¿Deseas realizar el sorteo de capitanes?",
+      text: "Se asignará un capitán por curso para cada actividad.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sí, sortear",
+      cancelButtonText: "Cancelar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loading = true; // Mostramos loader general
+
+        // Creamos un array de observables para ejecutar todo en paralelo
+        const tareasAsignacion = this.deportes.map(actividad =>
+          this.obtenerYAsignarCapitanes(actividad)
+        );
+
+        forkJoin(tareasAsignacion).subscribe({
+          next: (resultados) => {
+            this.loading = false;
+            this.mostrarResumenCapitanes(resultados.flat());
+          },
+          error: (err) => {
+            this.loading = false;
+            Swal.fire("Error", "No se pudo completar el sorteo", "error");
+          }
+        });
+      }
+    });
   }
+  private obtenerYAsignarCapitanes(actividad: ActividadDeportes): Observable<any[]> {
+    return this._capitanService.getUsuariosQuierenCapiByEvento(Number(this.idEvento), actividad.idActividad).pipe(
+      switchMap(usuarios => {
+        const usuariosPorCurso = new Map<number, Usuario[]>();
+        usuarios.forEach(u => {
+          if (!usuariosPorCurso.has(u.idCurso)) usuariosPorCurso.set(u.idCurso, []);
+          usuariosPorCurso.get(u.idCurso)!.push(u);
+        });
 
-   procesarActividades(): void {
+        const asignaciones: Observable<any>[] = [];
 
-    this.deportes.forEach(actividad => {
-      this.escogerCapitanesPorActividad(actividad.idEventoActividad,actividad.idActividad);
+        usuariosPorCurso.forEach((usuariosCurso, idCurso) => {
+          const elegido = usuariosCurso[Math.floor(Math.random() * usuariosCurso.length)];
+          const obs = this._capitanService.asignarCapitanEventoActividad(actividad.idEventoActividad, elegido.idUsuario).pipe(
+            map(() => ({
+              deporte: actividad.nombreActividad,
+              curso: idCurso,
+              nombre: `${elegido.usuario}`
+            }))
+          );
+          asignaciones.push(obs);
+        });
+
+        return asignaciones.length > 0 ? forkJoin(asignaciones) : of([]);
+      })
+    );
+  }
+  private mostrarResumenCapitanes(asignaciones: any[]) {
+    if (asignaciones.length === 0) {
+      Swal.fire("Sorteo Finalizado", "No había candidatos para ninguna actividad.", "info");
+      return;
+    }
+
+    // Generamos el HTML de la tabla
+    let tablaHtml = `
+    <div style="max-height: 400px; overflow-y: auto;">
+      <table class="table table-sm table-striped" style="font-size: 0.85rem; text-align: left;">
+        <thead>
+          <tr>
+            <th>Deporte</th>
+            <th>Curso</th>
+            <th>Capitán</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${asignaciones.map(a => `
+            <tr>
+              <td><small>${a.deporte}</small></td>
+              <td><span class="badge bg-primary">Curso ${a.curso}</span></td>
+              <td><strong>${a.nombre}</strong></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+    Swal.fire({
+      title: 'Capitanes Asignados',
+      html: tablaHtml,
+      icon: 'success',
+      confirmButtonText: 'Genial',
+      width: '600px'
     });
   }
   public capitanesPorCurso: Usuario[] = [];
@@ -330,6 +448,9 @@ export class SeleccionDeportesComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+
+
 
 
 }

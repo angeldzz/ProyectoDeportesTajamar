@@ -5,19 +5,18 @@ import {forkJoin, lastValueFrom, Observable, pipe, Subject, takeUntil} from 'rxj
 import { ResultadoService } from '../../../core/services/resultado.service';
 import { EventosService } from '../../../core/services/eventos.service';
 import { DeportesService } from '../../../core/services/deportes.service';
-
 import { PartidoResultado } from '../../../models/PartidoResultado';
 import { Evento } from '../../../models/Evento';
 import { ResultadoDeporteEvento } from '../../../models/ResultadoDeporteEvento';
-import { CalendarioComponent } from '../../shared/calendario/calendario.component';
 import {Colores} from '../../../models/Colores';
 import {Equipov2} from '../../../models/EquipoV2';
 import {Equipov2Service} from '../../../core/services/equipov2.service';
 import {Usuario} from '../../../models/Usuario';
 import {Avatar} from 'primeng/avatar';
 import {FormsModule} from '@angular/forms';
-import {UsuarioService} from '../../../core/services/usuario.service';
 import {AuthService} from '../../../core/services/auth.service';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-resultados',
@@ -194,11 +193,6 @@ export class ResultadosComponent implements OnInit ,OnDestroy {
   cajapuntosLocal: number | null = null;
   cajapuntosVisitante: number | null = null;
 
-  onLocalChange(id: number | null) {
-    this.selectedLocal = id;
-  }
-
-
   get equiposLocal() {
     if (!this.equipos) return [];
     return this.equipos.filter(e => e.idEquipo !== this.selectedVisitante);
@@ -209,9 +203,6 @@ export class ResultadosComponent implements OnInit ,OnDestroy {
     return this.equipos.filter(e => e.idEquipo !== this.selectedLocal);
   }
 
-  onVisitanteChange(id: number | null) {
-    this.selectedVisitante = id;
-  }
   onChangeActividad(idEventoActividad: number) {
 
     this.selectedLocal = null;
@@ -252,8 +243,13 @@ export class ResultadosComponent implements OnInit ,OnDestroy {
       this.cajapuntosVisitante
     ).subscribe({
       next: () => {
-        alert('Resultado creado correctamente');
-
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Se ha creado el resultado",
+          showConfirmButton: false,
+          timer: 1000
+        });
         // Reset
         this.selectedLocal = null;
         this.selectedVisitante = null;
@@ -266,7 +262,13 @@ export class ResultadosComponent implements OnInit ,OnDestroy {
       },
       error: (err) => {
         console.error(err);
-        alert('Error al crear resultado');
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: "No se ha podido crear el resultado",
+          showConfirmButton: false,
+          timer: 1000
+        });
       }
     });
   }

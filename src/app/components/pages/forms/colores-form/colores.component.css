@@ -62,3 +62,47 @@
     min-width: 600px; /* Evita que las columnas se aplasten */
   }
 }
+.admin-colores-wrapper {
+  transition: all 0.3s ease;
+}
+
+/* Tabla responsiva */
+.table-responsive {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f8fafc;
+}
+
+/* Ajustes para móviles (menos de 576px) */
+@media (max-width: 576px) {
+  .admin-colores-wrapper {
+    margin-top: 0.5rem !important;
+  }
+
+  .table td, .table th {
+    padding: 12px 8px;
+    font-size: 0.9rem;
+  }
+
+  /* Botones más grandes para dedos en móviles */
+  .btn-sm {
+    padding: 8px 10px;
+    font-size: 1rem;
+  }
+
+  /* Ajustar el input para que no se vea apretado */
+  .form-control {
+    font-size: 16px; /* Evita zoom automático en iOS */
+  }
+}
+
+/* Estilo para el scrollbar en Webkit */
+.table-responsive::-webkit-scrollbar {
+  width: 6px;
+}
+.table-responsive::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+.table-responsive::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 10px;
+}

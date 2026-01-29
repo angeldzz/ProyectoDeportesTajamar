@@ -26,12 +26,14 @@ export class ColoresComponent implements OnInit {
   constructor(private _coloresService: ColoresService) { }
 
   ngOnInit(): void {
-   this._coloresService.getColores().subscribe(value => {
-      this.colores = value;
-   })
+    this.getColores();
   }
 
-
+  getColores(){
+    this._coloresService.getColores().subscribe(value => {
+      this.colores = value;
+    })
+  }
   getVariableColor(nombre: string): string {
     if (!nombre) return 'var(--color-default)';
 
@@ -50,25 +52,25 @@ export class ColoresComponent implements OnInit {
   }
 
 
-
   deleteColor(idColor:Number): void {
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: "Quieres borrar el color",
+      text: "",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!"
+      confirmButtonText: "Si, Borrar"
     }).then((result) => {
       if (result.isConfirmed) {
         this._coloresService.deleteColor(idColor).subscribe(value => {
           console.log(value);
           Swal.fire({
-            title: "Deleted!",
-            text: "Your file has been deleted.",
+            title: "Borrado",
+            text: "Se ha borrado el color",
             icon: "success"
           });
+          this.getColores();
         });
       }
     });
@@ -81,7 +83,8 @@ export class ColoresComponent implements OnInit {
 
    this._coloresService.createColor(this.nombreColor).subscribe(value => {
      console.log(value);
-     window.location.reload();
+    this.getColores();
+     //window.location.reload();
    })
   }
 
@@ -92,7 +95,8 @@ export class ColoresComponent implements OnInit {
 
     this._coloresService.updateColor(this.idEditando,this.nombreColor).subscribe(value => {
       console.log(this.idEditando,this.nombreColor);
-      window.location.reload();
+      this.getColores();
+      //window.location.reload();
     })
   }
 }
