@@ -1,21 +1,28 @@
+/* Fondo de la página en Azul Perlado */
+body {
+  background-color: #e2e8f0; 
+  margin: 0;
+  padding: 0;
+}
+
 /* Contenedor principal */
 .materiales-page {
   max-width: 900px;
   margin: 2rem auto;
   padding: 2rem;
-  background-color: #fff; /* blanco */
+  background-color: #ffffff; /* Blanco puro para contraste */
   border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 25px rgba(30, 64, 175, 0.15); /* Sombra con un toque azulado */
   font-family: 'Outfit', sans-serif;
-  color: #222; /* texto principal negro */
+  color: #1e293b; /* Texto principal en azul oscuro grisáceo */
 }
 
 /* Título */
 .materiales-page h3 {
   font-size: 1.8rem;
   margin-bottom: 1.5rem;
-  color: #ff7e5f; /* naranja principal */
-  border-bottom: 2px solid #ff7e5f;
+  color: #2563eb; /* Azul brillante */
+  border-bottom: 2px solid #2563eb;
   display: inline-block;
   padding-bottom: 4px;
 }
@@ -36,14 +43,14 @@
 .material-form label {
   font-weight: 600;
   margin-bottom: 0.3rem;
-  color: #333;
+  color: #334155;
 }
 
 .material-form input[type="text"],
 .material-form input[type="number"],
 .material-form input[type="date"] {
   padding: 0.6rem 0.8rem;
-  border: 1px solid #ccc;
+  border: 1px solid #cbd5e1;
   border-radius: 8px;
   font-size: 0.95rem;
   transition: all 0.2s ease;
@@ -52,15 +59,15 @@
 .material-form input[type="text"]:focus,
 .material-form input[type="number"]:focus,
 .material-form input[type="date"]:focus {
-  border-color: #ff7e5f;
-  box-shadow: 0 0 6px rgba(255, 126, 95, 0.3);
+  border-color: #3b82f6;
+  box-shadow: 0 0 6px rgba(59, 130, 246, 0.3);
   outline: none;
 }
 
 .material-form input[type="checkbox"] {
   width: 18px;
   height: 18px;
-  accent-color: #ff7e5f;
+  accent-color: #2563eb;
 }
 
 /* Botones */
@@ -83,27 +90,27 @@
 }
 
 .material-form button[type="submit"] {
-  background: linear-gradient(135deg, #ff7e5f, #ffb85f);
+  background: linear-gradient(135deg, #2563eb, #60a5fa); /* Degradado azul */
 }
 
 .material-form button[type="submit"]:hover {
   opacity: 0.9;
-  box-shadow: 0 4px 12px rgba(255, 126, 95, 0.3);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
 
 .material-form button[type="button"] {
-  background-color: #333;
+  background-color: #64748b; /* Gris azulado para el botón secundario */
 }
 
 .material-form button[type="button"]:hover {
   opacity: 0.9;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(100, 116, 139, 0.3);
 }
 
 /* Separador */
 .materiales-page hr {
   border: none;
-  border-top: 1px solid #eee;
+  border-top: 1px solid #e2e8f0;
   margin: 2rem 0;
 }
 
@@ -115,7 +122,7 @@ table {
 }
 
 thead {
-  background: linear-gradient(135deg, #ff7e5f, #ffb85f);
+  background: linear-gradient(135deg, #1e40af, #3b82f6); /* Azul profundo */
   color: #fff;
 }
 
@@ -125,27 +132,28 @@ thead th {
 }
 
 tbody tr {
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #f1f5f9;
   transition: background 0.2s;
 }
 
 tbody tr:hover {
-  background-color: rgba(255, 126, 95, 0.05);
+  background-color: rgba(37, 99, 235, 0.05); /* Efecto hover azul muy suave */
 }
 
 tbody td {
   padding: 0.6rem 1rem;
-  color: #222;
+  color: #334155;
 }
 
 /* Mensajes de carga o sin datos */
 .materiales-page div[ngIf] {
   font-style: italic;
-  color: #666;
+  color: #64748b;
   margin-top: 1rem;
 }
+
 .materiales-page .error-message {
-  color: #d9534f; /* rojo para errores */
+  color: #dc2626; /* Rojo para errores */
   font-weight: 600;
   margin-top: 1rem;
 }
