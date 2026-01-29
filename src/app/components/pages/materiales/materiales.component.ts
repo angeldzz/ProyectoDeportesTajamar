@@ -58,7 +58,7 @@ export class MaterialesComponent implements OnInit {
   }
 
   remove(id: number){
-    if(!confirm('Confirmar eliminación')) return;
+    if(!confirm('Confirmar eliminaciÃ³n')) return;
     this.materialesService.delete(id).subscribe({next:_=>this.loadAll()});
   }
 

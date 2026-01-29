@@ -32,19 +32,19 @@
   <hr />
 
   <div *ngIf="loading">Cargando materiales...</div>
-  <table *ngIf="!loading && lista.length">
-    <thead>
-      <tr><th>Id</th><th>Nombre</th><th>Usuario</th><th>Pendiente</th><th>Fecha</th></tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let m of lista">
-        <td>{{ m.idMaterial }}</td>
-        <td>{{ m.nombreMaterial }}</td>
-        <td>{{ m.idUsuario }}</td>
-        <td>{{ m.pendiente }}</td>
-        <td>{{ m.fechaSolicitud | date }}</td>
-      </tr>
-    </tbody>
-  </table>
-  <div *ngIf="!loading && lista.length === 0">No hay materiales.</div>
+<table *ngIf="!loading && lista.length">
+  <thead>
+  <tr><th>Id</th><th>Nombre</th><th>Usuario</th><th>Pendiente</th><th>Fecha</th></tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let m of lista">
+  <td>{{ m.idMaterial }}</td>
+  <td>{{ m.nombreMaterial }}</td>
+  <td>{{ m.idUsuario }}</td>
+  <td>{{ m.pendiente }}</td>
+  <td>{{ m.fechaSolicitud | date }}</td>
+  </tr>
+  </tbody>
+</table>
+<div *ngIf="!loading && lista.length === 0">No hay materiales.</div>
 </div>

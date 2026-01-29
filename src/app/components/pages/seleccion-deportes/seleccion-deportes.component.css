@@ -162,3 +162,38 @@
   text-transform: uppercase;
   color: var(--text-secondary);
 }
+.no-caret::after {
+  display: none !important;
+}
+
+/* Estilo para que el botón de los tres puntos resalte sobre la imagen */
+.dropdown .btn-link:hover {
+  background: rgba(0,0,0,0.5) !important;
+  color: white !important;
+}
+
+.dropdown-item i {
+  color: var(--text-main);
+  font-size: 1.1rem;
+}
+
+.dropdown-item:hover {
+  color: var(--bs-primary);
+}
+
+.preciodrop:hover {
+  cursor: pointer;
+}
+.custom-btn-rand {
+  border-width: 1px;
+  border-style: solid;
+  transition: all 0.3s ease;
+  background: transparent;
+  color:black;
+}
+
+.custom-btn-rand:hover {
+  opacity: 1 !important;
+  background-color: rgba(255, 193, 7, 0.1); /* Fondo amarillo muy suave al pasar el ratón */
+  transform: translateY(-1px);
+}

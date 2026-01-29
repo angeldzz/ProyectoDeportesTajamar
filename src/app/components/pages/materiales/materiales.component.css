@@ -1,5 +1,151 @@
-.material-form{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center}
-.material-form label{display:block;font-weight:600}
-.material-form .actions{grid-column:1/-1;margin-top:8px}
-.materiales-page table{width:100%;border-collapse:collapse;margin-top:12px}
-.materiales-page th,.materiales-page td{border:1px solid #ddd;padding:8px;text-align:left}
+/* Contenedor principal */
+.materiales-page {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fff; /* blanco */
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  font-family: 'Outfit', sans-serif;
+  color: #222; /* texto principal negro */
+}
+
+/* TÃ­tulo */
+.materiales-page h3 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #ff7e5f; /* naranja principal */
+  border-bottom: 2px solid #ff7e5f;
+  display: inline-block;
+  padding-bottom: 4px;
+}
+
+/* Formulario */
+.material-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.material-form div {
+  display: flex;
+  flex-direction: column;
+}
+
+.material-form label {
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  color: #333;
+}
+
+.material-form input[type="text"],
+.material-form input[type="number"],
+.material-form input[type="date"] {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+.material-form input[type="text"]:focus,
+.material-form input[type="number"]:focus,
+.material-form input[type="date"]:focus {
+  border-color: #ff7e5f;
+  box-shadow: 0 0 6px rgba(255, 126, 95, 0.3);
+  outline: none;
+}
+
+.material-form input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #ff7e5f;
+}
+
+/* Botones */
+.material-form .actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.material-form button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #fff;
+}
+
+.material-form button[type="submit"] {
+  background: linear-gradient(135deg, #ff7e5f, #ffb85f);
+}
+
+.material-form button[type="submit"]:hover {
+  opacity: 0.9;
+  box-shadow: 0 4px 12px rgba(255, 126, 95, 0.3);
+}
+
+.material-form button[type="button"] {
+  background-color: #333;
+}
+
+.material-form button[type="button"]:hover {
+  opacity: 0.9;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Separador */
+.materiales-page hr {
+  border: none;
+  border-top: 1px solid #eee;
+  margin: 2rem 0;
+}
+
+/* Tabla */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+thead {
+  background: linear-gradient(135deg, #ff7e5f, #ffb85f);
+  color: #fff;
+}
+
+thead th {
+  padding: 0.8rem 1rem;
+  text-align: left;
+}
+
+tbody tr {
+  border-bottom: 1px solid #eee;
+  transition: background 0.2s;
+}
+
+tbody tr:hover {
+  background-color: rgba(255, 126, 95, 0.05);
+}
+
+tbody td {
+  padding: 0.6rem 1rem;
+  color: #222;
+}
+
+/* Mensajes de carga o sin datos */
+.materiales-page div[ngIf] {
+  font-style: italic;
+  color: #666;
+  margin-top: 1rem;
+}
+.materiales-page .error-message {
+  color: #d9534f; /* rojo para errores */
+  font-weight: 600;
+  margin-top: 1rem;
+}

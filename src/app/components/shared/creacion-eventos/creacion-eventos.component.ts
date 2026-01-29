@@ -6,17 +6,22 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
 
+
 import { EventosService } from '../../../core/services/eventos.service';
 import { Router } from '@angular/router';
+import {ProfesoresService} from '../../../core/services/profesores.service';
+import {Usuario} from '../../../models/Usuario';
+import {FormsModule} from '@angular/forms';
+
 
 @Component({
   selector: 'app-creacion-eventos',
-  imports: [FullCalendarModule],
+  imports: [FullCalendarModule, FormsModule],
   templateUrl: './creacion-eventos.component.html',
   styleUrl: './creacion-eventos.component.css',
 })
 export class CreacionEventosComponent implements OnInit {
-  constructor(private _eventosService: EventosService, private router: Router){}
+  constructor(private _eventosService: EventosService, private router: Router,private _profesoresService:ProfesoresService) { }
   selectedDate: Date | null = null;
   selectedDateStr: string = '';
   showTimeModal: boolean = false;
@@ -28,6 +33,12 @@ export class CreacionEventosComponent implements OnInit {
   isDraggingMinute: boolean = false;
   startY: number = 0;
   startScrollTop: number = 0;
+
+
+  profesores: Usuario[] = [];
+  idProfesorSeleccionado: number | null = null;
+
+
 
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
@@ -50,6 +61,15 @@ export class CreacionEventosComponent implements OnInit {
   };
 
   ngOnInit(): void {
+
+    this.cargarProfesores();
+  }
+
+  cargarProfesores() {
+    this._profesoresService.getProfesActivos().subscribe({
+      next: (data) => this.profesores = data,
+      error: (err) => console.error('Error cargando profesores', err)
+    });
   }
 
   handleDateSelect(selectInfo: DateSelectArg) {
@@ -78,15 +98,39 @@ export class CreacionEventosComponent implements OnInit {
     this.showTimeModal = false;
   }
 
+  // confirmTime() {
+  //   if (this.selectedDate) {
+  //     // Crear una nueva fecha con la hora seleccionada
+  //     const fechaConHora = new Date(this.selectedDate);
+  //     fechaConHora.setHours(this.selectedHour, this.selectedMinute, 0, 0);
+  //     this.selectedDate = fechaConHora;
+  //     this.selectedDateStr = this.formatDateWithTime(fechaConHora);
+  //   }
+  //   this.showTimeModal = false;
+  // }
+
   confirmTime() {
-    if (this.selectedDate) {
-      // Crear una nueva fecha con la hora seleccionada
+    if (this.selectedDate && this.idProfesorSeleccionado) {
       const fechaConHora = new Date(this.selectedDate);
       fechaConHora.setHours(this.selectedHour, this.selectedMinute, 0, 0);
       this.selectedDate = fechaConHora;
-      this.selectedDateStr = this.formatDateWithTime(fechaConHora);
+
+      // Ejecutamos la creación del evento
+      this._eventosService.createEvento(this.selectedDate).subscribe({
+        next: (eventoCreado: any) => {
+          // Una vez creado el evento, asociamos al profesor
+          this._profesoresService.asociarProfesorEvento(eventoCreado.idEvento, this.idProfesorSeleccionado!).subscribe({
+            next: () => {
+              this.showTimeModal = false;
+              this.router.navigate(['/asignacion-actividad-evento', eventoCreado.idEvento]);
+            }
+          });
+        },
+        error: (err) => console.error('Error al crear evento:', err)
+      });
+    } else {
+      alert("Por favor, selecciona una hora y un profesor");
     }
-    this.showTimeModal = false;
   }
 
   formatDateWithTime(date: Date): string {
