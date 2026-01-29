@@ -9,7 +9,7 @@
       <h2 class="fw-bold m-0 ms-3" style="color: var(--text-main);">Actividades Disponibles</h2>
     </div>
 
-    @if (!loading && !eventoPasado) {
+    @if (((role$ | async) === 3 || (role$ | async) === 4 || (role$ | async) === 6) && !loading && !eventoPasado) {
       <button class="btn btn-sm btn-outline-warning d-flex align-items-center gap-2 opacity-75 custom-btn-rand"
               (click)="procesarActividades()"
               title="Prueba Aleatoria">
