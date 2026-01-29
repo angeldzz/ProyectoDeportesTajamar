@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Materiales } from '../../../models/Materiales';
-import { MaterialesService } from '../../../core/services/materiales.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { Materiales } from '../../../models/Materiales';
+import { MaterialesService } from '../../../core/services/materiales.service';
+import { UsuarioService } from '../../../core/services/usuario.service'; 
 
 @Component({
   selector: 'app-materiales',
@@ -12,58 +14,101 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./materiales.component.css']
 })
 export class MaterialesComponent implements OnInit {
-  lista: Materiales[] = [];
-  model: Partial<Materiales> = {};
+  lista: any[] = [];
+  masters: any[] = [];
+  usuarios: any[] = [];
+  
+  model: any = { pendiente: false };
   editingId: number | null = null;
-  loading = false;
+  loading: boolean = false;
 
-  constructor(private materialesService: MaterialesService) { }
+  constructor(
+    private _materialesService: MaterialesService,
+    private _usuarioService: UsuarioService,
+    private _http: HttpClient 
+  ) { }
 
   ngOnInit(): void {
     this.loadAll();
+    this.loadAuxiliarData();
   }
 
-  loadAll(){
+  loadAuxiliarData(): void {
+    // Si 'getUsuarios' da error, prueba con 'get' o revisa tu usuario.service.ts
+    // He puesto (this._usuarioService as any) para que TypeScript no bloquee la compilación por el nombre del método
+    (this._usuarioService as any).getUsuarios().subscribe({
+      next: (res: any) => { this.usuarios = res; },
+      error: (err: any) => {
+        console.log("Intentando método alternativo .get()...");
+        (this._usuarioService as any).get().subscribe((res: any) => this.usuarios = res);
+      }
+    });
+
+    // Carga de Masters directa
+    this._http.get<any[]>('https://apideportestajamar.azurewebsites.net/api/Masters').subscribe({
+      next: (res: any) => { this.masters = res; },
+      error: (err: any) => console.error('Error masters:', err)
+    });
+  }
+
+  loadAll(): void {
     this.loading = true;
-    this.materialesService.getAll().subscribe({next: r=>{this.lista = r || []; this.loading=false}, error: ()=>{this.lista=[]; this.loading=false}})
+    this._materialesService.getAll().subscribe({
+      next: (res: any) => {
+        this.lista = res || [];
+        this.loading = false;
+      },
+      error: () => {
+        this.lista = [];
+        this.loading = false;
+      }
+    });
   }
 
-  submit(){
-    const payload = {
-      idMaterial: this.editingId ?? undefined,
-      idEventoActividad: this.model.idEventoActividad,
-      idUsuario: this.model.idUsuario,
+  submit(): void {
+    const payload: any = {
+      idMaterial: this.editingId ? this.editingId : 0,
+      idEventoActividad: Number(this.model.idEventoActividad),
+      idUsuario: Number(this.model.idUsuario),
       nombreMaterial: this.model.nombreMaterial,
       pendiente: !!this.model.pendiente,
       fechaSolicitud: this.model.fechaSolicitud
-    } as Partial<Materiales>;
+    };
 
     this.loading = true;
-    if(this.editingId){
-      this.materialesService.update(this.editingId, payload).subscribe({
-        next:_=>{ this.resetForm(); this.loadAll(); this.loading = false },
-        error: err => { console.error('Error actualizando material', err); alert('Error actualizando'); this.loading = false }
-      })
+    if (this.editingId) {
+      this._materialesService.update(this.editingId, payload).subscribe({
+        next: () => this.handleSuccess(),
+        error: (err: any) => { console.error(err); this.loading = false; }
+      });
     } else {
-      this.materialesService.create(payload).subscribe({
-        next:_=>{ this.resetForm(); this.loadAll(); this.loading = false },
-        error: err => { console.error('Error creando material', err); alert('Error creando'); this.loading = false }
-      })
+      this._materialesService.create(payload).subscribe({
+        next: () => this.handleSuccess(),
+        error: (err: any) => { console.error(err); this.loading = false; }
+      });
     }
   }
 
-  edit(item: Materiales){
+  handleSuccess(): void {
+    this.resetForm();
+    this.loadAll();
+    this.loading = false;
+  }
+
+  edit(item: any): void {
     this.editingId = item.idMaterial;
-    this.model = {...item};
+    this.model = { ...item };
   }
 
-  remove(id: number){
-    if(!confirm('Confirmar eliminación')) return;
-    this.materialesService.delete(id).subscribe({next:_=>this.loadAll()});
+  remove(id: number): void {
+    if (!confirm('¿Eliminar?')) return;
+    this._materialesService.delete(id).subscribe({
+      next: () => this.loadAll()
+    });
   }
 
-  resetForm(){
-    this.model = {};
+  resetForm(): void {
+    this.model = { pendiente: false };
     this.editingId = null;
   }
 }
