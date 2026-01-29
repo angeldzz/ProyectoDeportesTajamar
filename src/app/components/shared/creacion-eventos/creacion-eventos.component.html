@@ -30,9 +30,9 @@
 
         <!-- Botón de acción -->
         <div class="action-buttons">
-            <button 
-                type="button" 
-                class="btn btn-crear-evento" 
+            <button
+                type="button"
+                class="btn btn-crear-evento"
                 (click)="crearEvento()"
                 [disabled]="!selectedDate">
                 <i class="bi bi-plus-circle"></i>
@@ -59,13 +59,27 @@
                     <span>{{ selectedDateStr }}</span>
                 </div>
 
+              <div class="profesor-selector-container mb-4">
+                <label class="form-label fw-bold small text-muted text-uppercase d-block mb-2">
+                  Responsable del Evento
+                </label>
+                <select class="form-select bg-light border-0" [(ngModel)]="idProfesorSeleccionado">
+                  <option [ngValue]="null" disabled selected>Seleccionar Profesor...</option>
+                  @for (profe of profesores; track profe.idUsuario) {
+                    <option [ngValue]="profe.idUsuario">
+                      {{ profe.usuario }} {{ profe.apellidos }}
+                    </option>
+                  }
+                </select>
+              </div>
+
                 <div class="time-picker-container">
                     <div class="time-picker-overlay-top"></div>
                     <div class="time-picker-selection-indicator"></div>
                     <div class="time-picker-overlay-bottom"></div>
 
                     <div class="time-picker-column">
-                        <div class="time-picker-scroll" 
+                        <div class="time-picker-scroll"
                              (scroll)="onHourScroll($event)"
                              (mousedown)="onHourMouseDown($event)"
                              (mousemove)="onHourMouseMove($event)"
@@ -73,7 +87,7 @@
                              (mouseleave)="onHourMouseUp()">
                             <div class="time-picker-spacer"></div>
                             @for (hour of hours; track hour) {
-                                <div class="time-picker-item" 
+                                <div class="time-picker-item"
                                      [class.selected]="hour === selectedHour">
                                     {{ hour.toString().padStart(2, '0') }}
                                 </div>
@@ -86,7 +100,7 @@
                     <div class="time-picker-separator">:</div>
 
                     <div class="time-picker-column">
-                        <div class="time-picker-scroll" 
+                        <div class="time-picker-scroll"
                              (scroll)="onMinuteScroll($event)"
                              (mousedown)="onMinuteMouseDown($event)"
                              (mousemove)="onMinuteMouseMove($event)"
@@ -94,7 +108,7 @@
                              (mouseleave)="onMinuteMouseUp()">
                             <div class="time-picker-spacer"></div>
                             @for (minute of minutes; track minute) {
-                                <div class="time-picker-item" 
+                                <div class="time-picker-item"
                                      [class.selected]="minute === selectedMinute">
                                     {{ minute.toString().padStart(2, '0') }}
                                 </div>

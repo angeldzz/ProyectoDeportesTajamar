@@ -1,3 +1,4 @@
+
 plus.main-content {
         min-height: calc(100vh - 56px);
         background-color: #f8f9fa;
@@ -14,7 +15,7 @@ plus.main-content {
         padding: 40px 20px;
         min-height: calc(100vh - 56px);
     }
-    
+
     @media (max-width: 991px) {
         .events-column {
             min-height: auto;
@@ -26,7 +27,7 @@ plus.main-content {
         padding: 40px 20px;
         min-height: calc(100vh - 56px);
     }
-    
+
     .events-container {
         max-width: 600px;
         margin: 0 auto;
@@ -228,16 +229,16 @@ plus.main-content {
     .bg-gradient-secondary {
         background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
     }
-    
+
     /* Colores adicionales de la paleta */
     .bg-gradient-orange {
         background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
     }
-    
+
     .bg-gradient-purple {
         background: linear-gradient(135deg, #a855f7 0%, #c084fc 100%);
     }
-    
+
     .bg-gradient-green {
         background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
     }
@@ -336,11 +337,11 @@ plus.main-content {
             height: auto;
             padding: 20px 15px;
         }
-        
+
         .events-column, .calendario-column {
             min-height: auto;
         }
-        
+
         .main-content {
             height: auto;
             overflow-y: visible;
@@ -466,24 +467,24 @@ plus.main-content {
     .section-title {
         font-size: 1.3rem;
     }
-    
+
     .event-card-horizontal .card-body {
         padding: 14px 16px;
     }
-    
+
     .event-date-badge {
         min-width: 55px;
         padding: 6px 10px;
     }
-    
+
     .event-month {
         font-size: 0.6rem;
     }
-    
+
     .event-day {
         font-size: 1.1rem;
     }
-    
+
     .btn-join-compact {
         padding: 8px 16px;
         font-size: 0.8rem;
@@ -496,92 +497,92 @@ plus.main-content {
         font-size: 1.1rem;
         margin-bottom: 20px;
     }
-    
+
     .event-card-horizontal .card-body {
         padding: 12px;
     }
-    
+
     .d-flex.align-items-center.gap-3 {
         gap: 8px !important;
     }
-    
+
     .d-flex.align-items-center.gap-4 {
         gap: 10px !important;
     }
-    
+
     .event-date-badge {
         min-width: 50px;
         padding: 6px 8px;
     }
-    
+
     .event-month {
         font-size: 0.55rem;
         letter-spacing: 0.5px;
     }
-    
+
     .event-day {
         font-size: 1rem;
     }
-    
+
     .event-title {
         font-size: 0.9rem;
     }
-    
+
     .event-meta {
         gap: 10px;
         font-size: 0.75rem;
         flex-wrap: wrap;
     }
-    
+
     .meta-item {
         gap: 4px;
     }
-    
+
     .meta-item i {
         font-size: 0.75rem;
     }
-    
+
     .badge-disponible,
     .badge-finalizado {
         font-size: 0.65rem;
         padding: 3px 8px;
     }
-    
+
     .btn-join-compact {
         padding: 6px 12px;
         font-size: 0.75rem;
     }
-    
+
     .btn-join-compact i {
         font-size: 0.7rem;
     }
-    
+
     .btn-icon-action {
         padding: 5px 8px;
         font-size: 0.8rem;
     }
-    
+
     .pagination-controls {
         gap: 8px;
         margin-top: 30px;
         flex-wrap: wrap;
     }
-    
+
     .pagination-btn {
         min-width: 80px;
         padding: 6px 10px;
         font-size: 0.75rem;
     }
-    
+
     .pagination-btn i {
         font-size: 0.7rem;
     }
-    
+
     .pagination-info {
         font-size: 0.85rem;
         padding: 0 8px;
     }
-    
+
     .calendario-content {
         padding: 15px;
     }
@@ -593,86 +594,86 @@ plus.main-content {
     .calendario-column {
         padding: 15px 10px;
     }
-    
+
     .section-title {
         font-size: 1rem;
     }
-    
+
     .event-card-horizontal .card-body {
         padding: 10px;
     }
-    
+
     .event-date-badge {
         min-width: 45px;
         padding: 5px 6px;
         border-radius: 8px;
     }
-    
+
     .event-month {
         font-size: 0.5rem;
     }
-    
+
     .event-day {
         font-size: 0.95rem;
     }
-    
+
     .event-title {
         font-size: 0.85rem;
     }
-    
+
     .event-meta {
         font-size: 0.7rem;
         gap: 8px;
     }
-    
+
     .badge-disponible,
     .badge-finalizado {
         font-size: 0.6rem;
         padding: 2px 6px;
     }
-    
+
     .btn-join-compact {
         padding: 5px 10px;
         font-size: 0.7rem;
         white-space: nowrap;
     }
-    
+
     .btn-join-compact i {
         display: none;
     }
-    
+
     .btn-icon-action {
         padding: 4px 6px;
         font-size: 0.75rem;
     }
-    
+
     .pagination-btn {
         min-width: 70px;
         padding: 5px 8px;
         font-size: 0.7rem;
     }
-    
+
     .pagination-btn i {
         font-size: 0.65rem;
     }
-    
+
     .pagination-info {
         font-size: 0.75rem;
     }
-    
+
     .calendario-content {
         padding: 10px;
     }
-    
+
     ::ng-deep .calendario-content .fc-toolbar {
         flex-direction: column;
         gap: 10px;
     }
-    
+
     ::ng-deep .calendario-content .fc-toolbar-title {
         font-size: 1.1rem;
     }
-    
+
     ::ng-deep .calendario-content .fc-button {
         font-size: 0.75rem;
         padding: 4px 8px;

@@ -570,3 +570,16 @@
         font-size: 1.4rem;
     }
 }
+
+
+.profesor-selector-container {
+  padding: 0 20px;
+  margin-bottom: 25px;
+}
+
+.profesor-selector-container select {
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
