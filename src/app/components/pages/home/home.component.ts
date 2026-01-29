@@ -10,8 +10,9 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
-import {UsuarioService} from '../../../core/services/usuario.service';
 import { Observable } from 'rxjs/internal/Observable';
+import { ProfesoresService } from '../../../core/services/profesores.service';
+import { Usuario } from '../../../models/Usuario';
 
 @Component({
   selector: 'app-home',
@@ -35,7 +36,7 @@ export class HomeComponent implements OnInit{
   // Paginación eventos disponibles
   public paginaDisponibles: number = 1;
   public eventosPorPagina: number = 3;
-
+  public profesores!: Array<Usuario>;
   // Paginación eventos anteriores
   public paginaAnteriores: number = 1;
 
@@ -56,14 +57,18 @@ export class HomeComponent implements OnInit{
   };
 
   constructor(private _authService: AuthService,
-              private _serviceEventos: EventosService) {
+              private _serviceEventos: EventosService,
+              private _profesoresService: ProfesoresService) {
 
     this.role$ = this._authService.userRole$;
   }
 
   ngOnInit(): void {
     // Suscribirse al rol de manera reactiva
-
+    this._profesoresService.getProfesActivos().subscribe(response => {
+      this.profesores = response;
+      console.log(this.profesores);
+    })
     this._serviceEventos.GetEventos().subscribe({
       next: (data) => {
         const fechaActual = new Date();
@@ -159,6 +164,14 @@ export class HomeComponent implements OnInit{
     if (this.paginaAnteriores > 1) {
       this.paginaAnteriores--;
     }
+  }
+
+  getNombreProfesor(idProfesor: number): string {
+    if (idProfesor === -1) {
+      return 'Profesor no asignado';
+    }
+    const profesor = this.profesores?.find(p => p.idUsuario === idProfesor);
+    return profesor?.usuario ?? `Profesor ${idProfesor}`;
   }
 
 }
