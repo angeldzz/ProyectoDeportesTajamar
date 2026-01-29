@@ -41,14 +41,12 @@
                 <i class="bi bi-three-dots-vertical text-white"></i>
               </button>
               <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4 mt-2">
-
+                <li>
+                  <a class="dropdown-item py-2" [routerLink]="['/materiales', idEvento, deporte.idActividad]">
+                    <i class="bi bi-box me-2"></i>Materiales
+                  </a>
+                </li>
                 @if (((role$ | async) === 3 || (role$ | async) === 4 || (role$ | async) === 6) && !eventoPasado) {
-
-                  <li>
-                    <a class="dropdown-item py-2" [routerLink]="['/materiales', idEvento, deporte.idActividad]">
-                      <i class="bi bi-box me-2"></i>Materiales
-                    </a>
-                  </li>
 
                   <li>
                     <a class="preciodrop dropdown-item py-2"
