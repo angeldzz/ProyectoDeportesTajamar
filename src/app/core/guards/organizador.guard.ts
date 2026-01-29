@@ -11,7 +11,7 @@ export const organizadorGuard = () => {
 
   console.log("Guard revisando:", { role, hasToken: !!token });
 
-  if (token && role === 4) {
+  if (token && role === 4 || role===6) {
     return true;
   }
 

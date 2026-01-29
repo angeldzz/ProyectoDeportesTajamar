@@ -1,11 +1,21 @@
 
 @if((role$ | async) == 3 || (role$ | async) == 5 || (role$ | async) == 6 ){
   @if(this.capitanEventoActividad){
-    <button  class="btn btn-info"
-             data-bs-toggle="modal"
-             data-bs-target="#modalEquipos"
-             (click)="abrirModalCrearEquipo()">
-      Crear Equipo</button>
+    <div class="mini-panel">
+      <div class="panel-header">
+        <h3 class="panel-title">Información</h3>
+      </div>
+      <div class="panel-body">
+        <p class="panel-text">Eres el capitán de esta actividad.</p>
+        <button class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#modalEquipos"
+                (click)="abrirModalCrearEquipo()">
+          Crear Equipo
+        </button>
+      </div>
+    </div>
+
   }
 }
 

@@ -14,9 +14,10 @@
         <input type="number" #cajaMinimo
                class="form-control border-0 bg-light rounded-3 p-2"
                placeholder="0">
+
       </div>
       <div class="col-md-2 d-flex align-items-end">
-        <button type="submit" class="btn btn-primary w-100 rounded-3 py-2">
+        <button type="submit" class="btn btn-primary w-100 rounded-3 py-2" (click)="crearActividad()">
           <i class="bi bi-plus-lg"></i> Crear
         </button>
       </div>
@@ -42,7 +43,11 @@
                 {{act.minimoJugadores}} pers.
               </span>
             </td>
-
+            <td>
+              <button class="btn btn-danger" (click)="borrarActividad(act.idActividad)">
+                Borrar
+              </button>
+            </td>
           </tr>
         }
       </tbody>
