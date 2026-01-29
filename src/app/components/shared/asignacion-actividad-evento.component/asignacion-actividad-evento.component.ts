@@ -47,8 +47,6 @@ export class AsignacionActividadEventoComponent implements OnInit{
       
       this.deportesSeleccionados = seleccionados;
       this.deportesSeleccionadosOriginales = [...seleccionados]; // Guardar copia del estado original
-      console.log("Deportes en evento:");
-      console.log(seleccionados);
       
       // Cargar deportes disponibles después de obtener los seleccionados
       this._serviceDeportes.getDeportes().subscribe(todosDeportes => {
@@ -62,8 +60,6 @@ export class AsignacionActividadEventoComponent implements OnInit{
           }));
         
         this.deportesDisponibles = deportesFiltrados;
-        console.log("Deportes disponibles (filtrados):");
-        console.log(deportesFiltrados);
       });
     });
   }
@@ -71,7 +67,6 @@ export class AsignacionActividadEventoComponent implements OnInit{
     const idEvento = this.route.snapshot.params['idEvento'];
       this._serviceEvento.GetEventoIndividual(idEvento).subscribe(result => {
       this.evento = result;
-      console.log("Id evento: " + this.evento.idEvento);
       // Load deportes after evento is loaded
       this.LoadDeportes();
     })
@@ -150,7 +145,6 @@ export class AsignacionActividadEventoComponent implements OnInit{
   ) {
     // Caso base: si ya procesamos todos los deportes
     if (index >= deportes.length) {
-      console.log(`✓ Eliminación completada: ${exitosos.length} exitosas, ${fallidos.length} fallidas`);
       onComplete();
       return;
     }
@@ -166,7 +160,6 @@ export class AsignacionActividadEventoComponent implements OnInit{
     // Eliminar la actividad actual
     this._serviceEvento.EliminarActividad_Evento(deporte.idEventoActividad).subscribe({
       next: () => {
-        console.log(`✓ Actividad ${deporte.nombre} eliminada correctamente`);
         exitosos.push(deporte.nombre || `ID ${deporte.idActividad}`);
         // Continuar con la siguiente actividad
         this.eliminarActividadesSecuencial(deportes, index + 1, exitosos, fallidos, onComplete);
@@ -228,7 +221,6 @@ export class AsignacionActividadEventoComponent implements OnInit{
     // Asignar la actividad actual
     this._serviceEvento.AsignarActividad_Evento(idEvento, deporte.idActividad).subscribe({
       next: () => {
-        console.log(`✓ Actividad ${deporte.nombre} asignada correctamente`);
         exitosos.push(deporte.nombre || `ID ${deporte.idActividad}`);
         // Continuar con la siguiente actividad
         this.asignarActividadesSecuencial(deportes, idEvento, index + 1, exitosos, fallidos);

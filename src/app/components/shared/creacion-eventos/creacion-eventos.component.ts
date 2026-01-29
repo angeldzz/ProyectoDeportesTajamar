@@ -159,7 +159,11 @@ export class CreacionEventosComponent implements OnInit {
 
   crearEvento() {
     if (this.selectedDate) {
-      this._eventosService.createEvento(this.selectedDate).subscribe({
+      // Ajustar la fecha para compensar la conversión UTC
+      const fechaAjustada = new Date(this.selectedDate);
+      fechaAjustada.setMinutes(fechaAjustada.getMinutes() - fechaAjustada.getTimezoneOffset());
+      
+      this._eventosService.createEvento(fechaAjustada).subscribe({
         next: (eventoCreado: any) => {
           this.router.navigate(['/asignacion-actividad-evento', eventoCreado.idEvento]);
         },
