@@ -2,15 +2,16 @@
 
   <div class="d-flex align-items-center mb-5">
     <div class="title-bar"></div>
+
+
+
     <h2 class="fw-bold m-0 ms-3" style="color: var(--text-main);">Actividades Disponibles</h2>
   </div>
 
-  <div class="contenedor-capitan">
-    <p>{{usario.nombre +","}}¿Quieres ser capitan?
-      <input type="checkbox" (change)="onChangeCapitan()"></p>
-  </div>
 
   <div class="row-cols-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-3">
+  <button (click)="procesarActividades()">Prueba Rand</button>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-5">
 
     @for(deporte of deportes; track deporte.idActividad) {
 
@@ -18,12 +19,23 @@
         <div class="card border-0 shadow-sm h-100 bg-white overflow-hidden card-hover-simple">
 
           <div class="position-relative p-2">
+<!--            TODO CAMBIAR IMAGENES-->
             <img src="https://img.asmedia.epimg.net/resizer/v2/Q4FRBZWWLJKJVLNER6KGG5X6WE.jpg?auth=9ac7b5ed6b83692a50a0974caa6192d003659fdc51a4f5881f7c61abdd6ee4d1&width=1472&height=828&smart=true"
                  class="card-img-top rounded-4 shadow-sm" alt="...">
+
+
+            @if(eventoPasado) {
+              <span class="badge position-absolute top-0 start-0 m-3 border-0 py-2 px-3 bg-danger  shadow-sm badge-status">
+              REGISTRO CERRADO
+            </span>
+            }@else{
 
             <span class="badge position-absolute top-0 start-0 m-3 border-0 py-2 px-3  shadow-sm badge-status">
               REGISTRO ABIERTO
             </span>
+            }
+
+
 
 
             @if(deporte.precio != null){
@@ -57,11 +69,18 @@
                 Equipo
               </button>
 
-              <button class="btn btn-enroll px-4 py-2 fw-bold shadow-sm"
-              (click)="inscribirseActividadEvento(this.idEvento,deporte.idActividad,deporte.idEventoActividad)">
-                Inscribirse
-              </button>
 
+              @if(!eventoPasado){
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#modalCapitan"
+                  (click)="abrirModalCapitan(deporte)"
+                >
+                  Inscríbete!!
+                </button>
+              }
 
             </div>
           </div>
@@ -71,3 +90,60 @@
   </div>
 </div>
 
+
+<div
+  class="modal fade"
+  id="modalCapitan"
+  tabindex="-1"
+  aria-labelledby="modalCapitanLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCapitanLabel">
+          ¿Quieres ser capitán del evento?
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-check">
+          <input
+            id="chkCapitan"
+            class="form-check-input"
+            type="checkbox"
+            [(ngModel)]="quiereSerCapitan"
+            (change)="onChangeCapitan()"
+          />
+          <label class="form-check-label" for="chkCapitan">
+            Sí, quiero ser capitán del evento
+          </label>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal">
+          Cerrar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-bs-dismiss="modal"
+          (click)="inscribirseDesdeModal()"
+          [disabled]=" yaInscrito || eventoPasado"
+        >
+          Inscribirse
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

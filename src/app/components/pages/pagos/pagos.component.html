@@ -1,7 +1,12 @@
 <div class="container mt-4">
   <div class="row">
     <div class="col-12">
-      <h2 class="mb-4">Cursos y Pagos</h2>
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Cursos y Pagos</h2>
+        <button class="btn btn-primary" style="border: 2px solid #0d6efd;" (click)="abrirModalCrearPago()">
+          <i class="bi bi-plus-circle"></i> Crear Pago
+        </button>
+      </div>
 
       <div class="accordion" id="cursosAccordion">
         <div class="accordion-item" *ngFor="let curso of cursos; let i = index">
@@ -26,25 +31,23 @@
           <div [id]="'collapse' + i" class="accordion-collapse collapse" [class.show]="i === 0"
                [attr.aria-labelledby]="'heading' + i" data-bs-parent="#cursosAccordion">
             <div class="accordion-body">
-              <h5 class="mb-3">Pagos del Curso</h5>
 
               <div *ngIf="getPagosPorCurso(curso.idCurso).length > 0; else noPagos">
                 <div class="row">
-                  <div class="col-lg-9 col-md-8">
+                  <div class="col-xl-8 col-lg-12 col-md-12 mb-3">
                     <div class="table-responsive">
                       <table class="table table-sm table-bordered tabla-pagos">
                         <thead class="table-light">
                           <tr>
-                            <th>IdPago</th>
-                            <th>IdCurso</th>
+                            <th class="d-none d-lg-table-cell">IdPago</th>
                             <th>Cantidad</th>
                             <th>Estado</th>
+                            <th *ngIf="(role$ | async) === 4">Acciones</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr *ngFor="let pago of getPagosPorCurso(curso.idCurso)">
-                            <td>{{ pago.idPago }}</td>
-                            <td>{{ pago.idCurso }}</td>
+                            <td class="d-none d-lg-table-cell">{{ pago.idPago }}</td>
                             <td>
                               <!-- Vista para otros roles (solo lectura) -->
                               <div *ngIf="(role$ | async) !== 4">
@@ -100,29 +103,37 @@
                                 </select>
                               </div>
                             </td>
+                            <td *ngIf="(role$ | async) === 4">
+                              <button class="btn btn-sm btn-danger" 
+                                      (click)="eliminarPago(pago)"
+                                      title="Eliminar pago">
+                                <i class="bi bi-trash"></i>
+                              </button>
+                            </td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
                   </div>
 
-                  <div class="col-lg-3 col-md-4">
+                    <div class="col-xl-4 col-lg-12 col-md-12">
                     <!-- Resumen de pagos -->
-                    <div class="p-3 bg-light rounded h-100 d-flex flex-column justify-content-center">
+                    <div class="p-3 bg-light rounded">
                       <div class="mb-3">
-                        <strong>Total de Pagos:</strong>
-                        <div class="fs-4 text-primary">{{ getPagosPorCurso(curso.idCurso).length }}</div>
+                      <strong>Total de Pagos:</strong>
+                      <div class="fs-4 text-primary">{{ getPagosPorCurso(curso.idCurso).length }}</div>
                       </div>
                       <div class="mb-3">
-                        <strong>Total Pagado:</strong>
-                        <div class="fs-4 text-success">{{ getTotalPagadoPorCurso(curso.idCurso) | currency:'EUR':'symbol':'1.2-2' }}</div>
+                      <strong>Total Pagado:</strong>
+                      <div class="fs-4 text-success">{{ getTotalPagadoPorCurso(curso.idCurso) | currency:'EUR':'symbol':'1.2-2' }}</div>
                       </div>
                       <div>
-                        <strong>Pendiente de Pagar:</strong>
-                        <div class="fs-4 text-warning">{{ getPendientePorCurso(curso.idCurso) | currency:'EUR':'symbol':'1.2-2' }}</div>
+                      <strong>Pendiente de Pagar:</strong>
+                      <div class="fs-4 text-warning">{{ getPendientePorCurso(curso.idCurso) | currency:'EUR':'symbol':'1.2-2' }}</div>
+                      <div class="fs-6 text-warning" *ngIf="(role$ | async) === 4">para actualizar una cantidad pulse el boton verde de confirmar!</div>
                       </div>
                     </div>
-                  </div>
+                    </div>
                 </div>
               </div>
 
@@ -142,3 +153,55 @@
     </div>
   </div>
 </div>
+
+<!-- Modal para crear pago -->
+<div class="modal" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-plus-circle"></i> Crear Nuevo Pago</h5>
+        <button type="button" class="btn-close" (click)="cerrarModal()"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="cursoSelect" class="form-label">Curso <span class="text-danger">*</span></label>
+            <select class="form-select" id="cursoSelect" [(ngModel)]="nuevoPago.idCurso" name="idCurso" required>
+              <option [value]="0" selected disabled>Seleccione un curso</option>
+              <option *ngFor="let curso of cursos" [value]="curso.idCurso">
+                {{ curso.nombre }} ({{ curso.fechaInicio | date: 'dd/MM/yyyy' }} - {{ curso.fechaFin | date: 'dd/MM/yyyy' }})
+              </option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="cantidad" class="form-label">Cantidad <span class="text-danger">*</span></label>
+            <div class="input-group">
+              <input type="number" class="form-control" id="cantidad" 
+                     [(ngModel)]="nuevoPago.cantidad" name="cantidad" 
+                     min="0" step="0.01" placeholder="0.00" required>
+              <span class="input-group-text">€</span>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="estado" class="form-label">Estado <span class="text-danger">*</span></label>
+            <select class="form-select" id="estado" [(ngModel)]="nuevoPago.estado" name="estado" required>
+              <option value="Pendiente" selected>⏱ Pendiente</option>
+              <option value="Pagado">✓ Pagado</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cerrarModal()">
+          <i class="bi bi-x-circle"></i> Cancelar
+        </button>
+        <button type="button" class="btn btn-primary" (click)="crearPago()">
+          <i class="bi bi-save"></i> Guardar Pago
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop fade" [class.show]="showModal" *ngIf="showModal"></div>

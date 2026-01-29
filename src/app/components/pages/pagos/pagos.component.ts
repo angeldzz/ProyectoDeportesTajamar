@@ -7,6 +7,7 @@ import { GestionEventoService } from '../../../core/services/gestion-evento.serv
 import { CursosActivos } from '../../../models/CursosActivos';
 import { AuthService } from '../../../core/services/auth.service';
 import { Observable } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-pagos',
@@ -18,6 +19,9 @@ export class PagosComponent implements OnInit {
   public pagos!: Array<Pagos>;
   public cursos!: Array<CursosActivos>;
   public role$!: Observable<number | null>;
+  public showModal: boolean = false;
+  public nuevoPago: Pagos = new Pagos(0, 0, 0, 0, 'Pendiente');
+  
   constructor(private _pagosService: PagosService,
     private _gestionEvento: GestionEventoService,
     private _authService: AuthService
@@ -51,7 +55,6 @@ export class PagosComponent implements OnInit {
   onEstadoChange(pago: Pagos): void {
     this._pagosService.UpdatePagos(pago).subscribe({
       next: (response) => {
-        console.log('Pago actualizado correctamente:', response);
       },
       error: (error) => {
         console.error('Error al actualizar el pago:', error);
@@ -62,7 +65,6 @@ export class PagosComponent implements OnInit {
   onCantidadChange(pago: Pagos): void {
     this._pagosService.UpdatePagos(pago).subscribe({
       next: (response) => {
-        console.log('Cantidad actualizada correctamente:', response);
       },
       error: (error) => {
         console.error('Error al actualizar la cantidad:', error);
@@ -92,5 +94,89 @@ export class PagosComponent implements OnInit {
     return pagosCurso
       .filter(pago => pago.estado.toLowerCase() === 'pendiente' || pago.estado.toLowerCase() === 'sin pagar')
       .reduce((total, pago) => total + pago.cantidad, 0);
+  }
+
+  eliminarPago(pago: Pagos): void {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: `Se eliminará el pago ${pago.estado} con cantidad ${pago.cantidad}€`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this._pagosService.DeletePagos(pago.idPago).subscribe({
+          next: () => {
+            this.pagos = this.pagos.filter(p => p.idPago !== pago.idPago);
+            Swal.fire('¡Eliminado!', 'El pago ha sido eliminado.', 'success');
+          },
+          error: (error) => {
+            console.error('Error al eliminar el pago:', error);
+            Swal.fire('Error', 'No se pudo eliminar el pago.', 'error');
+          }
+        });
+      }
+    });
+  }
+
+  abrirModalCrearPago(): void {
+    this.nuevoPago = new Pagos(0, 0, 0, 0, 'Pendiente');
+    this.showModal = true;
+  }
+
+  cerrarModal(): void {
+    this.showModal = false;
+    this.nuevoPago = new Pagos(0, 0, 0, 0, 'Pendiente');
+  }
+
+  crearPago(): void {
+    if (this.nuevoPago.idCurso === 0) {
+      Swal.fire('Error', 'Debes seleccionar un curso', 'error');
+      return;
+    }
+
+    if (this.nuevoPago.cantidad <= 0) {
+      Swal.fire('Error', 'La cantidad debe ser mayor a 0', 'error');
+      return;
+    }
+
+    // Obtener el primer precio actividad ID
+    this._pagosService.GetPrimerPrecioActividadId().subscribe({
+      next: (idPrecioActividad) => {
+        const pagoParaCrear = {
+          idPago: 0,
+          idCurso: Number(this.nuevoPago.idCurso),
+          idPrecioActividad: idPrecioActividad,
+          cantidad: Number(this.nuevoPago.cantidad),
+          estado: this.nuevoPago.estado.toUpperCase()
+        };
+
+        console.log('Datos enviados al backend:', pagoParaCrear);
+
+        this._pagosService.CreatePagos(pagoParaCrear as Pagos).subscribe({
+          next: (pagoCreado) => {
+            console.log('Pago creado exitosamente:', pagoCreado);
+            this.pagos.push({
+              ...pagoCreado,
+              estado: this.normalizarEstado(pagoCreado.estado)
+            });
+            Swal.fire('¡Éxito!', 'El pago ha sido creado correctamente', 'success');
+            this.cerrarModal();
+            this.ngOnInit();
+          },
+          error: (error) => {
+            console.error('Error completo:', error);
+            Swal.fire('Error', 'No se pudo crear el pago. Revisa la consola para más detalles.', 'error');
+          }
+        });
+      },
+      error: (error) => {
+        console.error('Error al obtener precio actividad:', error);
+        Swal.fire('Error', 'No se pudo obtener el precio de la actividad.', 'error');
+      }
+    });
   }
 }
