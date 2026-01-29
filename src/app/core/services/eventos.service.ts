@@ -4,6 +4,7 @@ import {Observable} from "rxjs";
 import {Evento} from "../../models/Evento";
 import {environment} from "../../../environments/environment.development";
 import { Deporte } from "../../models/Deportes";
+import {id} from 'date-fns/locale';
 
 @Injectable({
   providedIn: 'root'
@@ -39,5 +40,11 @@ export class EventosService {
     return this._http.delete<any>(
       `${environment.urlActividadesEventos}DeleteEventoActividadPanic/${idEventoActividad}`
     );
+  }
+
+
+  eliminarEventoPanic(idEvento:number){
+    let url=environment.urlEventos + "DeleteEventoPanic/" + idEvento;
+    return this._http.delete(url);
   }
 }

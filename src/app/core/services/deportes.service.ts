@@ -26,7 +26,7 @@ export class DeportesService {
       }
 
 
-    crearActividad(nombre:String,minJugadores:Number):Observable<any> {
+    crearActividad(nombre:string,minJugadores:number) {
       let url=environment.urlActividades+"create";
 
       const body={
@@ -37,4 +37,12 @@ export class DeportesService {
       return this._http.post(url, body);
     }
 
+    updateActividad(){
+
+    }
+
+    deleteActividad(idActividad:number){
+      let url= environment.urlActividades+idActividad;
+      return this._http.delete(url);
+    }
 };

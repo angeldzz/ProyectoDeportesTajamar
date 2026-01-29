@@ -23,7 +23,9 @@ export class PanelAdministradorComponent implements OnInit {
   adminMenu:SideItem[]=[
     {label:"Colores",route:'/panel_administrador/colores-form'},
     {label:"Actividades",route:'/panel_administrador/actividades-form'},
+    {label:"Eventos",route:'/panel_administrador/eventos-form'},
     {label:"Organizadores",route:'/panel_administrador/organizadores-form'},
+
   ]
 
   constructor(private _coloresService: ColoresService) {

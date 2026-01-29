@@ -28,4 +28,30 @@ export class DeportesFormComponent implements OnInit {
       this.actividades=value;
     })
   }
+
+  borrarActividad(idActividad:number){
+    this._deportesService.deleteActividad(idActividad).subscribe(value => {
+
+      console.log(value);
+      this.cargarActividades();
+    })
+  }
+
+  @ViewChild('cajaNombreAct') cajaNombre!: ElementRef;
+  @ViewChild('cajaMinimo') cajaMin!: ElementRef;
+
+    nombreActividad!:string;
+    numMin!:number;
+  crearActividad(){
+
+    this.nombreActividad=this.cajaNombre.nativeElement.value;
+    this.numMin=this.cajaMin.nativeElement.value;
+
+    this._deportesService.crearActividad(this.nombreActividad,this.numMin).subscribe(value => {
+      console.log(value);
+      this.cargarActividades();
+    })
+  }
+
+
 }

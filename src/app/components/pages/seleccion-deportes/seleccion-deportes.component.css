@@ -5,14 +5,28 @@
   padding: 50px 20px;
 }
 
-/* ------------------ TITLE BAR ------------------ */
-/*.title-bar {*/
-/*  width: 5rem;*/
-/*  height: 4px;*/
-/*  background-color: var(--blue-primary);*/
-/*  border-radius: 2px;*/
-/*  box-shadow: 0 2px 4px rgba(0,0,0,0.2);*/
-/*}*/
+.loader-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(255,255,255,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 5px solid #dbeafe;
+  border-top: 5px solid #0b7ef1;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
 
 .title-bar {
   width: 6px;

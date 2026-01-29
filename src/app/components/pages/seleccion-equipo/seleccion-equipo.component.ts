@@ -4,7 +4,7 @@ import {ActivatedRoute, Params} from '@angular/router';
 import {Equipov2} from '../../../models/EquipoV2';
 import {UsuarioService} from '../../../core/services/usuario.service';
 import {Usuario} from '../../../models/Usuario';
-import {EMPTY, map, Observable, Subject, switchMap, takeUntil} from 'rxjs';
+import {EMPTY, finalize, map, Observable, Subject, switchMap, takeUntil} from 'rxjs';
 import {CommonModule, NgStyle} from '@angular/common';
 import {AccordionModule} from 'primeng/accordion';
 import {Avatar} from 'primeng/avatar';
@@ -16,35 +16,39 @@ import Swal from 'sweetalert2';
 import {AuthService} from '../../../core/services/auth.service';
 import {CapitanService} from '../../../core/services/capitan.service';
 import {InscripcionesService} from '../../../core/services/inscripciones.service';
+import {Evento} from '../../../models/Evento';
 
 @Component({
   selector: 'app-seleccion-equipo',
   imports: [
-     AccordionModule, CommonModule, Avatar, FormsModule
+    AccordionModule, CommonModule, Avatar, FormsModule
   ],
   templateUrl: './seleccion-equipo.component.html',
   styleUrl: './seleccion-equipo.component.css',
 })
-export class SeleccionEquipoComponent implements OnInit,OnDestroy  {
+export class SeleccionEquipoComponent implements OnInit, OnDestroy {
   idEvento!: number;
   idActividad!: number;
   usuario!: Usuario;
 
   openIndex: number | null = null;
   equiposDisponibles: Array<Equipov2> = [];
-  colores:Colores[] = [];
+  colores: Colores[] = [];
   idEventoActividad!: number;
+  public isLoading: boolean = true;
   public role$!: Observable<number | null>;
-
+  eventoPasado: boolean = false;
+  datosEvento!: Evento;
   private destroy$ = new Subject<void>();
+
   constructor(private _equipoService: Equipov2Service,
               private _activeRoute: ActivatedRoute,
               private _usuarioService: UsuarioService,
-              private _colorService:ColoresService,
-              private _eventoService:EventosService,
-              private _authService:AuthService,
-              private _capitanService:CapitanService,
-              private _inscripcionesService:InscripcionesService,) {
+              private _colorService: ColoresService,
+              private _eventoService: EventosService,
+              private _authService: AuthService,
+              private _capitanService: CapitanService,
+              private _inscripcionesService: InscripcionesService,) {
 
     this.role$ = this._authService.userRole$;
   }
@@ -57,10 +61,15 @@ export class SeleccionEquipoComponent implements OnInit,OnDestroy  {
           this.idActividad = parametros['idActividad'];
           this.idEvento = parametros['idEvento'];
 
+          this._eventoService.GetEventoIndividual(Number(this.idEvento))
+            .subscribe(value => {
+              this.datosEvento = value;
+              this.eventoPasado = this.eventoEstaPasado(this.datosEvento.fechaEvento);
+            });
+
           return this._eventoService.findActividadEvento(
             this.idEvento.toString(),
-            this.idActividad.toString()
-          );
+            this.idActividad.toString());
         }),
         switchMap(eventoActividad => {
           this.idEventoActividad = eventoActividad.idEventoActividad;
@@ -70,7 +79,7 @@ export class SeleccionEquipoComponent implements OnInit,OnDestroy  {
         switchMap(usuario => {
           this.usuario = usuario;
 
-          this.comprobarUsuarioInscrito(this.idEvento,this.idActividad,this.usuario.idUsuario);
+          this.comprobarUsuarioInscrito(this.idEvento, this.idActividad, this.usuario.idUsuario);
 
           return this._capitanService.getIdCapitanUsuario(
             this.usuario.idUsuario,
@@ -107,6 +116,13 @@ export class SeleccionEquipoComponent implements OnInit,OnDestroy  {
     this.destroy$.complete();
   }
 
+  private eventoEstaPasado(fechaEvento: string | Date | null | undefined): boolean {
+    if (!fechaEvento) return false;
+    const fecha = fechaEvento instanceof Date ? fechaEvento : new Date(fechaEvento);
+    if (Number.isNaN(fecha.getTime())) return false;
+    return fecha.getTime() < Date.now();
+  }
+
   togglePanel(idx: number) {
     if (this.openIndex === idx) {
       // Si el mismo panel ya estaba abierto, cerrarlo
@@ -117,13 +133,23 @@ export class SeleccionEquipoComponent implements OnInit,OnDestroy  {
     }
 
   }
+
   getEquiposConJugadores(idActividad: number, idEvento: number) {
+    this.isLoading = true; // Iniciamos la carga
     this._equipoService.getEquiposConJugadores(idActividad, idEvento)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(value => {
-        console.log("Los Equipos:")
-        console.log(value)
-        this.equiposDisponibles = value;
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => this.isLoading = false) // Esto se ejecuta SIEMPRE al final
+      )
+      .subscribe({
+        next: (value) => {
+          this.equiposDisponibles = value;
+          this.isLoading = false; // Finalizamos la carga
+        },
+        error: (err) => {
+          console.error(err);
+          this.isLoading = false; // También finalizamos si hay error
+        }
       });
   }
 
@@ -184,7 +210,7 @@ export class SeleccionEquipoComponent implements OnInit,OnDestroy  {
   numJugadores!: number;
   color!: number;
 
-  crearEquipo(){
+  crearEquipo() {
     Swal.fire({
       title: "Estas seguro?",
       text: "No podras revertir la accion",
@@ -217,7 +243,8 @@ export class SeleccionEquipoComponent implements OnInit,OnDestroy  {
               text: "No se ha podido crear el equipo.",
               icon: "error"
             });
-            console.error('Error al crear equipo', err)}
+            console.error('Error al crear equipo', err)
+          }
         });
 
       }
@@ -251,14 +278,16 @@ export class SeleccionEquipoComponent implements OnInit,OnDestroy  {
               text: "No se ha podido borrar el equipo.",
               icon: "error"
             });
-            console.error('Error al borrar equipo', err)}
+            console.error('Error al borrar equipo', err)
+          }
         });
 
       }
-  });
-}
+    });
+  }
 
   coloresDisponibles: any[] = [];
+
   abrirModalCrearEquipo(): void {
     this._equipoService.obtenerColoresDisponibles(this.idActividad, this.idEvento).pipe(takeUntil(this.destroy$)).subscribe({
       next: (colores) => {
@@ -275,7 +304,7 @@ export class SeleccionEquipoComponent implements OnInit,OnDestroy  {
   capitanEventoActividad: boolean = false;
 
 
-   comprobarCapitan(idUsuario: number, idEventoActividad: number) {
+  comprobarCapitan(idUsuario: number, idEventoActividad: number) {
     this._capitanService
       .getIdCapitanUsuario(idUsuario, idEventoActividad)
       .pipe(
@@ -289,18 +318,18 @@ export class SeleccionEquipoComponent implements OnInit,OnDestroy  {
           if (capitanActividad.idEventoActividad === idEventoActividad) {
             console.log('Capitán válido:', capitanActividad);
             console.log(capitanActividad);
-            this.capitanEventoActividad=true;
+            this.capitanEventoActividad = true;
 
           } else {
             console.warn('No coincide el evento actividad');
-            this.capitanEventoActividad=false;
+            this.capitanEventoActividad = false;
 
           }
         },
         error: err => {
 
           console.error('Error comprobando capitán', err);
-          this.capitanEventoActividad=false;
+          this.capitanEventoActividad = false;
 
         }
 
@@ -311,14 +340,15 @@ export class SeleccionEquipoComponent implements OnInit,OnDestroy  {
   get botonUnirseDeshabilitado(): boolean {
     return (
       this.usuarioYaEstaInscrito ||
-      !this.usuarioInscritoEventoActual
+      !this.usuarioInscritoEventoActual ||
+      this.eventoPasado // Si el evento pasó, nadie puede unirse a equipos
     );
   }
 
   usuarioInscritoEventoActual: boolean = false;
 
   comprobarUsuarioInscrito(idEvento: number, idActividad: number, idUsuario: number): void {
-      console.log("wefwedfgewrgewsgt4eg")
+    console.log("wefwedfgewrgewsgt4eg")
     this._inscripcionesService
       .getNumeroInscipcionesEventoActividad(idEvento, idActividad)
       .pipe(
@@ -330,13 +360,13 @@ export class SeleccionEquipoComponent implements OnInit,OnDestroy  {
       .subscribe({
         next: (estaInscrito: boolean) => {
           console.log('¿Usuario inscrito?', estaInscrito);
-          if(estaInscrito) {
-            this.usuarioInscritoEventoActual=true
+          if (estaInscrito) {
+            this.usuarioInscritoEventoActual = true
           }
           // aquí guardas el boolean
         },
         error: () => {
-          this.usuarioInscritoEventoActual=false
+          this.usuarioInscritoEventoActual = false
           console.error('Error comprobando inscripción');
         }
       });
