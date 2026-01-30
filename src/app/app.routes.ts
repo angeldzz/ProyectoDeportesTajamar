@@ -92,7 +92,7 @@ export const routes: Routes = [
   {
     path: "materiales/:idEvento/:idActividad",
     component: MaterialesComponent,
-    canActivate: [organizadorGuard]
+    canActivate: [loginGuard]
   },
   {
     path: "register",

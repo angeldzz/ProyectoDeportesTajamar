@@ -20,6 +20,8 @@ export class MaterialesService {
 
   create(item: Partial<Materiales>): Observable<any> {
     // API expects POST to /api/Materiales/create
+
+    console.log("EL OBJET", item);
     return this._http.post(environment.urlMateriales + 'create', item);
   }
 
