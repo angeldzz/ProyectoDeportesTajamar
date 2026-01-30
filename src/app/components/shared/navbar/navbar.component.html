@@ -1,4 +1,4 @@
-@if (_authService.loggedIn | async) {
+ @if (_authService.loggedIn | async) {
   <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
     <div class="container-fluid">
       <div class="d-flex align-items-center me-4">
@@ -30,7 +30,7 @@
             </a>
           </li>
 
-          @if ((role$ | async) == 3 ||(role$ | async) == 6) {
+          @if ((role$ | async) == 3 ||(role$ | async) == 6 || (role$ | async) == 4) {
             <li class="nav-item d-lg-none">
               <a class="nav-link px-3" [routerLink]="['/panel_administrador']" routerLinkActive="active-link">
                 <i class="bi bi-shield-lock me-2"></i>Admin
@@ -55,7 +55,7 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4 mt-2">
               <li><a class="dropdown-item py-2" [routerLink]="['/perfil']"><i class="bi bi-person me-2"></i>Perfil</a></li>
-              @if ((role$ | async) == 6 || (role$ | async) == 3) {
+              @if ((role$ | async) == 6 || (role$ | async) == 3 || (role$ | async) == 4) {
                 <li><a class="dropdown-item py-2" [routerLink]="['/panel_administrador']"><i class="bi bi-shield-lock me-2"></i>Admin</a></li>
               }
               <li><hr class="dropdown-divider"></li>
