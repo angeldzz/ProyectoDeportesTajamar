@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import {ProfesoresService} from '../../../core/services/profesores.service';
 import {Usuario} from '../../../models/Usuario';
 import {FormsModule} from '@angular/forms';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -113,10 +114,12 @@ export class CreacionEventosComponent implements OnInit {
     if (this.selectedDate && this.idProfesorSeleccionado) {
       const fechaConHora = new Date(this.selectedDate);
       fechaConHora.setHours(this.selectedHour, this.selectedMinute, 0, 0);
-      this.selectedDate = fechaConHora;
+      
+      // Sumar 1 hora para compensar el ajuste del servidor
+      fechaConHora.setHours(fechaConHora.getHours() + 1);
 
       // Ejecutamos la creación del evento
-      this._eventosService.createEvento(this.selectedDate).subscribe({
+      this._eventosService.createEvento(fechaConHora).subscribe({
         next: (eventoCreado: any) => {
           // Una vez creado el evento, asociamos al profesor
           this._profesoresService.asociarProfesorEvento(eventoCreado.idEvento, this.idProfesorSeleccionado!).subscribe({
@@ -129,7 +132,12 @@ export class CreacionEventosComponent implements OnInit {
         error: (err) => console.error('Error al crear evento:', err)
       });
     } else {
-      alert("Por favor, selecciona una hora y un profesor");
+      Swal.fire({
+        icon: 'warning',
+        title: 'Datos incompletos',
+        text: 'Por favor, selecciona una hora y un profesor',
+        confirmButtonText: 'Entendido'
+      });
     }
   }
 
@@ -203,11 +211,7 @@ export class CreacionEventosComponent implements OnInit {
 
   crearEvento() {
     if (this.selectedDate) {
-      // Ajustar la fecha para compensar la conversión UTC
-      const fechaAjustada = new Date(this.selectedDate);
-      fechaAjustada.setMinutes(fechaAjustada.getMinutes() - fechaAjustada.getTimezoneOffset());
-      
-      this._eventosService.createEvento(fechaAjustada).subscribe({
+      this._eventosService.createEvento(this.selectedDate).subscribe({
         next: (eventoCreado: any) => {
           this.router.navigate(['/asignacion-actividad-evento', eventoCreado.idEvento]);
         },

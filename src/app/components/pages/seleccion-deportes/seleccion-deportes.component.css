@@ -5,36 +5,13 @@
   padding: 50px 20px;
 }
 
-.loader-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(255,255,255,0.75);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-}
-
-.spinner {
-  width: 48px;
-  height: 48px;
-  border: 5px solid #dbeafe;
-  border-top: 5px solid #0b7ef1;
-  border-radius: 50%;
-  animation: spin 0.9s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
+/* ------------------ TITLE BAR ------------------ */
 .title-bar {
   width: 6px;
   height: 32px;
   background-color: var(--sport-orange);
   border-radius: 50px;
 }
-
 
 /* ------------------ CAPITAN CHECKBOX ------------------ */
 .contenedor-capitan {
@@ -49,41 +26,38 @@
 
 /* ------------------ CARD DE DEPORTES ------------------ */
 .card-hover-simple {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border-radius: 1.25rem !important; /* rounded-4 */
-  /* necesito aumentar el tamaño de la tarjeta
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1) !important;
-  height: 100%;
-  min-height: 400px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 20px !important;
+  overflow: hidden;
+  transition: all 0.25s ease;
+  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-height: 400px; */
-
-
+  height: 100%; /* para que las cards tengan altura uniforme */
 }
 
 .card-hover-simple:hover {
   transform: translateY(-8px);
   box-shadow: 0 15px 35px rgba(255, 126, 95, 0.15) !important;
-
-}
-.card-hover-simple {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border-radius: 1.25rem !important;
-  height: 100%;
-  min-height: 450px;   /* ⬅ más alta */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  border-color: var(--blue-accent);
 }
 
+/* Imagen de deporte */
+.card-hover-simple img.card-img-top {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 16px;
+  transition: transform 0.3s ease;
+}
 
+.card-hover-simple:hover img.card-img-top {
+  transform: scale(1.05);
+}
 
 /* Badges */
 .badge-status {
-  font-size: 0.75rem;
-  font-weight: 700;
   color: #fff;
   background-color: #28a745;
   padding: 5px 10px;
@@ -92,11 +66,12 @@
   top: 12px;
   left: 12px;
   z-index: 2;
+  font-size: 0.75rem;
+  font-weight: 700;
 }
 
 .badge-sport-type {
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-family: 'Outfit', sans-serif;
   color: #fff;
   background-color: var(--blue-accent);
   padding: 4px 10px;
@@ -105,6 +80,8 @@
   bottom: 12px;
   left: 12px;
   z-index: 2;
+  font-size: 0.75rem;
+  font-weight: 700;
 }
 
 /* ------------------ CARD BODY ------------------ */
@@ -112,7 +89,7 @@
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  flex-grow: 1; /* para que el contenido empuje los botones abajo */
+  flex-grow: 1;
 }
 
 .card-body h5 {
@@ -133,23 +110,34 @@
   margin: 1rem 0;
 }
 
+/* Iconos de información */
+.icon-container {
+  background-color: var(--sport-yellow-light);
+  border-radius: 10px;
+}
+
+.icon-people {
+  color: var(--sport-orange);
+}
+
 /* ------------------ BOTONES ------------------ */
 .btn-enroll {
-  background-color: var(--blue-accent);
-  color: #fff;
+  background: linear-gradient(135deg, var(--sport-orange), var(--sport-yellow));
+  color: white !important;
   border: none;
-  border-radius: 12px;
+  font-size: 0.85rem;
   font-weight: 700;
   padding: 0.5rem 1.2rem;
+  border-radius: 12px;
   transition: all 0.2s ease;
   cursor: pointer;
   margin-left: 0.5rem;
 }
 
 .btn-enroll:hover {
-  background-color: #1c7ed6;
+  opacity: 0.9;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(255, 126, 95, 0.3);
 }
 
 /* ------------------ MIN JUGADORES & INSCRITOS ------------------ */
@@ -163,38 +151,54 @@
   text-transform: uppercase;
   color: var(--text-secondary);
 }
-.no-caret::after {
-  display: none !important;
+.card-hover-simple {
+  background-color: var(--bg-card);
+  /* Borde fino negrito (usando rgba para suavizarlo un poco si es necesario) */
+  border: 1px solid rgba(0, 0, 0, 0.8) !important;
+  border-radius: 20px !important;
+  overflow: hidden;
+  transition: all 0.25s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-/* Estilo para que el botón de los tres puntos resalte sobre la imagen */
-.dropdown .btn-link:hover {
-  background: rgba(0,0,0,0.5) !important;
-  color: white !important;
+.card-hover-simple:hover {
+  transform: translateY(-8px);
+  /* Mantenemos el borde al hacer hover o podemos resaltarlo más */
+  border-color: #000000;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15) !important;
+}
+.card-hover-simple {
+  /* Color azul perlado muy suave */
+  background-color: #f0f4f8 !important;
+
+  /* Borde fino negrito */
+  border: 1px solid rgba(0, 0, 0, 0.7) !important;
+
+  border-radius: 20px !important;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-.dropdown-item i {
-  color: var(--text-main);
-  font-size: 1.1rem;
+.card-hover-simple:hover {
+  transform: translateY(-8px);
+  /* El fondo se aclara ligeramente al pasar el ratón para dar sensación de brillo perlado */
+  background-color: #f8fafc !important;
+  border-color: #000000 !important;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12) !important;
 }
 
-.dropdown-item:hover {
-  color: var(--bs-primary);
-}
-
-.preciodrop:hover {
-  cursor: pointer;
-}
-.custom-btn-rand {
-  border-width: 1px;
-  border-style: solid;
-  transition: all 0.3s ease;
-  background: transparent;
-  color:black;
-}
-
-.custom-btn-rand:hover {
-  opacity: 1 !important;
-  background-color: rgba(255, 193, 7, 0.1); /* Fondo amarillo muy suave al pasar el ratón */
-  transform: translateY(-1px);
+/* Ajuste para el cuerpo de la card para que sea transparente y herede el perlado */
+.card-body {
+  background: transparent !important;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
